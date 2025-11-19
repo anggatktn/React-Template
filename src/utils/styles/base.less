@@ -1,0 +1,124 @@
+@import url(/src/utils/styles/variables.less);
+@import url(/src/utils/styles/nprogress.less);
+@import url(/src/utils/styles/text.less);
+@import url(https://maxst.icons8.com/vue-static/landings/line-awesome/font-awesome-line-awesome/css/all.min.css);
+
+&:root {
+    color: #202227;
+    font-family: "Plus Jakarta Sans", sans-serif;
+    width: 100vw;
+    height: 100vh;
+
+    button {
+        &:disabled {
+            border-color: transparent;
+        }
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+}
+
+html {
+    box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+}
+
+body {
+    margin: 0px;
+    font-family: "Plus Jakarta Sans", sans-serif;
+
+}
+
+.container {
+    margin-right: auto;
+    margin-left: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+    width: 100%;
+}
+
+.no-gutter {
+    padding: 0 0 0 0;
+
+    &>div {
+        max-width: 100%;
+    }
+}
+
+.container.no-padding {
+    padding: 0;
+}
+
+button.ghost-button {
+    border: 1px solid @primary-color;
+    border-radius: 3px;
+    color: @primary-color;
+
+    &:hover,
+    &:active,
+    &:focus,
+    &:focus-visible {
+        border: 1px solid @primary-color !important;
+        border-radius: 3px !important;
+        color: @primary-color !important;
+    }
+}
+
+button.primary-button {
+    border: 1px solid @primary-color;
+    background-color: @primary-color;
+    border-radius: 3px;
+    color: #ffffff;
+
+    &:hover,
+    &:active,
+    &:focus,
+    &:focus-visible {
+        border: 1px solid @primary-color !important;
+        background-color: @primary-color !important;
+        border-radius: 3px !important;
+        color: #ffffff !important;
+    }
+}
+
+.primary-color {
+    color: @primary-color;
+}
+
+@media (min-width: @screen-xs) {
+    .container {
+        max-width: calc(@screen-xs - 30px);
+    }
+}
+
+@media (min-width: @screen-sm) {
+    .container {
+        max-width: calc(@screen-sm - 30px);
+    }
+}
+
+@media (min-width: @screen-md) {
+    .container {
+        max-width: calc(@screen-md - 30px);
+    }
+}
+
+@media (min-width: @screen-lg) {
+    .container {
+        max-width: calc(@screen-lg - 30px);
+    }
+}
+
+@media (min-width: @screen-xl) {
+    .container {
+        max-width: calc(@screen-xl - 30px);
+    }
+}
