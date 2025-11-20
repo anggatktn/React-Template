@@ -11,7 +11,7 @@ interface IRouteGroup {
 const routeGroup: IRouteGroup[] = [
     {
         path: '/',
-        element: AuthPage,
+        element: HomePage,
         isProtected: false
     }
 ]

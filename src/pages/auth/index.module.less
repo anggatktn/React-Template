@@ -1,5 +1,51 @@
-.background {
+.container {
   background: linear-gradient(to top right, #ffb6c1, #add8e6, #e0ffff);
-  min-height: 100vh; /* Viewport height */
+  min-height: 100vh;
+  /* Viewport height */
   width: 100%;
+  padding: 25px 45px;
+  display: flex;
+  flex-direction: row;
+}
+
+.left-pane {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+
+
+
+  .wrap-logo {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    height: 20px;
+    /* This sets the *container* height */
+
+    .logo {
+      width: auto;
+      /* Good: allows width to adjust */
+      /* Add the height property here */
+      height: 100%;
+      /* Make the image height match the parent (.wrap-logo) height of 50px */
+      display: block;
+      /* Ensures proper height calculation and scaling */
+    }
+  }
+
+  .term {
+    /* To allow margin to take effect on inline elements */
+    display: inline-block;
+
+    /* Pushes the next element 20px to the right */
+    margin-right: 20px;
+  }
+}
+
+.right-pane {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 40px;
 }

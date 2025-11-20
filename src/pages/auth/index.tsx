@@ -4,6 +4,7 @@ import { AuthScreenModel } from "./auth-screen-model";
 import { useStateFlow } from "../../utils/StateFlow";
 import { useMemo } from "react";
 import Button, { ButtonVariant } from "../../components/dashboard/buttons";
+import LoginForm from "../../components/auth/login-form";
 
 const AuthPage: React.FC = () => {
 
@@ -12,10 +13,30 @@ const AuthPage: React.FC = () => {
     const navigate = useNavigate();
 
     return (
-        <div className={classes.background}>
-            <Button text={`Clicked ${state.buttonClicked} times`} onClick={() => {
-                if (state.buttonClicked >= 5) { navigate('/dashboard') } else {model.buttonClicked()}
-            }} variant={ButtonVariant.PRIMARY} />
+        <div className={classes["container"]}>
+            <div className={classes["left-pane"]}>
+                <div className={classes["wrap-logo"]}>
+                    <img src='/images/rfid-logo.svg' alt='Logo' className={classes['logo']} />
+                </div>
+                <span style={{
+                    display: "flex",
+                    flexGrow: 1,
+                    alignItems: "center",
+                    fontSize: 42,
+                    color: 'white'
+                }}>Order your RFID tags<br />with us Easier and Faster</span>
+                <span style={{
+                    fontSize: 18,
+                    fontWeight: 300
+                }}>
+                    <span className={classes["term"]}>Customer</span>
+                    <span className={classes["term"]}>Vendor</span>
+                    <span className={classes["term"]}>Super Admin</span>
+                </span>
+            </div>
+            <div className={classes["right-pane"]}>
+                <LoginForm />
+            </div>
         </div>
     )
 };
