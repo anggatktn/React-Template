@@ -1,3 +1,4 @@
+import type { FormValues } from "../../components/auth/login-form";
 import { StateFlow } from "../../utils/StateFlow";
 import type { AuthScreenState } from "./auth-screen-state";
 
@@ -12,5 +13,9 @@ export class AuthScreenModel {
             ...this.state.getValue(),
             buttonClicked: this.state.getValue().buttonClicked + 1
         });
+    }
+
+    onFormFinished(values: FormValues){
+        
     }
 }

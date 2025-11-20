@@ -6,10 +6,14 @@ import classes from './index.module.less';
 const { Title, Link } = Typography;
 
 // 2. Define the types for the form fields
-interface FormValues {
+export interface FormValues {
     email: string;
     password?: string; // Optional since it's sensitive and might not be initialised
     remember: boolean;
+}
+
+interface LoginFormArgs {
+    onFinish: (values: FormValues) => void,
 }
 
 // 3. Define the type for the custom message state
@@ -18,28 +22,31 @@ interface MessageState {
     text: string;
 }
 
-const LoginForm: React.FC = () => {
+const LoginForm: React.FC<LoginFormArgs> = ({ onFinish }) => {
     const [form] = Form.useForm<FormValues>();
 
     // Explicitly type the state hooks
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
     const [message, setMessage] = useState<MessageState | null>(null);
 
-    // Ant Design Form uses the onFinish event handler
-    const onFinish = (values: FormValues) => {
-        setMessage(null);
-        setIsSubmitting(true);
 
-        // Simulate an API call with the form data
-        setTimeout(() => {
-            console.log('Attempting login with:', values);
-            setMessage({
-                type: 'success',
-                text: `Successfully simulated login for ${values.email}! Welcome back.`,
-            });
-            setIsSubmitting(false);
-        }, 1500);
-    };
+
+    // Ant Design Form uses the onFinish event handler
+    // const formFinish = (values: FormValues) => {
+    //     setMessage(null);
+    //     setIsSubmitting(true);
+
+    //     // Simulate an API call with the form data
+    //     setTimeout(() => {
+    //         console.log('Attempting login with:', values);
+    //         setMessage({
+    //             type: 'success',
+    //             text: `Successfully simulated login for ${values.email}! Welcome back.`,
+    //         });
+    //         setIsSubmitting(false);
+    //     }, 1500);
+    // };
+
 
     // onFinishFailed uses a specific Ant Design type for error info
     const onFinishFailed = (errorInfo: any) => { // Using 'any' for brevity as Ant's type is complex
@@ -49,6 +56,8 @@ const LoginForm: React.FC = () => {
             text: 'Please correct the errors in the form.',
         });
     };
+
+
 
     const handleCreateAccount = () => {
         setMessage({
@@ -121,10 +130,10 @@ const LoginForm: React.FC = () => {
                             <Form.Item name="remember" valuePropName="checked" noStyle>
                                 <Checkbox>Keep me signed in</Checkbox>
                             </Form.Item>
-                            <Link href="#" style={{ 
+                            <Link href="#" style={{
                                 color: '#265CD7',
                                 fontWeight: 500
-                             }}>
+                            }}>
                                 Forgot Password?
                             </Link>
                         </div>

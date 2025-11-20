@@ -4,7 +4,7 @@ import { AuthScreenModel } from "./auth-screen-model";
 import { useStateFlow } from "../../utils/StateFlow";
 import { useMemo } from "react";
 import Button, { ButtonVariant } from "../../components/dashboard/buttons";
-import LoginForm from "../../components/auth/login-form";
+import LoginForm, { type FormValues } from "../../components/auth/login-form";
 
 const AuthPage: React.FC = () => {
 
@@ -35,7 +35,7 @@ const AuthPage: React.FC = () => {
                 </span>
             </div>
             <div className={classes["right-pane"]}>
-                <LoginForm />
+                <LoginForm onFinish={ model.onFormFinished }/>
             </div>
         </div>
     )
