@@ -3,7 +3,6 @@ import classes from './index.module.less';
 import { AuthScreenModel } from "./auth-screen-model";
 import { useStateFlow } from "../../utils/StateFlow";
 import { useMemo } from "react";
-import Button, { ButtonVariant } from "../../components/dashboard/buttons";
 import LoginForm, { type FormValues } from "../../components/auth/login-form";
 
 const AuthPage: React.FC = () => {
@@ -35,7 +34,13 @@ const AuthPage: React.FC = () => {
                 </span>
             </div>
             <div className={classes["right-pane"]}>
-                <LoginForm onFinish={ model.onFormFinished }/>
+                <LoginForm
+                    onPrimaryButtonClicked={model.onFormPrimaryButtonPressed}
+                    onSecondaryButtonClicked={model.onFormSecondaryButtonPressed}
+                    formType={state.authFormType}
+                    onRetypeEmail={model.onRetypeEmail}
+                    isLoading={false}
+                />
             </div>
         </div>
     )

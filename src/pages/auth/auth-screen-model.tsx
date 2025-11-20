@@ -1,21 +1,58 @@
 import type { FormValues } from "../../components/auth/login-form";
 import { StateFlow } from "../../utils/StateFlow";
-import type { AuthScreenState } from "./auth-screen-state";
+import { AuthFormType, type AuthScreenState } from "./auth-screen-state";
 
 export class AuthScreenModel {
+    public readonly state: StateFlow<AuthScreenState> = new StateFlow({
+        buttonClicked: 0,
+        authFormType: AuthFormType.SignIn,
+        isLoading: false
+    } as AuthScreenState);
 
-    public readonly state : StateFlow<AuthScreenState> = new StateFlow({
-        buttonClicked: 0
-    });
-
-    buttonClicked() {
+    public onFormPrimaryButtonPressed = (values: FormValues) => {
+        console.log(values)
+        var newFormType: AuthFormType = AuthFormType.SignIn
+        switch (this.state.getValue().authFormType) {
+            case AuthFormType.SignIn:
+                console.log("Sign In")
+                break
+            case AuthFormType.CreateAccount:
+                newFormType = AuthFormType.EnterOTP
+                break
+            case AuthFormType.EnterOTP:
+                console.log("Enter OTP")
+                break
+        }
         this.state.setValue({
             ...this.state.getValue(),
-            buttonClicked: this.state.getValue().buttonClicked + 1
-        });
+            authFormType: newFormType
+        })
     }
 
-    onFormFinished(values: FormValues){
-        
+    public onFormSecondaryButtonPressed = () => {
+        console.log(this.state.getValue().authFormType)
+        var newFormType: AuthFormType = AuthFormType.SignIn
+        switch (this.state.getValue().authFormType) {
+            case AuthFormType.SignIn:
+                newFormType = AuthFormType.CreateAccount
+                break
+            case AuthFormType.CreateAccount:
+                newFormType = AuthFormType.SignIn
+                break
+            case AuthFormType.EnterOTP:
+                newFormType = AuthFormType.CreateAccount
+                break
+        }
+        this.state.setValue({
+            ...this.state.getValue(),
+            authFormType: newFormType
+        })
+    }
+
+    public onRetypeEmail = () => {
+        this.state.setValue({
+            ...this.state.getValue(),
+            authFormType: AuthFormType.CreateAccount
+        })
     }
 }
