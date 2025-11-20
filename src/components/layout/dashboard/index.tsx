@@ -1,6 +1,6 @@
 import type { ReactNode } from "react"
 import React from "react"
-import classes from "./index.module.less"
+
 import { SideBar, SideBarMenu } from "../../dashboard/sidebar";
 import { TopBar } from "../../dashboard/topbar";
 
@@ -26,7 +26,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ isLoading = false, ch
                 flexGrow: 1,
                 overflow: "hidden"
             }}>
-                <TopBar/>
+                <TopBar />
                 <div style={{
                     backgroundColor: "#F9FAFB",
                     display: "flex",

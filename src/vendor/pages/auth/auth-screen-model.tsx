@@ -1,9 +1,9 @@
-import { StateFlow } from "../../utils/StateFlow";
+import { StateFlow } from "../../../utils/StateFlow";
 import type { AuthScreenState } from "./auth-screen-state";
 
 export class AuthScreenModel {
 
-    public readonly state : StateFlow<AuthScreenState> = new StateFlow({
+    public readonly state: StateFlow<AuthScreenState> = new StateFlow({
         buttonClicked: 0
     });
 

@@ -1,8 +1,8 @@
 interface TopBarProps {
-    
+
 }
 
-export const TopBar: React.FC<TopBarProps> = (props) => {
+export const TopBar: React.FC<TopBarProps> = (_) => {
     return (
         <div style={{
             width: "100%",
