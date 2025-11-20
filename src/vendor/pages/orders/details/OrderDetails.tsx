@@ -5,9 +5,13 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Navbar from '../../../../components/layout/Navbar';
 import OrderInfoCard from '../../../components/orders/details/OrderInfoCard';
 import ShippingUpdateCard from '../../../components/orders/details/ShippingUpdateCard';
-import PackingListTable, { type PackingListItem } from '../../../components/orders/details/PackingListTable';
-// We will re-integrate the other components in the next steps
+import PackingListTable from '../../../components/orders/details/PackingListTable';
 import classes from './OrderDetails.module.less';
+import CustomerInfoSection from '../../../components/orders/details/CustomerInfoCard';
+import MessagesCard from '../../../components/orders/details/MessagesCard';
+import DeliveryInfoSection from '../../../components/orders/details/DeliveryInfoSection';
+import OrderTrackingCard from '../../../components/orders/details/OrderTrackingCard';
+import { getMockOrderData, mockPackingListItems, mockCustomerData, mockDeliveryData } from './data';
 
 const { Content } = Layout;
 const { Title } = Typography;
@@ -16,54 +20,22 @@ const OrderDetails: React.FC = () => {
     const navigate = useNavigate();
     const { id } = useParams();
 
-    // Updated Mock Data to match your Image
-    const orderData = {
-        id: id?.replace('#', '') || '0020251001', // Clean ID
-        date: 'Oct 25, 2025, 10:10am',
-        status: 'Update Shipping Cost',
-        itemCount: 3,
-        amountPaid: 1390.00,
-        shipmentPaid: null,
-
-        // Delivery info for the top card
-        deliveryAddress: '123 Orchard Road, #04-12 Lucky Plaza, Singapore, Central Singapore, Singapore 876543.',
-        contactPerson: 'John Doe',
-        contactPhone: '+65 98765432',
-        deliveryNote: 'Please attempt to delivery during weekdays.'
-    };
+    // Load mock data
+    const orderData = getMockOrderData(id);
+    const packingListItems = mockPackingListItems;
+    const customerData = mockCustomerData;
+    const deliveryData = mockDeliveryData;
 
     const handleShippingUpdate = (newWeight: number, newCost: number) => {
         console.log('Updating:', newWeight, newCost);
         // Here you would typically call your backend API
     };
 
-    const packingListItems: PackingListItem[] = [
-        {
-            key: '1', sn: '01', ssn: '1234567890', layout: 'Large Font',
-            description: 'Morbi quis elit condimentum, faucibus eros non...',
-            size: 'M', quantity: 300, epcStart: '5354250000000001000000104110'
-        },
-        {
-            key: '2', sn: '02', ssn: '1234567890', layout: 'Standard',
-            description: 'Morbi quis elit condimentum, faucibus eros non...',
-            size: 'M', quantity: 300, epcStart: '5354250000000001000000104110'
-        },
-        {
-            key: '3', sn: '03', ssn: '1234567890', layout: 'Standard',
-            description: 'Morbi quis elit condimentum, faucibus eros non...',
-            size: 'M', quantity: 300, epcStart: '5354250000000001000000104110'
-        },
-        {
-            key: '4', sn: '04', ssn: '1234567890', layout: 'Large Font',
-            description: 'Morbi quis elit condimentum, faucibus eros non...',
-            size: 'M', quantity: 300, epcStart: '5354250000000001000000104110'
-        },
-    ];
     return (
         <Layout>
             <Navbar />
             <Content className={classes.pageContainer}>
-                {/* Header Section */}
+                {/* Header */}
                 <div className={classes.header}>
                     <div className={classes.breadcrumb}>
                         <div style={{ display: 'flex', gap: '8px', alignItems: 'center', color: '#1890ff', marginBottom: '12px' }}>
@@ -73,33 +45,42 @@ const OrderDetails: React.FC = () => {
                             <span style={{ fontWeight: 600 }}>Order #{orderData.id}</span>
                         </div>
                     </div>
-
-                    {/* Title Row */}
                     <div className={classes.titleRow}>
                         <Title level={2} style={{ margin: 0 }}>Order details</Title>
-                        <Button type="primary" size="large" style={{ borderRadius: '4px' }}>
-                            Download Packing List
-                        </Button>
+                        <Button type="primary" size="large">Download Packing List</Button>
                     </div>
                 </div>
 
                 <div className={classes.content}>
-                    {/* 1. Order Information (Full Width) */}
+
                     <OrderInfoCard order={orderData} />
 
-                    {/* 2. PLACEHOLDER: Update Shipping Cost (We will build this next) */}
+
                     <ShippingUpdateCard
                         initialWeight={4}
                         initialCost={30.00}
                         onUpdate={handleShippingUpdate}
                     />
 
-                    {/* 3. PLACEHOLDER: Packing List (We will refactor your Table next) */}
                     <PackingListTable items={packingListItems} />
 
-                    <div style={{ height: '100px', background: 'rgba(0,0,0,0.05)', border: '1px dashed #ccc', margin: '24px 0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        Next Step: Customer Info, Messages & Tracking
-                    </div>
+                    <Row gutter={[24, 24]} style={{ marginBottom: 24 }}>
+                        <Col xs={24} lg={12}>
+                            <CustomerInfoSection data={customerData} />
+                        </Col>
+                        <Col xs={24} lg={12}>
+                            <DeliveryInfoSection data={deliveryData} />
+                        </Col>
+                    </Row>
+
+                    <Row gutter={[24, 24]}>
+                        <Col xs={24} lg={12}>
+                            <MessagesCard />
+                        </Col>
+                        <Col xs={24} lg={12}>
+                            <OrderTrackingCard />
+                        </Col>
+                    </Row>
                 </div>
             </Content>
         </Layout>

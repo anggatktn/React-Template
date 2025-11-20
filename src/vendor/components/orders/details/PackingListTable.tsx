@@ -34,8 +34,7 @@ const PackingListTable: React.FC<PackingListProps> = ({ items }) => {
             key: 'barcode',
             width: 100,
             render: () => (
-                // In a real app, use <img src={record.barcodeUrl} />
-                // Using a visual placeholder to match the "strip" look in your design
+
                 <div style={{
                     width: '60px',
                     height: '20px',
@@ -87,7 +86,6 @@ const PackingListTable: React.FC<PackingListProps> = ({ items }) => {
         },
     ];
 
-    // The buttons that appear on the top right of the card
     const headerActions = (
         <Space>
             <Button style={{ borderColor: '#1890ff', color: '#1890ff' }}>
@@ -105,7 +103,7 @@ const PackingListTable: React.FC<PackingListProps> = ({ items }) => {
             bordered={false}
             extra={headerActions}
             style={{ borderRadius: 8, marginBottom: 24, width: '100%' }}
-            bodyStyle={{ padding: 0 }} // Remove padding for edge-to-edge table
+            bodyStyle={{ padding: 0 }}
         >
             <Table
                 columns={columns}

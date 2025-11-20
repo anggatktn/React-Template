@@ -1,7 +1,7 @@
 import React from 'react';
-import { Card, Row, Col, Typography, Divider, Space } from 'antd';
+import { Card, Row, Col, Typography, Divider } from 'antd';
 
-const { Text, Title } = Typography;
+const { Text } = Typography;
 
 interface OrderInfoProps {
     order: {
@@ -9,9 +9,8 @@ interface OrderInfoProps {
         date: string;
         itemCount: number;
         amountPaid: number;
-        shipmentPaid: string | number | null; // Can be '-' or a number
+        shipmentPaid: string | number | null;
         status: string;
-        // Delivery Details
         deliveryAddress: string;
         contactPerson: string;
         contactPhone: string;
@@ -19,15 +18,30 @@ interface OrderInfoProps {
     };
 }
 
+const getStatusColor = (status: string) => {
+    switch (status) {
+        case 'Update Shipping Cost': return '#DF7021';
+        case 'Awaiting Shipment Payment': return '#1590A0';
+        case 'Ready to Ship': return '#DF7021';
+        case 'Order Shipped': return '#672DB7';
+        case 'Order Delivered': return '#3A9448';
+        case 'Awaiting Collection': return '#1590A0';
+        case 'Order Collected': return '#3A9448';
+        case 'Not Collected': return '#CF3030';
+        default: return '#8c8c8c';
+    }
+};
+
 const OrderInfoCard: React.FC<OrderInfoProps> = ({ order }) => {
-    // Helper for rendering the top stats to ensure consistent styling
-    const renderStat = (label: string, value: React.ReactNode, isMoney = false) => (
+
+    const renderStat = (label: string, value: React.ReactNode, isMoney = false, isStatus = false) => (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-            <Text type="secondary" style={{ fontSize: '12px' }}>{label}</Text>
+            <Text strong style={{ fontSize: '14px', color: '#262626' }}>{label}</Text>
+
             {isMoney ? (
-                <Text style={{ color: '#1890ff', fontWeight: 600 }}>{value}</Text>
+                <Text style={{ color: '#1890ff' }}>{value}</Text>
             ) : (
-                <Text strong>{value}</Text>
+                <Text style={{ color: '#595959' }}>{value}</Text>
             )}
         </div>
     );
@@ -48,15 +62,15 @@ const OrderInfoCard: React.FC<OrderInfoProps> = ({ order }) => {
                 <Col span={3}>{renderStat("Shipment Paid", order.shipmentPaid || '-')}</Col>
                 <Col span={4}>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                        <Text type="secondary" style={{ fontSize: '12px' }}>Status</Text>
-                        <Text type="warning" strong>{order.status}</Text>
+                        <Text strong style={{ fontSize: '14px', color: '#262626' }}>Status</Text>
+                        <Text strong style={{ color: getStatusColor(order.status) }}>{order.status}</Text>
                     </div>
                 </Col>
             </Row>
 
             <Divider style={{ margin: '24px 0' }} />
 
-            {/* Bottom Row: Delivery Details */}
+
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 <Row gutter={[16, 16]}>
                     <Col span={3}>

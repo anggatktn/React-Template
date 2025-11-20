@@ -1,34 +1,43 @@
 import React from 'react';
-import { Card, Descriptions, Avatar } from 'antd';
-import { UserOutlined } from '@ant-design/icons';
+import { Card, Row, Col, Typography } from 'antd';
+
+const { Text } = Typography;
 
 interface CustomerInfoProps {
-    customer: {
-        name: string;
-        email: string;
-        phone: string;
-        address: string;
+    data: {
+        vendorCode: string;
+        customerName: string;
+        companyName: string;
+        companyUEN: string;
+        companyEmail: string;
+        customerMobile: string;
+        companyAddress: string;
     };
 }
 
-const CustomerInfoCard: React.FC<CustomerInfoProps> = ({ customer }) => {
+const CustomerInfoSection: React.FC<CustomerInfoProps> = ({ data }) => {
+    const renderItem = (label: string, value: string) => (
+        <Row style={{ marginBottom: 12 }}>
+            <Col span={8}>
+                <Text strong style={{ fontSize: '14px' }}>{label}</Text>
+            </Col>
+            <Col span={16}>
+                <Text type="secondary">{value}</Text>
+            </Col>
+        </Row>
+    );
+
     return (
-        <Card title="Customer" bordered={false} style={{ marginBottom: 24, borderRadius: 8 }}>
-            <div style={{ display: 'flex', alignItems: 'center', marginBottom: 16 }}>
-                <Avatar icon={<UserOutlined />} style={{ marginRight: 12 }} />
-                <div>
-                    <div style={{ fontWeight: 500 }}>{customer.name}</div>
-                    <div style={{ fontSize: '12px', color: '#8c8c8c' }}>2 previous orders</div>
-                </div>
-            </div>
-            <Descriptions column={1} layout="vertical" size="small">
-                <Descriptions.Item label="Email">{customer.email}</Descriptions.Item>
-                <Descriptions.Item label="Phone">{customer.phone}</Descriptions.Item>
-                <Descriptions.Item label="Shipping Address">{customer.address}</Descriptions.Item>
-                <Descriptions.Item label="Billing Address">Same as shipping address</Descriptions.Item>
-            </Descriptions>
+        <Card title="Customer Information" bordered={false} style={{ borderRadius: 8, height: '100%' }}>
+            {renderItem("Vendor Code", data.vendorCode)}
+            {renderItem("Customer Name", data.customerName)}
+            {renderItem("Company Name", data.companyName)}
+            {renderItem("Company UEN", data.companyUEN)}
+            {renderItem("Company Email", data.companyEmail)}
+            {renderItem("Customer Mobile", data.customerMobile)}
+            {renderItem("Company Address", data.companyAddress)}
         </Card>
     );
 };
 
-export default CustomerInfoCard;
+export default CustomerInfoSection;
