@@ -19,63 +19,65 @@ const ShippingInfoCard: React.FC<ShippingInfoCardProps> = ({
     onEdit
 }) => {
     return (
-        <Card
-            title="Shipping Cost and Weight"
-            bordered={false}
-            style={{ borderRadius: 8, marginBottom: 24, width: '100%' }}
-            bodyStyle={{ padding: '24px' }}
-        >
-            <Row gutter={[16, 16]}>
-                <Col span={24}>
-                    <Row align="middle">
-                        <Col span={6}>
-                            <Text style={{ color: '#515B6D', fontWeight: 500 }}>Logistics Provider</Text>
-                        </Col>
-                        <Col flex="auto">
-                            <Text strong>{provider}</Text>
-                        </Col>
-                        <Col>
-                            <Button type="link" onClick={onEdit} style={{ padding: 0, fontWeight: 600 }}>
-                                Edit
-                            </Button>
-                        </Col>
-                    </Row>
-                </Col>
+        <div style={{ marginBottom: 24 }}>
+            <Typography.Title level={4} style={{ marginBottom: 16, marginTop: 30 }}>Shipping Cost and Weight</Typography.Title>
+            <Card
+                bordered={false}
+                style={{ borderRadius: 8, width: '100%' }}
+                bodyStyle={{ padding: '24px' }}
+            >
+                <Row gutter={[16, 16]}>
+                    <Col span={24}>
+                        <Row align="middle">
+                            <Col span={6}>
+                                <Text style={{ color: '#515B6D', fontWeight: 500 }}>Logistics Provider</Text>
+                            </Col>
+                            <Col flex="auto">
+                                <Text strong>{provider}</Text>
+                            </Col>
+                            <Col>
+                                <Button type="link" onClick={onEdit} style={{ padding: 0, fontWeight: 600 }}>
+                                    Edit
+                                </Button>
+                            </Col>
+                        </Row>
+                    </Col>
 
-                <Col span={24}>
-                    <Row>
-                        <Col span={6}>
-                            <Text style={{ color: '#515B6D', fontWeight: 500 }}>Weight</Text>
-                        </Col>
-                        <Col span={18}>
-                            <Text strong>{weight} KG</Text>
-                        </Col>
-                    </Row>
-                </Col>
+                    <Col span={24}>
+                        <Row>
+                            <Col span={6}>
+                                <Text style={{ color: '#515B6D', fontWeight: 500 }}>Weight</Text>
+                            </Col>
+                            <Col span={18}>
+                                <Text strong>{weight} KG</Text>
+                            </Col>
+                        </Row>
+                    </Col>
 
-                <Col span={24}>
-                    <Row>
-                        <Col span={6}>
-                            <Text style={{ color: '#515B6D', fontWeight: 500 }}>Shipping Cost</Text>
-                        </Col>
-                        <Col span={18}>
-                            <Text strong style={{ color: '#1890ff' }}>S${shippingCost.toFixed(2)}</Text>
-                        </Col>
-                    </Row>
-                </Col>
+                    <Col span={24}>
+                        <Row>
+                            <Col span={6}>
+                                <Text style={{ color: '#515B6D', fontWeight: 500 }}>Shipping Cost</Text>
+                            </Col>
+                            <Col span={18}>
+                                <Text strong style={{ color: '#1890ff' }}>S${shippingCost.toFixed(2)}</Text>
+                            </Col>
+                        </Row>
+                    </Col>
 
-                <Col span={24}>
-                    <Row>
-                        <Col span={6}>
-                            <Text style={{ color: '#515B6D', fontWeight: 500 }}>Status</Text>
-                        </Col>
-                        <Col span={18}>
-                            <Text strong style={{ color: '#13c2c2' }}>{status}</Text>
-                        </Col>
-                    </Row>
-                </Col>
-            </Row>
-        </Card>
+                    <Col span={24}>
+                        <Row>
+                            <Col span={6}>
+                                <Text style={{ color: '#515B6D', fontWeight: 500 }}>Status</Text>
+                            </Col>
+                            <Col span={18}>
+                                <Text strong style={{ color: '#13c2c2' }}>{status}</Text>
+                            </Col>
+                        </Row>
+                    </Col>
+                </Row>
+            </Card>
+        </div>
     );
 };
 

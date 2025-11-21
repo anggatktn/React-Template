@@ -25,12 +25,15 @@ const DeliveryInfoSection: React.FC<DeliveryInfoProps> = ({ data }) => {
     );
 
     return (
-        <Card title="Delivery Information" bordered={false} style={{ borderRadius: 8, height: '100%' }}>
-            {renderItem("Deliver to", <Text type="secondary">{data.deliverTo}</Text>)}
-            {renderItem("Contact Person", <Text type="secondary">{data.contactPerson}</Text>)}
-            {renderItem("Contact Mobile", <Text type="secondary">{data.contactMobile}</Text>)}
-            {renderItem("Delivery Note", <Text style={{ color: '#1890ff', fontStyle: 'italic' }}>{data.deliveryNote}</Text>)}
-        </Card>
+        <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+            <Typography.Title level={4} style={{ marginBottom: 16, marginTop: 30 }}>Delivery Information</Typography.Title>
+            <Card bordered={false} style={{ borderRadius: 8, flex: 1 }}>
+                {renderItem("Deliver to", <Text type="secondary">{data.deliverTo}</Text>)}
+                {renderItem("Contact Person", <Text type="secondary">{data.contactPerson}</Text>)}
+                {renderItem("Contact Mobile", <Text type="secondary">{data.contactMobile}</Text>)}
+                {renderItem("Delivery Note", <Text style={{ color: '#1890ff', fontStyle: 'italic' }}>{data.deliveryNote}</Text>)}
+            </Card>
+        </div>
     );
 };
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card, Button, message } from 'antd';
+import { Card, Button, message, Typography } from 'antd';
 
 interface UpdateOrderStatusCardProps {
     onAction: () => void;
@@ -19,24 +19,25 @@ const UpdateOrderStatusCard: React.FC<UpdateOrderStatusCardProps> = ({ onAction,
             message.success(successMessage);
         }, 1000);
     };
-
     return (
-        <Card
-            title="Update Order Status"
-            bordered={false}
-            style={{ borderRadius: 8, marginBottom: 24, width: '100%', background: 'transparent', boxShadow: 'none' }}
-            bodyStyle={{ padding: '24px' }}
-        >
-            <Button
-                type="primary"
-                size="large"
-                onClick={handleClick}
-                loading={loading}
-                style={{ fontWeight: 600, paddingLeft: 32, paddingRight: 32 }}
+        <div style={{ marginBottom: 24 }}>
+            <Typography.Title level={4} style={{ marginBottom: 16, marginTop: 30 }}>Update Order Status</Typography.Title>
+            <Card
+                bordered={false}
+                style={{ borderRadius: 8, width: '100%', background: 'transparent', boxShadow: 'none' }}
+                bodyStyle={{ padding: 0 }}
             >
-                {buttonText}
-            </Button>
-        </Card>
+                <Button
+                    type="primary"
+                    size="large"
+                    onClick={handleClick}
+                    loading={loading}
+                    style={{ fontWeight: 600, paddingLeft: 32, paddingRight: 32 }}
+                >
+                    {buttonText}
+                </Button>
+            </Card>
+        </div>
     );
 };
 
