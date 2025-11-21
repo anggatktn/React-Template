@@ -1,8 +1,9 @@
 import React from "react"
 import HomePage from "../pages/home"
-import ProfileCompletePage from "../pages/profile-complete"
+import ProfileCompletePage from "../pages/profile/complete"
 import OrdersPage from "../vendor/pages/orders"
 import OrderDetails from "../vendor/pages/orders/details/OrderDetails"
+import SSNLibrary from "../pages/dashboard/ssn-lib"
 
 interface IRouteGroup {
     path: string,
@@ -19,6 +20,11 @@ const routeGroup: IRouteGroup[] = [
     {
         path: '/profile/complete',
         element: ProfileCompletePage,
+        isProtected: false
+    },
+    {
+        path: '/dashboard/ssn-lib',
+        element: SSNLibrary,
         isProtected: false
     },
     {

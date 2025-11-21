@@ -1,11 +1,12 @@
 import { useMemo } from "react";
 import { ProfileCompleteModel } from "./profile-complete-model";
-import { useStateFlow } from "../../utils/StateFlow";
+import { useStateFlow } from "../../../utils/StateFlow";
 import { Form, Input, Button, Select, Row, Col, Avatar, Typography } from "antd";
 import classes from "./index.module.less";
 import { UserOutlined } from "@ant-design/icons";
 import Layout, { Header } from "antd/es/layout/layout";
-import MenuLayout, { TopBarMenu } from "../../components/layout/menu-layout";
+import MenuLayout, { TopBarMenu } from "../../../components/layout/menu-layout";
+import { useNavigate } from "react-router-dom";
 
 const { Title } = Typography;
 
@@ -13,7 +14,7 @@ const ProfileCompletePage: React.FC = () => {
     const model = useMemo(() => new ProfileCompleteModel(), []);
     const state = useStateFlow(model.state);
     const [form] = Form.useForm();
-
+    const navigate = useNavigate();
     return (
         <MenuLayout selectedMenu={undefined} onSelectMenu={() => { }} isMenuVisible={false}>
             <div className={classes.content}>
@@ -23,7 +24,10 @@ const ProfileCompletePage: React.FC = () => {
                 <Form
                     form={form}
                     layout="vertical"
-                    onFinish={model.onCompleteSignUpPressed}
+                    onFinish={(v) => {
+                        model.onCompleteSignUpPressed(v)
+                        navigate('/dashboard/ssn-lib')
+                    }}
                     initialValues={state.formValues}
                     className={classes.form}
                     requiredMark={false}

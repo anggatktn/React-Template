@@ -1,7 +1,8 @@
 import type { ProfileCompleteForms, ProfileCompleteState } from "./profile-complete-state";
-import { StateFlow } from "../../utils/StateFlow";
+import { StateFlow } from "../../../utils/StateFlow";
 
 export class ProfileCompleteModel {
+
     public readonly state: StateFlow<ProfileCompleteState> = new StateFlow({
         formValues: {
             vendorCode: "",

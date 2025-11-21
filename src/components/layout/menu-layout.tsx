@@ -6,13 +6,20 @@ import { NavLink } from "react-router-dom";
 
 interface MenuLayoutProps {
     selectedMenu?: TopBarMenu;
-    onSelectMenu: (menu: TopBarMenu) => void;
-    isMenuVisible: boolean,
-    children: React.ReactNode;
+    onSelectMenu?: (menu: TopBarMenu) => void;
+    isMenuVisible?: boolean,
+    children?: React.ReactNode;
 }
 
-const MenuLayout: React.FC<MenuLayoutProps> = ({ selectedMenu, onSelectMenu, isMenuVisible, children }) => {
-    const menuValues = Object.values(TopBarMenu).filter((value) => typeof value != 'number');
+const MenuLayout: React.FC<MenuLayoutProps> = ({
+    selectedMenu,
+    onSelectMenu,
+    isMenuVisible = true,
+    children
+}) => {
+    const menuValues = Object.keys(TopBarMenu)
+        .filter((key) => isNaN(Number(key)))
+        .map((key) => TopBarMenu[key as keyof typeof TopBarMenu]);
     return <Layout style={{
         minHeight: "100vh",
         backgroundColor: "#f4f6f8",
@@ -63,7 +70,14 @@ const MenuLayout: React.FC<MenuLayoutProps> = ({ selectedMenu, onSelectMenu, isM
                         gap: "20px",
                     }}>
                         {menuValues.map((menu) => {
-                            return <NavLink to={""} key={menu}>{menu}</NavLink>
+                            return <NavLink
+                                to={""}
+                                key={menu}
+                                style={{
+                                    color: selectedMenu === menu ? "#265CD7" : "#000",
+                                    fontWeight: 500,
+                                }}
+                            >{GetMenuLabel[menu]}</NavLink>
                         })}
                     </Row> : <></>
                 }
@@ -72,7 +86,13 @@ const MenuLayout: React.FC<MenuLayoutProps> = ({ selectedMenu, onSelectMenu, isM
 
             </div>
         </Header>
-        {children}
+        <div style={{
+            width: "100%",
+            maxWidth: "1200px",
+            paddingTop: "50px"
+        }}>
+            {children}
+        </div>
     </Layout >
 }
 
