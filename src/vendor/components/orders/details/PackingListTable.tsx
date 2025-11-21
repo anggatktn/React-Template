@@ -1,7 +1,6 @@
 import React from 'react';
 import { Table, Button, Card, Typography, Space } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import { BarcodeOutlined } from '@ant-design/icons'; // Placeholder for barcode image
 
 const { Text } = Typography;
 
@@ -21,7 +20,7 @@ interface PackingListProps {
 }
 
 const PackingListTable: React.FC<PackingListProps> = ({ items }) => {
-    const columns: ColumnsType<PackingListItem> = [
+    const baseColumns: ColumnsType<PackingListItem> = [
         {
             title: 'S/N',
             dataIndex: 'sn',
@@ -34,7 +33,6 @@ const PackingListTable: React.FC<PackingListProps> = ({ items }) => {
             key: 'barcode',
             width: 100,
             render: () => (
-
                 <div style={{
                     width: '60px',
                     height: '20px',
@@ -64,7 +62,7 @@ const PackingListTable: React.FC<PackingListProps> = ({ items }) => {
             title: 'Description',
             dataIndex: 'description',
             key: 'description',
-            ellipsis: true, // Truncate long text
+            ellipsis: true,
         },
         {
             title: 'Size',
@@ -86,32 +84,69 @@ const PackingListTable: React.FC<PackingListProps> = ({ items }) => {
         },
     ];
 
+    const columns = baseColumns.map((col) => ({
+        ...col,
+        onHeaderCell: () => ({
+            style: {
+                backgroundColor: '#E5EAF0',
+                borderBottom: '1px solid #d9d9d9',
+                fontWeight: 600
+            },
+        }),
+    }));
+
     const headerActions = (
-        <Space>
-            <Button style={{ borderColor: '#1890ff', color: '#1890ff' }}>
+        <Space size={12}>
+            <Button style={{
+                borderColor: '#265CD7',
+                borderWidth: '1px',
+                color: '#265CD7',
+                background: '#ECF2FF',
+                borderRadius: '6px',
+                padding: '15px 25px',
+                height: 'auto',
+                fontSize: '15px',
+                fontWeight: '700',
+                boxShadow: '0px 0px 4px 0px rgba(106, 77, 187, 0.12)'
+            }}>
                 Download Shipping Label
             </Button>
-            <Button style={{ borderColor: '#1890ff', color: '#1890ff', background: '#e6f7ff' }}>
+            <Button style={{
+                borderColor: '#265CD7',
+                borderWidth: '1px',
+                color: '#265CD7',
+                background: '#ECF2FF',
+                borderRadius: '6px',
+                padding: '15px 25px',
+                height: 'auto',
+                fontSize: '15px',
+                fontWeight: '700',
+                boxShadow: '0px 0px 4px 0px rgba(106, 77, 187, 0.12)'
+            }}>
                 Download Packing List
             </Button>
         </Space>
     );
 
     return (
-        <Card
-            title="Packing List"
-            bordered={false}
-            extra={headerActions}
-            style={{ borderRadius: 8, marginBottom: 24, width: '100%' }}
-            bodyStyle={{ padding: 0 }}
-        >
-            <Table
-                columns={columns}
-                dataSource={items}
-                pagination={false}
-                rowKey="key"
-            />
-        </Card>
+        <div style={{ marginBottom: 24, marginTop: 50 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+                <Typography.Title level={4} style={{ margin: 0 }}>Packing List</Typography.Title>
+                {headerActions}
+            </div>
+            <Card
+                bordered={false}
+                style={{ borderRadius: 8, width: '100%' }}
+                bodyStyle={{ padding: 0 }}
+            >
+                <Table
+                    columns={columns}
+                    dataSource={items}
+                    pagination={false}
+                    rowKey="key"
+                />
+            </Card>
+        </div>
     );
 };
 

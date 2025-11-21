@@ -34,7 +34,7 @@ const getStatusColor = (status: string) => {
 
 const OrderInfoCard: React.FC<OrderInfoProps> = ({ order }) => {
 
-    const renderStat = (label: string, value: React.ReactNode, isMoney = false, isStatus = false) => (
+    const renderStat = (label: string, value: React.ReactNode, isMoney = false) => (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
             <Text strong style={{ fontSize: '14px', color: '#262626' }}>{label}</Text>
 
@@ -47,59 +47,61 @@ const OrderInfoCard: React.FC<OrderInfoProps> = ({ order }) => {
     );
 
     return (
-        <Card
-            title="Order Information"
-            bordered={false}
-            style={{ borderRadius: 8, width: '100%', marginBottom: 24 }}
-            bodyStyle={{ padding: '24px' }}
-        >
-            {/* Top Row: Metrics */}
-            <Row gutter={[24, 24]} align="middle">
-                <Col span={4}>{renderStat("Ordered On", order.date)}</Col>
-                <Col span={4}>{renderStat("Order ID", order.id)}</Col>
-                <Col span={3}>{renderStat("No. of items", String(order.itemCount).padStart(2, '0'))}</Col>
-                <Col span={3}>{renderStat("Amount Paid", `S$${order.amountPaid.toFixed(2)}`, true)}</Col>
-                <Col span={3}>{renderStat("Shipment Paid", order.shipmentPaid || '-')}</Col>
-                <Col span={4}>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                        <Text strong style={{ fontSize: '14px', color: '#262626' }}>Status</Text>
-                        <Text strong style={{ color: getStatusColor(order.status) }}>{order.status}</Text>
-                    </div>
-                </Col>
-            </Row>
-
-            <Divider style={{ margin: '24px 0' }} />
-
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                <Row gutter={[16, 16]}>
-                    <Col span={3}>
-                        <Text strong>Deliver to</Text>
-                    </Col>
-                    <Col span={21}>
-                        <Text type="secondary">{order.deliveryAddress}</Text>
+        <div style={{ marginBottom: 24 }}>
+            <Typography.Title level={4} style={{ marginBottom: 16, marginTop: 30 }}>Order Information</Typography.Title>
+            <Card
+                bordered={false}
+                style={{ borderRadius: 8, width: '100%' }}
+                bodyStyle={{ padding: '24px' }}
+            >
+                {/* Top Row: Metrics */}
+                <Row gutter={[24, 24]} align="middle">
+                    <Col span={4}>{renderStat("Ordered On", order.date)}</Col>
+                    <Col span={4}>{renderStat("Order ID", order.id)}</Col>
+                    <Col span={3}>{renderStat("No. of items", String(order.itemCount).padStart(2, '0'))}</Col>
+                    <Col span={3}>{renderStat("Amount Paid", `S$${order.amountPaid.toFixed(2)}`, true)}</Col>
+                    <Col span={3}>{renderStat("Shipment Paid", order.shipmentPaid || '-')}</Col>
+                    <Col span={4}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                            <Text strong style={{ fontSize: '14px', color: '#262626' }}>Status</Text>
+                            <Text strong style={{ color: getStatusColor(order.status) }}>{order.status}</Text>
+                        </div>
                     </Col>
                 </Row>
 
-                <Row gutter={[16, 16]}>
-                    <Col span={3}>
-                        <Text strong>Contact Person</Text>
-                    </Col>
-                    <Col span={21}>
-                        <Text type="secondary">{order.contactPerson}, {order.contactPhone}</Text>
-                    </Col>
-                </Row>
+                <Divider style={{ margin: '24px 0' }} />
 
-                <Row gutter={[16, 16]}>
-                    <Col span={3}>
-                        <Text strong>Delivery Note</Text>
-                    </Col>
-                    <Col span={21}>
-                        <Text type="secondary">{order.deliveryNote}</Text>
-                    </Col>
-                </Row>
-            </div>
-        </Card>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                    <Row gutter={[16, 16]}>
+                        <Col span={3}>
+                            <Text strong>Deliver to</Text>
+                        </Col>
+                        <Col span={21}>
+                            <Text type="secondary">{order.deliveryAddress}</Text>
+                        </Col>
+                    </Row>
+
+                    <Row gutter={[16, 16]}>
+                        <Col span={3}>
+                            <Text strong>Contact Person</Text>
+                        </Col>
+                        <Col span={21}>
+                            <Text type="secondary">{order.contactPerson}, {order.contactPhone}</Text>
+                        </Col>
+                    </Row>
+
+                    <Row gutter={[16, 16]}>
+                        <Col span={3}>
+                            <Text strong>Delivery Note</Text>
+                        </Col>
+                        <Col span={21}>
+                            <Text type="secondary">{order.deliveryNote}</Text>
+                        </Col>
+                    </Row>
+                </div>
+            </Card>
+        </div>
     );
 };
 

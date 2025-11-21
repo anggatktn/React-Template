@@ -29,50 +29,52 @@ const ShippingUpdateCard: React.FC<ShippingUpdateProps> = ({
     };
 
     return (
-        <Card
-            title="Update Shipping Cost and Weight"
-            bordered={false}
-            style={{ borderRadius: 8, marginBottom: 24, width: '100%' }}
-            bodyStyle={{ padding: '24px' }}
-        >
-            <Row gutter={[24, 24]} align="bottom">
-                <Col span={6}>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                        <Text strong style={{ fontSize: '14px' }}>Total Weight</Text>
-                        <Input
-                            suffix={<span style={{ color: '#bfbfbf' }}>KG</span>}
-                            value={weight}
-                            onChange={(e) => setWeight(e.target.value)}
-                            style={{ padding: '8px 12px' }}
-                        />
-                    </div>
-                </Col>
+        <div style={{ marginBottom: 24 }}>
+            <Typography.Title level={4} style={{ marginBottom: 16, marginTop: 0 }}>Update Shipping Cost and Weight</Typography.Title>
+            <Card
+                bordered={false}
+                style={{ borderRadius: 8, width: '100%' }}
+                bodyStyle={{ padding: '24px' }}
+            >
+                <Row gutter={[24, 24]} align="bottom">
+                    <Col span={6}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                            <Text strong style={{ fontSize: '14px' }}>Total Weight</Text>
+                            <Input
+                                suffix={<span style={{ color: '#bfbfbf' }}>KG</span>}
+                                value={weight}
+                                onChange={(e) => setWeight(e.target.value)}
+                                style={{ padding: '8px 12px' }}
+                            />
+                        </div>
+                    </Col>
 
-                <Col span={6}>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                        <Text strong style={{ fontSize: '14px' }}>Total Shipping Cost</Text>
-                        <Input
-                            prefix={<span style={{ color: '#bfbfbf', marginRight: 4 }}>S$</span>}
-                            value={cost}
-                            onChange={(e) => setCost(e.target.value)}
-                            style={{ padding: '8px 12px' }}
-                        />
-                    </div>
-                </Col>
+                    <Col span={6}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                            <Text strong style={{ fontSize: '14px' }}>Total Shipping Cost</Text>
+                            <Input
+                                prefix={<span style={{ color: '#bfbfbf', marginRight: 4 }}>S$</span>}
+                                value={cost}
+                                onChange={(e) => setCost(e.target.value)}
+                                style={{ padding: '8px 12px' }}
+                            />
+                        </div>
+                    </Col>
 
-                <Col span={4}>
-                    <Button
-                        type="primary"
-                        onClick={handleUpdate}
-                        loading={loading}
-                        block
-                        style={{ height: '40px' }} // Matches input height
-                    >
-                        Update
-                    </Button>
-                </Col>
-            </Row>
-        </Card>
+                    <Col span={4}>
+                        <Button
+                            type="primary"
+                            onClick={handleUpdate}
+                            loading={loading}
+                            block
+                            style={{ height: '40px' }} // Matches input height
+                        >
+                            Update
+                        </Button>
+                    </Col>
+                </Row>
+            </Card>
+        </div>
     );
 };
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Layout, Typography, Button, Row, Col } from 'antd';
+import { Layout, Typography, Row, Col, Divider } from 'antd';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import { useNavigate, useParams } from 'react-router-dom';
 import Navbar from '../../../../components/layout/Navbar';
@@ -13,7 +13,7 @@ import CustomerInfoSection from '../../../components/orders/details/CustomerInfo
 import MessagesCard from '../../../components/orders/details/MessagesCard';
 import DeliveryInfoSection from '../../../components/orders/details/DeliveryInfoSection';
 import OrderTrackingCard from '../../../components/orders/details/OrderTrackingCard';
-import { getMockOrderData, mockPackingListItems, mockCustomerData, mockDeliveryData } from './data';
+import { getMockOrderData, mockPackingListItems, mockCustomerData } from './data';
 
 const { Content } = Layout;
 const { Title } = Typography;
@@ -26,7 +26,6 @@ const OrderDetails: React.FC = () => {
     const orderData = getMockOrderData(id);
     const packingListItems = mockPackingListItems;
     const customerData = mockCustomerData;
-    const deliveryData = mockDeliveryData;
 
     const [currentStatus, setCurrentStatus] = useState(orderData.status);
 
@@ -71,8 +70,8 @@ const OrderDetails: React.FC = () => {
                     </div>
                     <div className={classes.titleRow}>
                         <Title level={2} style={{ margin: 0 }}>Order details</Title>
-                        <Button type="primary" size="large">Download Packing List</Button>
                     </div>
+                    <Divider style={{ margin: '16px 0', borderColor: '#D2DAE5' }} />
                 </div>
 
                 <div className={classes.content}>
@@ -114,16 +113,21 @@ const OrderDetails: React.FC = () => {
 
                     <PackingListTable items={packingListItems} />
 
-                    <Row gutter={[24, 24]} style={{ marginBottom: 24 }}>
+                    <Row gutter={[24, 24]} style={{ marginBottom: 32 }}>
                         <Col xs={24} lg={12}>
                             <CustomerInfoSection data={customerData} />
                         </Col>
                         <Col xs={24} lg={12}>
-                            <DeliveryInfoSection data={deliveryData} />
+                            <DeliveryInfoSection data={{
+                                deliverTo: orderData.deliveryAddress,
+                                contactPerson: orderData.contactPerson,
+                                contactMobile: orderData.contactPhone,
+                                deliveryNote: orderData.deliveryNote
+                            }} />
                         </Col>
                     </Row>
 
-                    <Row gutter={[24, 24]}>
+                    <Row gutter={[24, 24]} style={{ marginBottom: 32 }}>
                         <Col xs={24} lg={12}>
                             <MessagesCard />
                         </Col>

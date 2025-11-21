@@ -28,15 +28,18 @@ const CustomerInfoSection: React.FC<CustomerInfoProps> = ({ data }) => {
     );
 
     return (
-        <Card title="Customer Information" bordered={false} style={{ borderRadius: 8, height: '100%' }}>
-            {renderItem("Vendor Code", data.vendorCode)}
-            {renderItem("Customer Name", data.customerName)}
-            {renderItem("Company Name", data.companyName)}
-            {renderItem("Company UEN", data.companyUEN)}
-            {renderItem("Company Email", data.companyEmail)}
-            {renderItem("Customer Mobile", data.customerMobile)}
-            {renderItem("Company Address", data.companyAddress)}
-        </Card>
+        <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+            <Typography.Title level={4} style={{ marginBottom: 16, marginTop: 30 }}>Customer Information</Typography.Title>
+            <Card bordered={false} style={{ borderRadius: 8, flex: 1 }}>
+                {renderItem("Vendor Code", data.vendorCode)}
+                {renderItem("Customer Name", data.customerName)}
+                {renderItem("Company Name", data.companyName)}
+                {renderItem("Company UEN", data.companyUEN)}
+                {renderItem("Company Email", data.companyEmail)}
+                {renderItem("Customer Mobile", data.customerMobile)}
+                {renderItem("Company Address", data.companyAddress)}
+            </Card>
+        </div>
     );
 };
 
