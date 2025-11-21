@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Layout, Typography, Button, Row, Col } from 'antd';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import { useNavigate, useParams } from 'react-router-dom';
 import Navbar from '../../../../components/layout/Navbar';
 import OrderInfoCard from '../../../components/orders/details/OrderInfoCard';
 import ShippingUpdateCard from '../../../components/orders/details/ShippingUpdateCard';
+import ShippingInfoCard from '../../../components/orders/details/ShippingInfoCard';
+import UpdateOrderStatusCard from '../../../components/orders/details/UpdateOrderStatusCard';
 import PackingListTable from '../../../components/orders/details/PackingListTable';
 import classes from './OrderDetails.module.less';
 import CustomerInfoSection from '../../../components/orders/details/CustomerInfoCard';
@@ -26,9 +28,31 @@ const OrderDetails: React.FC = () => {
     const customerData = mockCustomerData;
     const deliveryData = mockDeliveryData;
 
+    const [currentStatus, setCurrentStatus] = useState(orderData.status);
+
+    // Update local state when orderData changes
+    useEffect(() => {
+        setCurrentStatus(orderData.status);
+    }, [orderData.status]);
+
     const handleShippingUpdate = (newWeight: number, newCost: number) => {
         console.log('Updating:', newWeight, newCost);
         // Here you would typically call your backend API
+        setCurrentStatus('Awaiting Shipment Payment');
+    };
+
+    const handleEditShipping = () => {
+        setCurrentStatus('Update Shipping Cost');
+    };
+
+    const handleMarkAsShipped = () => {
+        console.log('Marking as shipped');
+        setCurrentStatus('Order Shipped');
+    };
+
+    const handleMarkAsCollected = () => {
+        console.log('Marking as collected');
+        setCurrentStatus('Order Collected');
     };
 
     return (
@@ -53,14 +77,40 @@ const OrderDetails: React.FC = () => {
 
                 <div className={classes.content}>
 
-                    <OrderInfoCard order={orderData} />
+                    <OrderInfoCard order={{ ...orderData, status: currentStatus }} />
 
+                    {currentStatus === 'Update Shipping Cost' && (
+                        <ShippingUpdateCard
+                            initialWeight={4}
+                            initialCost={30.00}
+                            onUpdate={handleShippingUpdate}
+                        />
+                    )}
 
-                    <ShippingUpdateCard
-                        initialWeight={4}
-                        initialCost={30.00}
-                        onUpdate={handleShippingUpdate}
-                    />
+                    {currentStatus === 'Awaiting Shipment Payment' && (
+                        <ShippingInfoCard
+                            weight={4}
+                            shippingCost={30.00}
+                            status={currentStatus}
+                            onEdit={handleEditShipping}
+                        />
+                    )}
+
+                    {currentStatus === 'Ready to Ship' && (
+                        <UpdateOrderStatusCard
+                            onAction={handleMarkAsShipped}
+                            buttonText="Mark Order as Shipped"
+                            successMessage="Order marked as shipped"
+                        />
+                    )}
+
+                    {currentStatus === 'Awaiting Collection' && (
+                        <UpdateOrderStatusCard
+                            onAction={handleMarkAsCollected}
+                            buttonText="Mark Order as Collected"
+                            successMessage="Order marked as collected"
+                        />
+                    )}
 
                     <PackingListTable items={packingListItems} />
 
