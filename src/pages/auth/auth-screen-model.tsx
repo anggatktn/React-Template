@@ -9,7 +9,7 @@ export class AuthScreenModel {
         isLoading: false
     } as AuthScreenState);
 
-    public onFormPrimaryButtonPressed = (values: FormValues) => {
+    public onFormPrimaryButtonPressed = (values: FormValues, onSignUpOtpSuccess: () => void) => {
         console.log(values)
         var newFormType: AuthFormType = AuthFormType.SignIn
         switch (this.state.getValue().authFormType) {
@@ -20,7 +20,8 @@ export class AuthScreenModel {
                 newFormType = AuthFormType.EnterOTP
                 break
             case AuthFormType.EnterOTP:
-                console.log("Enter OTP")
+                onSignUpOtpSuccess()
+                return
                 break
         }
         this.state.setValue({

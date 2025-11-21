@@ -35,7 +35,11 @@ const AuthPage: React.FC = () => {
             </div>
             <div className={classes["right-pane"]}>
                 <LoginForm
-                    onPrimaryButtonClicked={model.onFormPrimaryButtonPressed}
+                    onPrimaryButtonClicked={(values: FormValues) => {
+                        model.onFormPrimaryButtonPressed(values, () => {
+                            navigate('/profile/complete')
+                        })
+                    }}
                     onSecondaryButtonClicked={model.onFormSecondaryButtonPressed}
                     formType={state.authFormType}
                     onRetypeEmail={model.onRetypeEmail}
