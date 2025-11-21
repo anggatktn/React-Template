@@ -61,7 +61,7 @@ const OrderDetails: React.FC = () => {
                 {/* Header */}
                 <div className={classes.header}>
                     <div className={classes.breadcrumb}>
-                        <div style={{ display: 'flex', gap: '8px', alignItems: 'center', color: '#1890ff', marginBottom: '12px' }}>
+                        <div style={{ display: 'flex', gap: '8px', alignItems: 'center', color: '#1890ff', marginBottom: '12px', marginTop: '23px' }}>
                             <ArrowLeftOutlined onClick={() => navigate('/vendor/orders')} style={{ cursor: 'pointer' }} />
                             <span>Order Tracking</span>
                             <span>{'>'}</span>

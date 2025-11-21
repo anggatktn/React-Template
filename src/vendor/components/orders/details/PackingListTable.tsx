@@ -13,6 +13,7 @@ export interface PackingListItem {
     size: string;
     quantity: number;
     epcStart: string;
+    epcEnd?: string;
 }
 
 interface PackingListProps {
@@ -80,7 +81,13 @@ const PackingListTable: React.FC<PackingListProps> = ({ items }) => {
             title: 'EPC-Start',
             dataIndex: 'epcStart',
             key: 'epcStart',
-            render: (text) => <Text type="secondary" style={{ fontSize: '12px' }}>{text}</Text>,
+            render: (text) => <Text type="secondary" style={{ fontSize: '14px' }}>{text}</Text>,
+        },
+        {
+            title: 'EPC-End',
+            dataIndex: 'epcEnd',
+            key: 'epcEnd',
+            render: (text) => <Text type="secondary" style={{ fontSize: '14px' }}>{text || '-'}</Text>,
         },
     ];
 
@@ -144,6 +151,7 @@ const PackingListTable: React.FC<PackingListProps> = ({ items }) => {
                     dataSource={items}
                     pagination={false}
                     rowKey="key"
+                    scroll={{ x: 'max-content' }}
                 />
             </Card>
         </div>

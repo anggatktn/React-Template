@@ -39,7 +39,7 @@ const OrderInfoCard: React.FC<OrderInfoProps> = ({ order }) => {
             <Text strong style={{ fontSize: '14px', color: '#262626' }}>{label}</Text>
 
             {isMoney ? (
-                <Text style={{ color: '#1890ff' }}>{value}</Text>
+                <Text style={{ color: '#3654CB', fontWeight: "600" }}>{value}</Text>
             ) : (
                 <Text style={{ color: '#595959' }}>{value}</Text>
             )}
@@ -60,7 +60,7 @@ const OrderInfoCard: React.FC<OrderInfoProps> = ({ order }) => {
                     <Col span={4}>{renderStat("Order ID", order.id)}</Col>
                     <Col span={3}>{renderStat("No. of items", String(order.itemCount).padStart(2, '0'))}</Col>
                     <Col span={3}>{renderStat("Amount Paid", `S$${order.amountPaid.toFixed(2)}`, true)}</Col>
-                    <Col span={3}>{renderStat("Shipment Paid", order.shipmentPaid || '-')}</Col>
+                    <Col span={3}>{renderStat("Shipment Paid", order.shipmentPaid ? `S$${Number(order.shipmentPaid).toFixed(2)}` : '-', order.shipmentPaid ? true : false)}</Col>
                     <Col span={4}>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                             <Text strong style={{ fontSize: '14px', color: '#262626' }}>Status</Text>

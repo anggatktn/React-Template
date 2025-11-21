@@ -50,7 +50,8 @@ export const mockPackingListItems: PackingListItem[] = [
         description: 'Morbi quis elit condimentum, faucibus eros non...',
         size: 'M',
         quantity: 300,
-        epcStart: '5354250000000001000000104110'
+        epcStart: '5354250000000001000000104110',
+        epcEnd: '5354250000000001000000104410'
     },
     {
         key: '2',
@@ -60,7 +61,8 @@ export const mockPackingListItems: PackingListItem[] = [
         description: 'Morbi quis elit condimentum, faucibus eros non...',
         size: 'M',
         quantity: 300,
-        epcStart: '5354250000000001000000104110'
+        epcStart: '5354250000000001000000104110',
+        epcEnd: '5354250000000001000000104410'
     },
     {
         key: '3',
@@ -70,7 +72,8 @@ export const mockPackingListItems: PackingListItem[] = [
         description: 'Morbi quis elit condimentum, faucibus eros non...',
         size: 'M',
         quantity: 300,
-        epcStart: '5354250000000001000000104110'
+        epcStart: '5354250000000001000000104110',
+        epcEnd: '5354250000000001000000104410'
     },
     {
         key: '4',
@@ -80,7 +83,8 @@ export const mockPackingListItems: PackingListItem[] = [
         description: 'Morbi quis elit condimentum, faucibus eros non...',
         size: 'M',
         quantity: 300,
-        epcStart: '5354250000000001000000104110'
+        epcStart: '5354250000000001000000104110',
+        epcEnd: '5354250000000001000000104410'
     },
 ];
 

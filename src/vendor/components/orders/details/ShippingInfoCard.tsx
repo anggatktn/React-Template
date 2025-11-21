@@ -20,7 +20,7 @@ const ShippingInfoCard: React.FC<ShippingInfoCardProps> = ({
 }) => {
     return (
         <div style={{ marginBottom: 24 }}>
-            <Typography.Title level={4} style={{ marginBottom: 16, marginTop: 0 }}>Shipping Cost and Weight</Typography.Title>
+            <Typography.Title level={4} style={{ marginBottom: 16, marginTop: 30 }}>Shipping Cost and Weight</Typography.Title>
             <Card
                 bordered={false}
                 style={{ borderRadius: 8, width: '100%' }}
