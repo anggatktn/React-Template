@@ -1,6 +1,5 @@
-import type { ProfileCompleteState } from "./profile-complete-state";
+import type { ProfileCompleteForms, ProfileCompleteState } from "./profile-complete-state";
 import { StateFlow } from "../../utils/StateFlow";
-import type { ProfileCompleteForms } from ".";
 
 export class ProfileCompleteModel {
     public readonly state: StateFlow<ProfileCompleteState> = new StateFlow({
@@ -16,13 +15,27 @@ export class ProfileCompleteModel {
             city: "",
             stateRegion: "",
             postalCode: "",
-            country: "",
+            country: undefined,
             deliveryContactPerson: "",
             deliveryContactPhone: "",
         }
-    });
+    } as ProfileCompleteState);
 
-    onCompleteSignUpPressed(values: ProfileCompleteForms) {
+    public readonly countries: Record<string, string> = {
+        "Singapore": "Singapore",
+        "Malaysia": "Malaysia",
+        "Indonesia": "Indonesia",
+        "Brunei": "Brunei",
+        "Thailand": "Thailand",
+        "Vietnam": "Vietnam",
+        "Myanmar": "Myanmar",
+        "Philippines": "Philippines",
+        "Laos": "Laos",
+        "Cambodia": "Cambodia",
+    };
+
+    public onCompleteSignUpPressed = (values: ProfileCompleteForms) => {
+        console.log(values)
         this.state.setValue({
             ...this.state.getValue(),
             formValues: values

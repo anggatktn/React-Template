@@ -4,9 +4,8 @@ import { Form, Input, Button, Checkbox, Typography, Alert, InputNumber } from 'a
 import classes from './index.module.less';
 import { AuthFormType } from '../../../pages/auth/auth-screen-state';
 
-const { Title, Link } = Typography;
+const { Link } = Typography;
 
-// 2. Define the types for the form fields
 export interface FormValues {
     email: string;
     password?: string;
@@ -20,12 +19,6 @@ interface LoginFormArgs {
     onRetypeEmail: () => void,
     formType: AuthFormType,
     isLoading: boolean
-}
-
-// 3. Define the type for the custom message state
-interface MessageState {
-    type: 'success' | 'error' | 'info' | 'warning';
-    text: string;
 }
 
 const ButtonSecondaryLabels: Record<AuthFormType, string> = {
@@ -91,16 +84,6 @@ const LoginForm: React.FC<LoginFormArgs> = ({
                         }}
                     >Re-type email</span>
                 </div> : <></>}
-
-                {/* Status Message Display */}
-                {/* {message && (
-                    <Alert
-                        message={message.text}
-                        type={message.type}
-                        showIcon
-                        style={{ marginBottom: 24 }}
-                    />
-                )} */}
 
                 <Form
                     form={form}
