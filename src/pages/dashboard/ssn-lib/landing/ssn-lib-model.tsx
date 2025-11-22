@@ -6,7 +6,8 @@ export class SSNLibModel {
     public readonly state: StateFlow<SSNLibState> = new StateFlow({
         sortBy: "S/N",
         searchValue: "",
-    });
+        ssnLibList: ["1"],
+    } as SSNLibState);
 
     private navigate?: NavigateFunction;
 
@@ -29,6 +30,13 @@ export class SSNLibModel {
         this.state.setValue({
             ...this.state.getValue(),
             searchValue: value
+        });
+    }
+
+    public handleSSNLibList = (value: string[]) => {
+        this.state.setValue({
+            ...this.state.getValue(),
+            ssnLibList: value
         });
     }
 }

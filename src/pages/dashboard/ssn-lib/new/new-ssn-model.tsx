@@ -1,6 +1,7 @@
 import type { NavigateFunction } from "react-router-dom";
 import { StateFlow } from "../../../../utils/StateFlow";
 import { type AddSSNState, type AddedSSNRecord } from "./new-ssn-state";
+import { v4 as uuidv4 } from 'uuid';
 
 export class AddSSNModel {
     public readonly state: StateFlow<AddSSNState> = new StateFlow<AddSSNState>({
@@ -18,6 +19,7 @@ export class AddSSNModel {
                 style: 'Standard',
                 description: 'Description',
                 size: 'Size',
+                id: uuidv4(),
             },
             {
                 addedOn: '2025-11-22 08:54:54',
@@ -27,6 +29,7 @@ export class AddSSNModel {
                 style: 'Standard',
                 description: 'Description',
                 size: 'Size',
+                id: uuidv4(),
             },
         ],
     });
@@ -110,6 +113,7 @@ export class AddSSNModel {
             style: this.getLayoutName(currentState.selectedLayout),
             description: currentState.description || '-',
             size: currentState.size || '-',
+            id: uuidv4(),
         };
 
         // Add to the list

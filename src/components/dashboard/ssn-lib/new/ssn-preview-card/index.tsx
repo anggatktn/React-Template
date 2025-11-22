@@ -22,20 +22,21 @@ const SSNPreviewCard: React.FC<SSNPreviewCardProps> = ({
 }) => {
     return (
         <div style={{
-            position: 'relative',
             height: '100%',
             display: 'flex',
             flexDirection: 'column',
             gap: '24px',
+            position: 'relative',
         }}>
             <div style={{
+                padding: '12px',
                 position: 'sticky',
                 top: "70px",
                 zIndex: 1,
-                padding: '12px',
                 gap: '16px',
                 display: 'flex',
                 flexDirection: 'column',
+                height: "max-content",
                 borderBottom: '1px solid #E8EDF0',
             }}>
                 <Text strong style={{
@@ -96,7 +97,7 @@ const SSNPreviewCard: React.FC<SSNPreviewCardProps> = ({
                 </div>
                 <Button
                     type="primary"
-                    size="large"
+                    size="middle"
                     block
                     onClick={onAddToLibrary}
                     disabled={!canAdd}

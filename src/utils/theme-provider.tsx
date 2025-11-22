@@ -10,5 +10,8 @@ export const theme: ThemeConfig = {
             colorBgContainerDisabled: 'rgba(38, 92, 215, 0.5)',
             colorTextDisabled: 'rgba(255, 255, 255, 0.8)',
         },
+        Segmented: {
+            boxShadowTertiary: 'none',
+        }
     }
 };

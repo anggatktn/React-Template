@@ -136,7 +136,7 @@ const AddedSSNsTable: React.FC<AddedSSNsTableProps> = ({
                 columns={columns}
                 dataSource={addedSSNs}
                 pagination={false}
-                rowKey={(record, index) => `${record.ssn}-${index}`}
+                rowKey={(record) => `${record.id}`}
                 locale={{
                     emptyText: (
                         <div className={classes['empty-state']}>

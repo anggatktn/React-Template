@@ -3,7 +3,7 @@ import HomePage from "../pages/home"
 import ProfileCompletePage from "../pages/profile/complete"
 import OrdersPage from "../vendor/pages/orders"
 import OrderDetails from "../vendor/pages/orders/details/OrderDetails"
-import SSNLibrary from "../pages/dashboard/ssn-lib/landing"
+import SSNLibraryPage from "../pages/dashboard/ssn-lib/landing"
 import NewSSNPage from "../pages/dashboard/ssn-lib/new"
 
 interface IRouteGroup {
@@ -25,7 +25,7 @@ const routeGroup: IRouteGroup[] = [
     },
     {
         path: '/dashboard/ssn-lib',
-        element: SSNLibrary,
+        element: SSNLibraryPage,
         isProtected: false
     },
     {

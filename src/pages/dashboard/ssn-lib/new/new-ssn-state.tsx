@@ -6,6 +6,7 @@ export interface AddedSSNRecord {
     style: string;
     description: string;
     size: string;
+    id: string;
 }
 
 export interface AddSSNState {
