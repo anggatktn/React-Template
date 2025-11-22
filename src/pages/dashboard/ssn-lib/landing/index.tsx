@@ -1,10 +1,10 @@
-import MenuLayout, { TopBarMenu } from "../../../components/layout/menu-layout";
+import MenuLayout, { TopBarMenu } from "../../../../components/layout/menu-layout";
 import React, { useMemo, useState } from 'react';
 import { Button, Input, Radio, Typography, Empty, Segmented } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import classes from './index.module.less';
 import { SSNLibModel } from "./ssn-lib-model";
-import { useStateFlow } from "../../../utils/StateFlow";
+import { useStateFlow } from "../../../../utils/StateFlow";
 import { useNavigate } from "react-router-dom";
 
 const { Title, Text } = Typography;

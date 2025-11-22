@@ -1,5 +1,5 @@
 import type { NavigateFunction } from "react-router-dom";
-import { StateFlow } from "../../../utils/StateFlow";
+import { StateFlow } from "../../../../utils/StateFlow";
 import { type SSNLibState } from "./ssn-lib-state";
 
 export class SSNLibModel {
@@ -22,7 +22,7 @@ export class SSNLibModel {
     }
 
     public handleAddSSN = () => {
-        this.navigate?.('/dashboard/ssn-lib/add');
+        this.navigate?.('/dashboard/ssn-lib/new');
     }
 
     public handleSearch = (value: string) => {
