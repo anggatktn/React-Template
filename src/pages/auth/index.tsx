@@ -8,10 +8,10 @@ import { useModelLoading } from "../../utils/base/BaseModel";
 
 const AuthPage: React.FC = () => {
 
-    const model = useMemo(() => new AuthScreenModel(), []);
+    const navigate = useNavigate();
+    const model = useMemo(() => new AuthScreenModel(navigate), []);
     const state = useStateFlow(model.state);
     const isLoading = useModelLoading(model);
-    const navigate = useNavigate();
 
     return (
         <div className={classes["container"]}>

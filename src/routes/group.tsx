@@ -21,27 +21,27 @@ const routeGroup: IRouteGroup[] = [
     {
         path: '/profile/complete',
         element: ProfileCompletePage,
-        isProtected: false
+        isProtected: true
     },
     {
         path: '/dashboard/ssn-lib',
         element: SSNLibraryPage,
-        isProtected: false
+        isProtected: true
     },
     {
         path: '/dashboard/ssn-lib/new',
         element: NewSSNPage,
-        isProtected: false
+        isProtected: true
     },
     {
         path: '/vendor/orders',
         element: OrdersPage,
-        isProtected: false
+        isProtected: true
     },
     {
         path: '/vendor/orders/:id',
         element: OrderDetails,
-        isProtected: false
+        isProtected: true
     }
 ]
 

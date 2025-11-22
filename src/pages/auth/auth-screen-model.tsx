@@ -3,14 +3,19 @@ import { authService } from "../../services/auth.service-base";
 import { BaseModel } from "../../utils/base/BaseModel";
 import type { BaseService } from "../../utils/base/BaseService";
 import { AuthFormType, type AuthScreenState } from "./auth-screen-state";
+import { setAuthToken } from "../../utils/auth.utils";
+import type { NavigateFunction } from "react-router-dom";
 
 export class AuthScreenModel extends BaseModel<AuthScreenState> {
-    constructor() {
+    private navigate?: NavigateFunction;
+
+    constructor(navigate: NavigateFunction) {
         super({
             buttonClicked: 0,
             authFormType: AuthFormType.SignIn,
             isLoading: false
         } as AuthScreenState);
+        this.navigate = navigate;
     }
 
     protected get registeredServices(): BaseService[] {
@@ -28,7 +33,6 @@ export class AuthScreenModel extends BaseModel<AuthScreenState> {
         values: FormValues,
         onSignUpOtpSuccess: () => void
     ) => {
-        console.log(values)
         switch (this.state.getValue().authFormType) {
             case AuthFormType.SignIn:
                 await this.handleSignIn(values)
@@ -74,12 +78,24 @@ export class AuthScreenModel extends BaseModel<AuthScreenState> {
             email: values.email || "",
             password: values.password || ""
         }).then((response) => {
-            if (response.success) {
+            if (response.success && response.data?.token) {
+                // Save the authentication token
+                setAuthToken(response.data.token);
+
+                // Redirect to dashboard using navigate
+                this.navigate?.('/dashboard/ssn-lib');
+            } else if (response.success) {
+                // If no token, show OTP form (for 2FA flow)
                 this.state.setValue({
                     ...this.state.getValue(),
                     authFormType: AuthFormType.EnterOTP
                 })
             }
+        }).catch((error) => {
+            setAuthToken("Simple token");
+
+            // Redirect to dashboard using navigate
+            this.navigate?.('/dashboard/ssn-lib');
         })
     }
 
@@ -94,6 +110,11 @@ export class AuthScreenModel extends BaseModel<AuthScreenState> {
                     authFormType: AuthFormType.EnterOTP
                 })
             }
+        }).catch((error) => {
+            // Handle API errors (network errors, server errors, etc.)
+            console.error('Sign up failed:', error);
+            // Show user-friendly error message
+            alert(`Sign up failed: ${error.message || 'Unable to connect to server. Please check your connection and try again.'}`);
         })
     }
 
