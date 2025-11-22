@@ -1,15 +1,15 @@
 import MenuLayout, { TopBarMenu } from "../../../../components/layout/menu-layout";
 import React, { useMemo } from 'react';
-import { Typography, Breadcrumb, Row, Col, Divider } from 'antd';
-import { LeftCircleFilled, LeftOutlined } from '@ant-design/icons';
+import { Typography, Row, Col, Divider } from 'antd';
 import { AddSSNModel as NewSSNModel } from "./new-ssn-model";
 import { useStateFlow } from "../../../../utils/StateFlow";
-import { useNavigate, useNavigation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import RFIDTypeSelector, { type RFIDType } from "../../../../components/dashboard/ssn-lib/new/rfid-type-selector";
 import LayoutStyleSelector from "../../../../components/dashboard/ssn-lib/new/layout-style-selector";
 import SSNFormInputs from "../../../../components/dashboard/ssn-lib/new/ssn-form-inputs";
 import SSNPreviewCard from "../../../../components/dashboard/ssn-lib/new/ssn-preview-card";
 import AddedSSNsTable from "../../../../components/dashboard/ssn-lib/new/added-ssns-table";
+import PageBreadcrumb from "../../../../components/dashboard/page-breadcrumb";
 
 const { Title } = Typography;
 
@@ -33,51 +33,16 @@ const NewSSNPage: React.FC = () => {
             backgroundColor: '#f5f5f5',
             padding: "24px"
         }}>
-            {/* Breadcrumb */}
-            <Breadcrumb
-                style={{
-                    marginBottom: '24px',
-                    alignItems: 'center',
-                }}
+            <PageBreadcrumb
                 items={[
                     {
-                        title: (
-                            <div
-                                style={{
-                                    alignItems: 'center',
-                                    display: 'flex',
-                                    flexDirection: 'row',
-                                    cursor: 'pointer'
-                                }}
-                                onClick={() => navigate(-1)}
-                            >
-                                <LeftCircleFilled
-                                    style={{
-                                        marginRight: '8px',
-                                        color: '#1677ff',
-                                        fontSize: '20px',
-                                    }}
-                                />
-                                <span
-                                    style={{
-                                        color: '#1677ff',
-                                    }}
-                                >
-                                    SSN Library
-                                </span>
-                            </div>
-                        ),
+                        label: 'SSN Library',
+                        onClick: () => navigate(-1)
                     },
                     {
-                        title: (
-                            <span style={{
-                                fontWeight: 700,
-                                color: '#1677ff',
-                            }}>
-                                Add new SSN
-                            </span>
-                        ),
-                    },
+                        label: 'Add new SSN',
+                        isActive: true
+                    }
                 ]}
             />
 
