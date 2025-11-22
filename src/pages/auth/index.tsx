@@ -4,11 +4,13 @@ import { AuthScreenModel } from "./auth-screen-model";
 import { useStateFlow } from "../../utils/StateFlow";
 import { useMemo } from "react";
 import LoginForm, { type FormValues } from "../../components/auth/login-form";
+import { useModelLoading } from "../../utils/base/BaseModel";
 
 const AuthPage: React.FC = () => {
 
     const model = useMemo(() => new AuthScreenModel(), []);
     const state = useStateFlow(model.state);
+    const isLoading = useModelLoading(model);
     const navigate = useNavigate();
 
     return (
@@ -43,7 +45,7 @@ const AuthPage: React.FC = () => {
                     onSecondaryButtonClicked={model.onFormSecondaryButtonPressed}
                     formType={state.authFormType}
                     onRetypeEmail={model.onRetypeEmail}
-                    isLoading={false}
+                    isLoading={isLoading}
                 />
             </div>
         </div>

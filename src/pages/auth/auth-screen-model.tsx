@@ -1,33 +1,45 @@
 import type { FormValues } from "../../components/auth/login-form";
-import { StateFlow } from "../../utils/StateFlow";
+import { authService } from "../../services/auth.service-base";
+import { BaseModel } from "../../utils/base/BaseModel";
+import type { BaseService } from "../../utils/base/BaseService";
 import { AuthFormType, type AuthScreenState } from "./auth-screen-state";
 
-export class AuthScreenModel {
-    public readonly state: StateFlow<AuthScreenState> = new StateFlow({
-        buttonClicked: 0,
-        authFormType: AuthFormType.SignIn,
-        isLoading: false
-    } as AuthScreenState);
+export class AuthScreenModel extends BaseModel<AuthScreenState> {
+    constructor() {
+        super({
+            buttonClicked: 0,
+            authFormType: AuthFormType.SignIn,
+            isLoading: false
+        } as AuthScreenState);
+    }
 
-    public onFormPrimaryButtonPressed = (values: FormValues, onSignUpOtpSuccess: () => void) => {
+    protected get registeredServices(): BaseService[] {
+        return [authService];
+    }
+
+    protected onLoadingStateChanged(isLoading: boolean): void {
+        this.updateState(state => ({
+            ...state,
+            isLoading
+        }));
+    }
+
+    public onFormPrimaryButtonPressed = async (
+        values: FormValues,
+        onSignUpOtpSuccess: () => void
+    ) => {
         console.log(values)
-        var newFormType: AuthFormType = AuthFormType.SignIn
         switch (this.state.getValue().authFormType) {
             case AuthFormType.SignIn:
-                console.log("Sign In")
+                await this.handleSignIn(values)
                 break
             case AuthFormType.CreateAccount:
-                newFormType = AuthFormType.EnterOTP
+                await this.handleSignUp(values)
                 break
             case AuthFormType.EnterOTP:
                 onSignUpOtpSuccess()
                 return
-                break
         }
-        this.state.setValue({
-            ...this.state.getValue(),
-            authFormType: newFormType
-        })
     }
 
     public onFormSecondaryButtonPressed = () => {
@@ -55,5 +67,41 @@ export class AuthScreenModel {
             ...this.state.getValue(),
             authFormType: AuthFormType.CreateAccount
         })
+    }
+
+    private async handleSignIn(values: FormValues) {
+        authService.signIn({
+            email: values.email || "",
+            password: values.password || ""
+        }).then((response) => {
+            if (response.success) {
+                this.state.setValue({
+                    ...this.state.getValue(),
+                    authFormType: AuthFormType.EnterOTP
+                })
+            }
+        })
+    }
+
+    private async handleSignUp(values: FormValues) {
+        authService.signUp({
+            email: values.email || "",
+            password: values.password || ""
+        }).then((response) => {
+            if (response.success) {
+                this.state.setValue({
+                    ...this.state.getValue(),
+                    authFormType: AuthFormType.EnterOTP
+                })
+            }
+        })
+    }
+
+    private handleVerifyOtp = (values: FormValues) => {
+
+    }
+
+    private handleResendOtp = (values: FormValues) => {
+
     }
 }
