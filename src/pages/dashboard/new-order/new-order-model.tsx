@@ -2,6 +2,7 @@ import type { NavigateFunction } from "react-router-dom";
 import { StateFlow } from "../../../utils/StateFlow";
 import { type NewOrderState, type CartItem } from "./new-order-state";
 import { v4 as uuidv4 } from 'uuid';
+import type { DeliveryAddressFormValues } from "../../../components/dashboard/new-order/add-delivery-address-modal";
 
 export class NewOrderModel {
     public readonly state: StateFlow<NewOrderState> = new StateFlow<NewOrderState>({
@@ -12,6 +13,7 @@ export class NewOrderModel {
         subTotal: 0,
         transactionFee: 0,
         totalCost: 0,
+        isAddAddressModalOpen: false,
     });
 
     private navigate?: NavigateFunction;
@@ -123,5 +125,33 @@ export class NewOrderModel {
 
     public handleNavigateToSSNLibrary = () => {
         this.navigate?.('/dashboard/ssn-lib');
+    }
+
+    public handleOpenAddAddressModal = () => {
+        this.state.setValue({
+            ...this.state.getValue(),
+            isAddAddressModalOpen: true
+        });
+    }
+
+    public handleCloseAddAddressModal = () => {
+        this.state.setValue({
+            ...this.state.getValue(),
+            isAddAddressModalOpen: false
+        });
+    }
+
+    public handleSubmitDeliveryAddress = (values: DeliveryAddressFormValues) => {
+        // TODO: Implement API call to save delivery address
+        console.log('Submitting delivery address:', values);
+
+        // For now, just add it to the delivery destinations list
+        // In real implementation, you'd save to backend and refresh the list
+
+        // Close the modal
+        this.handleCloseAddAddressModal();
+
+        // Optionally, you could set the newly added address as selected
+        // this.handleDeliveryDestinationSelect(values.addressLine1);
     }
 }

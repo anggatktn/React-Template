@@ -13,4 +13,5 @@ export interface NewOrderState {
     subTotal: number;
     transactionFee: number;
     totalCost: number;
+    isAddAddressModalOpen: boolean;
 }

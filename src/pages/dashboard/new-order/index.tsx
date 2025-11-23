@@ -8,6 +8,7 @@ import PageBreadcrumb from "../../../components/dashboard/page-breadcrumb";
 import OrderFormInputs from "../../../components/dashboard/new-order/order-form-inputs";
 import CartItemsList from "../../../components/dashboard/new-order/cart-items-list";
 import OrderSummaryCard from "../../../components/dashboard/new-order/order-summary-card";
+import AddDeliveryAddressModal from "../../../components/dashboard/new-order/add-delivery-address-modal";
 
 const { Title } = Typography;
 
@@ -71,6 +72,7 @@ const NewOrderPage: React.FC = () => {
                         onDeliveryDestinationSelect={model.handleDeliveryDestinationSelect}
                         onAddToCart={model.handleAddToCart}
                         onAddHandheldScanner={model.handleAddHandheldScanner}
+                        onAddDeliveryAddress={model.handleOpenAddAddressModal}
                     />
                     <CartItemsList
                         cartItems={state.cartItems}
@@ -89,6 +91,13 @@ const NewOrderPage: React.FC = () => {
                     />
                 </Col>
             </Row>
+
+            {/* Add Delivery Address Modal */}
+            <AddDeliveryAddressModal
+                open={state.isAddAddressModalOpen}
+                onCancel={model.handleCloseAddAddressModal}
+                onSubmit={model.handleSubmitDeliveryAddress}
+            />
         </div>
     </MenuLayout>
 }
