@@ -71,7 +71,7 @@ const MenuLayout: React.FC<MenuLayoutProps> = ({
                     }}>
                         {menuValues.map((menu) => {
                             return <NavLink
-                                to={""}
+                                to={GetMenuRoute[menu]}
                                 key={menu}
                                 style={{
                                     color: selectedMenu === menu ? "#265CD7" : "#000",
@@ -113,3 +113,13 @@ const GetMenuLabel: Record<TopBarMenu, string> = {
     [TopBarMenu.FAQ]: "FAQ",
     [TopBarMenu.Contact]: "Contact"
 }
+
+const GetMenuRoute: Record<TopBarMenu, string> = {
+    [TopBarMenu.SSNLibrary]: "/dashboard/ssn-lib",
+    [TopBarMenu.NewOrder]: "/dashboard/new-order",
+    [TopBarMenu.OrderTracking]: "/dashboard/order-tracking",
+    [TopBarMenu.FAQ]: "/dashboard/faq",
+    [TopBarMenu.Contact]: "/dashboard/contact"
+}
+
+export { GetMenuRoute };
