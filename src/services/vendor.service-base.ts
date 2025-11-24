@@ -99,6 +99,20 @@ export class VendorOrderService extends BaseService {
                 );
             }
 
+            if (filter.sortBy) {
+                filtered.sort((a, b) => {
+                    const parseDate = (dateStr: string) => {
+                        const cleaned = dateStr.replace(/,/g, '').replace(/([ap]m)$/i, ' $1');
+                        return new Date(cleaned).getTime();
+                    };
+
+                    const dateA = parseDate(a.date);
+                    const dateB = parseDate(b.date);
+
+                    return filter.sortBy === 'recent' ? dateB - dateA : dateA - dateB;
+                });
+            }
+
             return {
                 data: filtered,
                 success: true,
