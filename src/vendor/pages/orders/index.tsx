@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { Layout, Tabs, Input, Radio, Typography } from 'antd';
-import { SearchOutlined } from '@ant-design/icons';
+import { Layout, Tabs, Typography } from 'antd';
 import Navbar from '../../../components/layout/Navbar';
 import OrdersTable from '../../components/orders/OrdersTable';
+import OrdersControls from '../../components/orders/OrdersControls';
 import { newOrdersData, readyToShipData, selfCollectionData } from './data';
 import classes from './index.module.less';
 
 const { Content } = Layout;
-const { Title, Text } = Typography;
+const { Title } = Typography;
 
 const OrdersPage: React.FC = () => {
     const [activeTab, setActiveTab] = useState('2'); // Default to Ready to Ship as per image
@@ -74,29 +74,13 @@ const OrdersPage: React.FC = () => {
 
         return (
             <>
-                <div className={classes.controls}>
-                    <div className={classes.sortControls}>
-                        <Text strong>Sort by</Text>
-                        <Radio.Group
-                            value={sortOrder}
-                            onChange={e => setSortOrder(e.target.value)}
-                            buttonStyle="solid"
-                        >
-                            <Radio.Button value="recent">Recent</Radio.Button>
-                            <Radio.Button value="oldest">Oldest</Radio.Button>
-                        </Radio.Group>
-                    </div>
-                    <div className={classes.searchControls}>
-                        <Text strong>Total items {processedData.length}</Text>
-                        <Input
-                            placeholder="Search SSN, Order ID..."
-                            prefix={<SearchOutlined style={{ color: '#bfbfbf' }} />}
-                            style={{ width: 300, borderRadius: '6px' }}
-                            value={searchQuery}
-                            onChange={e => setSearchQuery(e.target.value)}
-                        />
-                    </div>
-                </div>
+                <OrdersControls
+                    sortOrder={sortOrder}
+                    searchQuery={searchQuery}
+                    totalItems={processedData.length}
+                    onSortChange={(value) => setSortOrder(value as 'recent' | 'oldest')}
+                    onSearchChange={setSearchQuery}
+                />
                 <OrdersTable data={processedData} />
             </>
         );
@@ -133,7 +117,7 @@ const OrdersPage: React.FC = () => {
                     items={items}
                     onChange={setActiveTab}
                     size="large"
-                    tabBarStyle={{ marginBottom: 0, borderBottom: '1px solid #e8e8e8' }}
+                    tabBarStyle={{ marginBottom: 0 }}
                 />
             </Content>
         </Layout>
