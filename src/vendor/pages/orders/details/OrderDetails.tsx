@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Layout, Typography, Row, Col, Divider, Spin, message } from 'antd';
-import { ArrowLeftOutlined } from '@ant-design/icons';
+import { Layout, Typography, Row, Col, Divider, Spin, message, Button } from 'antd';
+import { ArrowLeftOutlined, RightOutlined } from '@ant-design/icons';
 import { useNavigate, useParams } from 'react-router-dom';
 import Navbar from '../../../../components/layout/Navbar';
 import OrderInfoCard from '../../../components/orders/details/OrderInfoCard';
@@ -10,7 +10,6 @@ import UpdateOrderStatusCard from '../../../components/orders/details/UpdateOrde
 import PackingListTable from '../../../components/orders/details/PackingListTable';
 import classes from './OrderDetails.module.less';
 import CustomerInfoSection from '../../../components/orders/details/CustomerInfoCard';
-import MessagesCard from '../../../components/orders/details/MessagesCard';
 import DeliveryInfoSection from '../../../components/orders/details/DeliveryInfoSection';
 import OrderTrackingCard from '../../../components/orders/details/OrderTrackingCard';
 import { vendorOrderService, type OrderDetail } from '../../../../services/vendor.service-base';
@@ -70,7 +69,7 @@ const OrderDetails: React.FC = () => {
             const response = await vendorOrderService.markAsShipped(id);
             if (response.success) {
                 message.success('Order marked as shipped');
-                setCurrentStatus('Shipped');
+                setCurrentStatus('Order Shipped');
             }
         } catch (error) {
             message.error('Failed to mark as shipped');
@@ -132,15 +131,31 @@ const OrderDetails: React.FC = () => {
                 {/* Header */}
                 <div className={classes.header}>
                     <div className={classes.breadcrumb}>
-                        <div style={{ display: 'flex', gap: '8px', alignItems: 'center', color: '#1890ff', marginBottom: '12px', marginTop: '23px' }}>
-                            <ArrowLeftOutlined onClick={() => navigate('/vendor/orders')} style={{ cursor: 'pointer' }} />
-                            <span>Order Tracking</span>
-                            <span>{'>'}</span>
-                            <span style={{ fontWeight: 600 }}>Order #{orderDetail.orderId}</span>
+                        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '12px', marginTop: '23px' }}>
+                            <div
+                                onClick={() => navigate('/vendor/orders')}
+                                style={{
+                                    width: '32px',
+                                    height: '32px',
+                                    borderRadius: '50%',
+                                    backgroundColor: '#E6F7FF',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    cursor: 'pointer',
+                                    marginRight: '12px'
+                                }}
+                            >
+                                <ArrowLeftOutlined style={{ color: '#265CD7', fontSize: '14px' }} />
+                            </div>
+                            <span style={{ color: '#265CD7', fontSize: '14px', cursor: 'pointer' }} onClick={() => navigate('/vendor/orders')}>Order Tracking</span>
+                            <RightOutlined style={{ fontSize: '10px', color: '#265CD7', margin: '0 12px' }} />
+                            <span style={{ color: '#265CD7', fontWeight: 600, fontSize: '14px' }}>Order #{orderDetail.orderId}</span>
                         </div>
                     </div>
                     <div className={classes.titleRow}>
                         <Title level={2} style={{ margin: 0 }}>Order details</Title>
+                        <Button type="primary" size="large" style={{ fontWeight: 600, paddingLeft: 32, paddingRight: 32 }}>Download Packing List</Button>
                     </div>
                     <Divider style={{ margin: '16px 0', borderColor: '#D2DAE5' }} />
                 </div>
@@ -216,10 +231,7 @@ const OrderDetails: React.FC = () => {
 
                     <Row gutter={[24, 24]} style={{ marginBottom: 32 }}>
                         <Col xs={24} lg={12}>
-                            <MessagesCard />
-                        </Col>
-                        <Col xs={24} lg={12}>
-                            <OrderTrackingCard />
+                            <OrderTrackingCard style={{ minHeight: '300px' }} />
                         </Col>
                     </Row>
                 </div>
