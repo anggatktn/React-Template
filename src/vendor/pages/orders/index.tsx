@@ -1,87 +1,62 @@
-import React, { useState } from 'react';
-import { Layout, Tabs, Typography } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Layout, Tabs, Typography, Spin } from 'antd';
 import Navbar from '../../../components/layout/Navbar';
 import OrdersTable from '../../components/orders/OrdersTable';
 import OrdersControls from '../../components/orders/OrdersControls';
-import { newOrdersData, readyToShipData, selfCollectionData } from './data';
 import classes from './index.module.less';
+import { vendorOrderService, type Order } from '../../../services/vendor.service-base';
 
 const { Content } = Layout;
 const { Title } = Typography;
 
 const OrdersPage: React.FC = () => {
-    const [activeTab, setActiveTab] = useState('2'); // Default to Ready to Ship as per image
+    const [activeTab, setActiveTab] = useState('2'); // Default to Ready to Ship
     const [searchQuery, setSearchQuery] = useState('');
     const [sortOrder, setSortOrder] = useState<'recent' | 'oldest'>('recent');
+    const [orders, setOrders] = useState<Order[]>([]);
+    const [loading, setLoading] = useState(false);
 
-    const parseDate = (dateStr: string) => {
-        // Format: "Oct 25, 2025, 10:10am"
-        // Remove commas and split
-        const cleanStr = dateStr.replace(/,/g, '');
-        const parts = cleanStr.split(' ');
-        // parts: [Month, Day, Year, Time] -> ["Oct", "25", "2025", "10:10am"]
+    useEffect(() => {
+        fetchOrders();
+    }, [activeTab, searchQuery, sortOrder]);
 
-        if (parts.length < 4) return 0;
-
-        const monthMap: { [key: string]: number } = {
-            'Jan': 0, 'Feb': 1, 'Mar': 2, 'Apr': 3, 'May': 4, 'Jun': 5,
-            'Jul': 6, 'Aug': 7, 'Sep': 8, 'Oct': 9, 'Nov': 10, 'Dec': 11
-        };
-
-        const month = monthMap[parts[0]];
-        const day = parseInt(parts[1]);
-        const year = parseInt(parts[2]);
-
-        // Parse time "10:10am"
-        const timePart = parts[3];
-        const isPM = timePart.toLowerCase().includes('pm');
-        const timeStr = timePart.toLowerCase().replace('am', '').replace('pm', '');
-        const [hoursStr, minutesStr] = timeStr.split(':');
-        let hours = parseInt(hoursStr);
-        const minutes = parseInt(minutesStr);
-
-        if (isPM && hours < 12) hours += 12;
-        if (!isPM && hours === 12) hours = 0;
-
-        return new Date(year, month, day, hours, minutes).getTime();
+    const fetchOrders = async () => {
+        setLoading(true);
+        try {
+            const response = await vendorOrderService.getOrders({
+                status: activeTab,
+                search: searchQuery,
+                sortBy: sortOrder
+            });
+            if (response.success) {
+                setOrders(response.data);
+            }
+        } catch (error) {
+            console.error('Failed to fetch orders', error);
+        } finally {
+            setLoading(false);
+        }
     };
 
-    const processData = (data: any[]) => {
-        let processed = [...data];
-
-        // Filter
-        if (searchQuery) {
-            const query = searchQuery.toLowerCase();
-            processed = processed.filter(order =>
-                order.orderId.toLowerCase().includes(query) ||
-                order.totalSsn.toLowerCase().includes(query) ||
-                order.deliverTo.toLowerCase().includes(query)
+    const renderTabContent = () => {
+        if (loading) {
+            return (
+                <div style={{ display: 'flex', justifyContent: 'center', padding: '50px' }}>
+                    <Spin size="large" />
+                </div>
             );
         }
-
-        // Sort
-        processed.sort((a, b) => {
-            const dateA = parseDate(a.date);
-            const dateB = parseDate(b.date);
-            return sortOrder === 'recent' ? dateB - dateA : dateA - dateB;
-        });
-
-        return processed;
-    };
-
-    const renderTabContent = (data: any[]) => {
-        const processedData = processData(data);
 
         return (
             <>
                 <OrdersControls
                     sortOrder={sortOrder}
                     searchQuery={searchQuery}
-                    totalItems={processedData.length}
+                    totalItems={orders.length}
                     onSortChange={(value) => setSortOrder(value as 'recent' | 'oldest')}
                     onSearchChange={setSearchQuery}
                 />
-                <OrdersTable data={processedData} />
+                <OrdersTable data={orders} />
             </>
         );
     };
@@ -90,17 +65,17 @@ const OrdersPage: React.FC = () => {
         {
             key: '1',
             label: 'New Orders',
-            children: renderTabContent(newOrdersData),
+            children: renderTabContent(),
         },
         {
             key: '2',
             label: 'Ready to Ship',
-            children: renderTabContent(readyToShipData),
+            children: renderTabContent(),
         },
         {
             key: '3',
             label: 'Self Collection',
-            children: renderTabContent(selfCollectionData),
+            children: renderTabContent(),
         },
     ];
 
