@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Layout, Typography, Row, Col, Divider } from 'antd';
-import { ArrowLeftOutlined } from '@ant-design/icons';
+import { Layout, Typography, Row, Col, Divider, Spin, message, Button } from 'antd';
+import { ArrowLeftOutlined, RightOutlined } from '@ant-design/icons';
 import { useNavigate, useParams } from 'react-router-dom';
 import Navbar from '../../../../components/layout/Navbar';
 import OrderInfoCard from '../../../components/orders/details/OrderInfoCard';
@@ -10,10 +10,9 @@ import UpdateOrderStatusCard from '../../../components/orders/details/UpdateOrde
 import PackingListTable from '../../../components/orders/details/PackingListTable';
 import classes from './OrderDetails.module.less';
 import CustomerInfoSection from '../../../components/orders/details/CustomerInfoCard';
-import MessagesCard from '../../../components/orders/details/MessagesCard';
 import DeliveryInfoSection from '../../../components/orders/details/DeliveryInfoSection';
 import OrderTrackingCard from '../../../components/orders/details/OrderTrackingCard';
-import { getMockOrderData, mockPackingListItems, mockCustomerData } from './data';
+import { vendorOrderService, type OrderDetail } from '../../../../services/vendor.service-base';
 
 const { Content } = Layout;
 const { Title } = Typography;
@@ -21,37 +20,108 @@ const { Title } = Typography;
 const OrderDetails: React.FC = () => {
     const navigate = useNavigate();
     const { id } = useParams();
+    const [orderDetail, setOrderDetail] = useState<OrderDetail | null>(null);
+    const [loading, setLoading] = useState(false);
+    const [currentStatus, setCurrentStatus] = useState<string>('');
 
-    // Load mock data
-    const orderData = getMockOrderData(id);
-    const packingListItems = mockPackingListItems;
-    const customerData = mockCustomerData;
-
-    const [currentStatus, setCurrentStatus] = useState(orderData.status);
-
-    // Update local state when orderData changes
     useEffect(() => {
-        setCurrentStatus(orderData.status);
-    }, [orderData.status]);
+        if (id) {
+            fetchOrderDetails(id);
+        }
+    }, [id]);
 
-    const handleShippingUpdate = (newWeight: number, newCost: number) => {
-        console.log('Updating:', newWeight, newCost);
-        // Here you would typically call your backend API
-        setCurrentStatus('Awaiting Shipment Payment');
+    const fetchOrderDetails = async (orderId: string) => {
+        setLoading(true);
+        try {
+            const response = await vendorOrderService.getOrderDetails(orderId);
+            if (response.success) {
+                setOrderDetail(response.data);
+                setCurrentStatus(response.data.status);
+            }
+        } catch (error) {
+            console.error('Failed to fetch order details', error);
+            message.error('Failed to load order details');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleShippingUpdate = async (newWeight: number, newCost: number) => {
+        if (!id) return;
+        try {
+            const response = await vendorOrderService.updateShippingCost(id, newCost);
+            if (response.success) {
+                message.success('Shipping cost updated');
+                setCurrentStatus('Awaiting Shipment Payment');
+            }
+        } catch (error) {
+            message.error('Failed to update shipping cost');
+        }
     };
 
     const handleEditShipping = () => {
         setCurrentStatus('Update Shipping Cost');
     };
 
-    const handleMarkAsShipped = () => {
-        console.log('Marking as shipped');
-        setCurrentStatus('Order Shipped');
+    const handleMarkAsShipped = async () => {
+        if (!id) return;
+        try {
+            const response = await vendorOrderService.markAsShipped(id);
+            if (response.success) {
+                message.success('Order marked as shipped');
+                setCurrentStatus('Order Shipped');
+            }
+        } catch (error) {
+            message.error('Failed to mark as shipped');
+        }
     };
 
-    const handleMarkAsCollected = () => {
-        console.log('Marking as collected');
-        setCurrentStatus('Order Collected');
+    const handleMarkAsCollected = async () => {
+        if (!id) return;
+        try {
+            const response = await vendorOrderService.markAsCollected(id);
+            if (response.success) {
+                message.success('Order marked as collected');
+                setCurrentStatus('Order Collected');
+            }
+        } catch (error) {
+            message.error('Failed to mark as collected');
+        }
+    };
+
+    if (loading || !orderDetail) {
+        return (
+            <Layout>
+                <Navbar />
+                <Content className={classes.pageContainer} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    <Spin size="large" />
+                </Content>
+            </Layout>
+        );
+    }
+
+    // Map OrderDetail to component props
+    const orderInfoProps = {
+        id: orderDetail.orderId,
+        date: orderDetail.date,
+        itemCount: orderDetail.totalQty,
+        amountPaid: orderDetail.items.reduce((acc, item) => acc + ((item.price || 0) * (item.quantity || 1)), 0),
+        shipmentPaid: orderDetail.shippingCost,
+        status: currentStatus,
+        deliveryAddress: orderDetail.deliverTo,
+        contactPerson: orderDetail.customerName,
+        contactPhone: orderDetail.customerPhone,
+        deliveryNote: 'Leave at front door' // Mock note
+    };
+
+    const customerData = {
+        vendorCode: '0000567', // Mock
+        customerName: orderDetail.customerName,
+        companyName: 'Gear Turf Technology Pte Ltd', // Mock
+        companyUEN: '201525201Z', // Mock
+        companyEmail: orderDetail.customerEmail,
+        customerMobile: orderDetail.customerPhone,
+        companyAddress: orderDetail.billingAddress
     };
 
     return (
@@ -61,27 +131,43 @@ const OrderDetails: React.FC = () => {
                 {/* Header */}
                 <div className={classes.header}>
                     <div className={classes.breadcrumb}>
-                        <div style={{ display: 'flex', gap: '8px', alignItems: 'center', color: '#1890ff', marginBottom: '12px', marginTop: '23px' }}>
-                            <ArrowLeftOutlined onClick={() => navigate('/vendor/orders')} style={{ cursor: 'pointer' }} />
-                            <span>Order Tracking</span>
-                            <span>{'>'}</span>
-                            <span style={{ fontWeight: 600 }}>Order #{orderData.id}</span>
+                        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '12px', marginTop: '23px' }}>
+                            <div
+                                onClick={() => navigate('/vendor/orders')}
+                                style={{
+                                    width: '32px',
+                                    height: '32px',
+                                    borderRadius: '50%',
+                                    backgroundColor: '#E6F7FF',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    cursor: 'pointer',
+                                    marginRight: '12px'
+                                }}
+                            >
+                                <ArrowLeftOutlined style={{ color: '#265CD7', fontSize: '14px' }} />
+                            </div>
+                            <span style={{ color: '#265CD7', fontSize: '14px', cursor: 'pointer' }} onClick={() => navigate('/vendor/orders')}>Order Tracking</span>
+                            <RightOutlined style={{ fontSize: '10px', color: '#265CD7', margin: '0 12px' }} />
+                            <span style={{ color: '#265CD7', fontWeight: 600, fontSize: '14px' }}>Order #{orderDetail.orderId}</span>
                         </div>
                     </div>
                     <div className={classes.titleRow}>
                         <Title level={2} style={{ margin: 0 }}>Order details</Title>
+                        <Button type="primary" size="large" style={{ fontWeight: 600, paddingLeft: 32, paddingRight: 32 }}>Download Packing List</Button>
                     </div>
                     <Divider style={{ margin: '16px 0', borderColor: '#D2DAE5' }} />
                 </div>
 
                 <div className={classes.content}>
 
-                    <OrderInfoCard order={{ ...orderData, status: currentStatus }} />
+                    <OrderInfoCard order={orderInfoProps} />
 
                     {currentStatus === 'Update Shipping Cost' && (
                         <ShippingUpdateCard
                             initialWeight={4}
-                            initialCost={30.00}
+                            initialCost={orderDetail.shippingCost}
                             onUpdate={handleShippingUpdate}
                         />
                     )}
@@ -89,7 +175,7 @@ const OrderDetails: React.FC = () => {
                     {currentStatus === 'Awaiting Shipment Payment' && (
                         <ShippingInfoCard
                             weight={4}
-                            shippingCost={30.00}
+                            shippingCost={orderDetail.shippingCost}
                             status={currentStatus}
                             onEdit={handleEditShipping}
                         />
@@ -111,7 +197,23 @@ const OrderDetails: React.FC = () => {
                         />
                     )}
 
-                    <PackingListTable items={packingListItems} />
+                    <PackingListTable items={orderDetail.items.map(item => ({
+                        key: item.key,
+                        sn: item.sn,
+                        barcode: item.barcode,
+                        ssn: item.ssn,
+                        tagType: item.tagType,
+                        style: item.style,
+                        color: item.color,
+                        size: item.size,
+                        sku: item.sku,
+                        price: item.price,
+                        layout: item.layout || '-',
+                        description: item.description || '-',
+                        quantity: item.quantity || 0,
+                        epcStart: item.epcStart || '-',
+                        epcEnd: item.epcEnd
+                    }))} />
 
                     <Row gutter={[24, 24]} style={{ marginBottom: 32 }}>
                         <Col xs={24} lg={12}>
@@ -119,20 +221,17 @@ const OrderDetails: React.FC = () => {
                         </Col>
                         <Col xs={24} lg={12}>
                             <DeliveryInfoSection data={{
-                                deliverTo: orderData.deliveryAddress,
-                                contactPerson: orderData.contactPerson,
-                                contactMobile: orderData.contactPhone,
-                                deliveryNote: orderData.deliveryNote
+                                deliverTo: orderDetail.deliverTo,
+                                contactPerson: orderDetail.customerName,
+                                contactMobile: orderDetail.customerPhone,
+                                deliveryNote: 'Leave at front door'
                             }} />
                         </Col>
                     </Row>
 
                     <Row gutter={[24, 24]} style={{ marginBottom: 32 }}>
                         <Col xs={24} lg={12}>
-                            <MessagesCard />
-                        </Col>
-                        <Col xs={24} lg={12}>
-                            <OrderTrackingCard />
+                            <OrderTrackingCard style={{ minHeight: '300px' }} />
                         </Col>
                     </Row>
                 </div>
