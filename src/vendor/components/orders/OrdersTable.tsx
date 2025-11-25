@@ -23,6 +23,7 @@ const OrdersTable: React.FC<OrdersTableProps> = ({ data }) => {
             case 'Awaiting Collection': return '#1590A0';
             case 'Order Collected': return '#3A9448';
             case 'Not Collected': return '#CF3030';
+            case 'Updated Self Collection Status': return '#1551A0';
             default: return 'default';
         }
     };

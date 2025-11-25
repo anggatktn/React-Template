@@ -89,6 +89,20 @@ const OrderDetails: React.FC = () => {
         }
     };
 
+    const handleMarkAsReadyForCollection = async () => {
+        if (!id) return;
+        try {
+            const response = await vendorOrderService.markAsReadyToCollect(id);
+            if (response.success) {
+                message.success('Order marked as ready for self collection');
+                setCurrentStatus('Awaiting Collection');
+            }
+
+        } catch (error) {
+            message.error('Failed to mark as ready for collection');
+        }
+    };
+
     if (loading || !orderDetail) {
         return (
             <Layout>
@@ -186,6 +200,14 @@ const OrderDetails: React.FC = () => {
                             onAction={handleMarkAsShipped}
                             buttonText="Mark Order as Shipped"
                             successMessage="Order marked as shipped"
+                        />
+                    )}
+
+                    {currentStatus === 'Updated Self Collection Status' && (
+                        <UpdateOrderStatusCard
+                            onAction={handleMarkAsReadyForCollection}
+                            buttonText="Mark it ready for self collection"
+                            successMessage="Order marked as ready for self collection"
                         />
                     )}
 

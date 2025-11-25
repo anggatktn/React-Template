@@ -69,7 +69,7 @@ const OrdersPage: React.FC = () => {
         },
         {
             key: '2',
-            label: 'Ready to Ship',
+            label: 'Shipments',
             children: renderTabContent(),
         },
         {
