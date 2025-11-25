@@ -9,10 +9,21 @@ export class NewOrderModel {
         selectedSSN: null,
         quantity: 1,
         deliveryDestination: null,
-        cartItems: [],
-        subTotal: 0,
-        transactionFee: 0,
-        totalCost: 0,
+        cartItems: [{
+            id: uuidv4(),
+            ssn: '123456789',
+            productType: 'Normal RFID Tag',
+            quantity: 1,
+            deliveryDestination: '123 Main St',
+            description: 'Normal RFID Tag',
+            size: '123 Main St',
+            tagsPrice: 12,
+            gst: 1,
+            subtotal: 13,
+        }],
+        subTotal: 13,
+        transactionFee: 13,
+        totalCost: 26,
         isAddAddressModalOpen: false,
     });
 
@@ -50,11 +61,23 @@ export class NewOrderModel {
             return;
         }
 
+        // Mock pricing - replace with actual pricing from SSN data
+        const pricePerTag = 0.12; // S$0.12 per tag
+        const tagsPrice = currentState.quantity * pricePerTag;
+        const gst = tagsPrice * 0.09; // 9% GST
+        const subtotal = tagsPrice + gst;
+
         const newCartItem: CartItem = {
             id: uuidv4(),
             ssn: currentState.selectedSSN,
+            productType: 'Normal RFID Tag', // TODO: Get from selected SSN data
             quantity: currentState.quantity,
             deliveryDestination: currentState.deliveryDestination,
+            description: '', // TODO: Get from form or SSN data
+            size: '', // TODO: Get from form or SSN data
+            tagsPrice: tagsPrice,
+            gst: gst,
+            subtotal: subtotal,
         };
 
         const updatedCartItems = [...currentState.cartItems, newCartItem];
@@ -113,9 +136,7 @@ export class NewOrderModel {
     }
 
     private calculateSubTotal(cartItems: CartItem[]): number {
-        // Placeholder calculation - $0 per item for now
-        // In real implementation, you'd fetch prices from SSN data
-        return cartItems.reduce((total, item) => total + (item.quantity * 0), 0);
+        return cartItems.reduce((total, item) => total + item.subtotal, 0);
     }
 
     private calculateTransactionFee(subTotal: number): number {
@@ -125,6 +146,25 @@ export class NewOrderModel {
 
     public handleNavigateToSSNLibrary = () => {
         this.navigate?.('/dashboard/ssn-lib');
+    }
+
+    public handleEditCartItem = (itemId: string) => {
+        // TODO: Implement edit functionality
+        // This could open a modal or populate the form with the item's data
+        console.log('Editing cart item:', itemId);
+
+        // Example implementation:
+        // const item = this.state.getValue().cartItems.find(i => i.id === itemId);
+        // if (item) {
+        //     this.state.setValue({
+        //         ...this.state.getValue(),
+        //         selectedSSN: item.ssn,
+        //         quantity: item.quantity,
+        //         deliveryDestination: item.deliveryDestination,
+        //     });
+        //     // Remove the item from cart
+        //     this.handleRemoveFromCart(itemId);
+        // }
     }
 
     public handleOpenAddAddressModal = () => {

@@ -4,7 +4,6 @@ import { Typography, Row, Col, Card, Divider } from 'antd';
 import { NewOrderModel } from "./new-order-model";
 import { useStateFlow } from "../../../utils/StateFlow";
 import { useNavigate } from "react-router-dom";
-import PageBreadcrumb from "../../../components/dashboard/page-breadcrumb";
 import OrderFormInputs from "../../../components/dashboard/new-order/order-form-inputs";
 import CartItemsList from "../../../components/dashboard/new-order/cart-items-list";
 import OrderSummaryCard from "../../../components/dashboard/new-order/order-summary-card";
@@ -77,6 +76,7 @@ const NewOrderPage: React.FC = () => {
                     <CartItemsList
                         cartItems={state.cartItems}
                         onRemoveItem={model.handleRemoveFromCart}
+                        onEditItem={model.handleEditCartItem}
                     />
                 </Col>
 

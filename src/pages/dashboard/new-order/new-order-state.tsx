@@ -1,8 +1,14 @@
 export interface CartItem {
     id: string;
     ssn: string;
+    productType: string; // e.g., "Normal RFID Tag"
     quantity: number;
     deliveryDestination: string;
+    description?: string;
+    size?: string;
+    tagsPrice: number;
+    gst: number;
+    subtotal: number;
 }
 
 export interface NewOrderState {
