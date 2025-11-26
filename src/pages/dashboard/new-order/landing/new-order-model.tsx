@@ -1,8 +1,8 @@
 import type { NavigateFunction } from "react-router-dom";
-import { StateFlow } from "../../../utils/StateFlow";
+import { StateFlow } from "../../../../utils/StateFlow";
 import { type NewOrderState, type CartItem } from "./new-order-state";
 import { v4 as uuidv4 } from 'uuid';
-import type { DeliveryAddressFormValues } from "../../../components/dashboard/new-order/add-delivery-address-modal";
+import type { DeliveryAddressFormValues } from "../../../../components/dashboard/new-order/add-delivery-address-modal";
 
 export class NewOrderModel {
     public readonly state: StateFlow<NewOrderState> = new StateFlow<NewOrderState>({
@@ -127,12 +127,15 @@ export class NewOrderModel {
             return;
         }
 
-        // TODO: Implement checkout API call
-        console.log('Proceeding to checkout with items:', currentState.cartItems);
-        console.log('Total cost:', currentState.totalCost);
-
-        // Navigate to order tracking or confirmation page
-        // this.navigate?.('/dashboard/order-tracking');
+        // Navigate to checkout page with state
+        this.navigate?.('/dashboard/new-order/checkout', {
+            state: {
+                cartItems: currentState.cartItems,
+                subTotal: currentState.subTotal,
+                transactionFee: currentState.transactionFee,
+                totalCost: currentState.totalCost
+            }
+        });
     }
 
     private calculateSubTotal(cartItems: CartItem[]): number {

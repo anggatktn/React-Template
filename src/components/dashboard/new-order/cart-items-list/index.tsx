@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, Empty, Typography, Row, Col, Button, Space, Divider } from 'antd';
-import type { CartItem } from '../../../../pages/dashboard/new-order/new-order-state';
+import type { CartItem } from '../../../../pages/dashboard/new-order/landing/new-order-state';
 
 const { Text, Title } = Typography;
 

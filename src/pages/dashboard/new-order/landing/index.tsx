@@ -1,13 +1,13 @@
-import MenuLayout, { TopBarMenu } from "../../../components/layout/menu-layout";
+import MenuLayout, { TopBarMenu } from "../../../../components/layout/menu-layout";
 import React, { useMemo } from 'react';
 import { Typography, Row, Col, Card, Divider } from 'antd';
 import { NewOrderModel } from "./new-order-model";
-import { useStateFlow } from "../../../utils/StateFlow";
+import { useStateFlow } from "../../../../utils/StateFlow";
 import { useNavigate } from "react-router-dom";
-import OrderFormInputs from "../../../components/dashboard/new-order/order-form-inputs";
-import CartItemsList from "../../../components/dashboard/new-order/cart-items-list";
-import OrderSummaryCard from "../../../components/dashboard/new-order/order-summary-card";
-import AddDeliveryAddressModal from "../../../components/dashboard/new-order/add-delivery-address-modal";
+import OrderFormInputs from "../../../../components/dashboard/new-order/order-form-inputs";
+import CartItemsList from "../../../../components/dashboard/new-order/cart-items-list";
+import OrderSummaryCard from "../../../../components/dashboard/new-order/order-summary-card";
+import AddDeliveryAddressModal from "../../../../components/dashboard/new-order/add-delivery-address-modal";
 
 const { Title } = Typography;
 
