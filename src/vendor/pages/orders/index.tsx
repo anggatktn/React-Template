@@ -10,7 +10,7 @@ const { Content } = Layout;
 const { Title } = Typography;
 
 const OrdersPage: React.FC = () => {
-    const [activeTab, setActiveTab] = useState('2'); // Default to Ready to Ship
+    const [activeTab, setActiveTab] = useState('2'); // Default to Pending Courier Pickup
     const [searchQuery, setSearchQuery] = useState('');
     const [sortOrder, setSortOrder] = useState<'recent' | 'oldest'>('recent');
     const [orders, setOrders] = useState<Order[]>([]);

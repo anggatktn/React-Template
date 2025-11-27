@@ -80,7 +80,7 @@ export class VendorOrderService extends BaseService {
             if (filter.status) {
                 // Map tab keys to data source
                 // 1: New Orders
-                // 2: Ready to Ship
+                // 2: Pending Courier Pickup
                 // 3: Self Collection
                 if (filter.status === '1') {
                     filtered = [...newOrdersData];

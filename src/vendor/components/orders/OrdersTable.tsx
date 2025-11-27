@@ -16,8 +16,8 @@ const OrdersTable: React.FC<OrdersTableProps> = ({ data }) => {
     const getStatusColor = (status: string) => {
         switch (status) {
             case 'Update Shipping Cost': return '#DF7021';
-            case 'Awaiting Shipment Payment': return '#1590A0';
-            case 'Ready to Ship': return '#DF7021';
+            case 'Awaiting Shipment Acceptance': return '#1590A0';
+            case 'Pending Courier Pickup': return '#DF7021';
             case 'Order Shipped': return '#672DB7';
             case 'Order Delivered': return '#3A9448';
             case 'Awaiting Collection': return '#1590A0';

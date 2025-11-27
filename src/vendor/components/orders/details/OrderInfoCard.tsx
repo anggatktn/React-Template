@@ -21,13 +21,14 @@ interface OrderInfoProps {
 const getStatusColor = (status: string) => {
     switch (status) {
         case 'Update Shipping Cost': return '#DF7021';
-        case 'Awaiting Shipment Payment': return '#1590A0';
-        case 'Ready to Ship': return '#DF7021';
+        case 'Awaiting Shipment Acceptance': return '#1590A0';
+        case 'Pending Courier Pickup': return '#DF7021';
         case 'Order Shipped': return '#672DB7';
         case 'Order Delivered': return '#3A9448';
         case 'Awaiting Collection': return '#1590A0';
         case 'Order Collected': return '#3A9448';
         case 'Not Collected': return '#CF3030';
+        case 'Updated Self Collection Status': return '#1551A0';
         default: return '#8c8c8c';
     }
 };
@@ -60,11 +61,10 @@ const OrderInfoCard: React.FC<OrderInfoProps> = ({ order }) => {
                     <Col span={4}>{renderStat("Order ID", order.id)}</Col>
                     <Col span={3}>{renderStat("No. of items", String(order.itemCount).padStart(2, '0'))}</Col>
                     <Col span={3}>{renderStat("Amount Paid", `S$${order.amountPaid.toFixed(2)}`, true)}</Col>
-                    <Col span={3}>{renderStat("Shipment Paid", order.shipmentPaid ? `S$${Number(order.shipmentPaid).toFixed(2)}` : '-', order.shipmentPaid ? true : false)}</Col>
-                    <Col span={4}>
+                    <Col span={7}>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                             <Text strong style={{ fontSize: '14px', color: '#262626' }}>Status</Text>
-                            <Text strong style={{ color: getStatusColor(order.status) }}>{order.status}</Text>
+                            <Text strong style={{ color: getStatusColor(order.status), whiteSpace: 'nowrap' }}>{order.status}</Text>
                         </div>
                     </Col>
                 </Row>

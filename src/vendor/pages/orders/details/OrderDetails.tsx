@@ -7,6 +7,7 @@ import OrderInfoCard from '../../../components/orders/details/OrderInfoCard';
 import ShippingUpdateCard from '../../../components/orders/details/ShippingUpdateCard';
 import ShippingInfoCard from '../../../components/orders/details/ShippingInfoCard';
 import UpdateOrderStatusCard from '../../../components/orders/details/UpdateOrderStatusCard';
+import MarkAsShippedCard from '../../../components/orders/details/MarkAsShippedCard';
 import PackingListTable from '../../../components/orders/details/PackingListTable';
 import classes from './OrderDetails.module.less';
 import CustomerInfoSection from '../../../components/orders/details/CustomerInfoCard';
@@ -46,13 +47,14 @@ const OrderDetails: React.FC = () => {
         }
     };
 
-    const handleShippingUpdate = async (newWeight: number, newCost: number) => {
+    const handleShippingUpdate = async (newWeight: number, newCost: number, newDuties: number) => {
         if (!id) return;
         try {
+            // TODO: Pass newDuties to backend when supported
             const response = await vendorOrderService.updateShippingCost(id, newCost);
             if (response.success) {
                 message.success('Shipping cost updated');
-                setCurrentStatus('Awaiting Shipment Payment');
+                setCurrentStatus('Awaiting Shipment Acceptance');
             }
         } catch (error) {
             message.error('Failed to update shipping cost');
@@ -63,9 +65,10 @@ const OrderDetails: React.FC = () => {
         setCurrentStatus('Update Shipping Cost');
     };
 
-    const handleMarkAsShipped = async () => {
+    const handleMarkAsShipped = async (trackingId: string, trackingUrl: string, note: string) => {
         if (!id) return;
         try {
+            // TODO: Pass tracking info to backend when supported
             const response = await vendorOrderService.markAsShipped(id);
             if (response.success) {
                 message.success('Order marked as shipped');
@@ -186,20 +189,18 @@ const OrderDetails: React.FC = () => {
                         />
                     )}
 
-                    {currentStatus === 'Awaiting Shipment Payment' && (
+                    {currentStatus === 'Awaiting Shipment Acceptance' && (
                         <ShippingInfoCard
                             weight={4}
                             shippingCost={orderDetail.shippingCost}
+                            duties={10.00}
                             status={currentStatus}
-                            onEdit={handleEditShipping}
                         />
                     )}
 
-                    {currentStatus === 'Ready to Ship' && (
-                        <UpdateOrderStatusCard
-                            onAction={handleMarkAsShipped}
-                            buttonText="Mark Order as Shipped"
-                            successMessage="Order marked as shipped"
+                    {currentStatus === 'Pending Courier Pickup' && (
+                        <MarkAsShippedCard
+                            onUpdate={handleMarkAsShipped}
                         />
                     )}
 
