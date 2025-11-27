@@ -30,6 +30,16 @@ export const newOrdersData: Order[] = [
         deliveryType: 'Door Step Delivery',
         status: 'Awaiting Shipment Payment',
     },
+    {
+        key: '3',
+        date: 'Oct 25, 2025, 03:45pm',
+        orderId: '#0020251003',
+        totalSsn: '03',
+        totalQty: 150,
+        deliverTo: 'Warehouse C',
+        deliveryType: 'Self Collection',
+        status: 'Updated Self Collection Status',
+    },
 ];
 
 export const readyToShipData: Order[] = [
