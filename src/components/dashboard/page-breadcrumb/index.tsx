@@ -19,7 +19,6 @@ const PageBreadcrumb: React.FC<PageBreadcrumbProps> = ({ items }) => {
     return (
         <Breadcrumb
             style={{
-                marginBottom: '24px',
                 alignItems: 'center',
             }}
             items={items.map((item, index) => ({

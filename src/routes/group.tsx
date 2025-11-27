@@ -7,6 +7,8 @@ import SSNLibraryPage from "../pages/dashboard/ssn-lib/landing"
 import NewSSNPage from "../pages/dashboard/ssn-lib/new"
 import NewOrderPage from "../pages/dashboard/new-order/landing"
 import CheckoutPage from "../pages/dashboard/new-order/checkout"
+import OrderTrackingPage from "../pages/dashboard/order-tracking"
+import OrderDetailsPage from "../pages/dashboard/order-tracking/details"
 
 interface IRouteGroup {
     path: string,
@@ -43,6 +45,16 @@ const routeGroup: IRouteGroup[] = [
     {
         path: '/dashboard/new-order/checkout',
         element: CheckoutPage,
+        isProtected: true
+    },
+    {
+        path: '/dashboard/order-tracking',
+        element: OrderTrackingPage,
+        isProtected: true
+    },
+    {
+        path: '/dashboard/order-tracking/:id',
+        element: OrderDetailsPage,
         isProtected: true
     },
     {

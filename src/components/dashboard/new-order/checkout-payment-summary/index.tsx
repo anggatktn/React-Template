@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, Row, Col, Typography, Divider, Button } from 'antd';
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
 
 interface PaymentSummaryCardProps {
     subTotal: number;

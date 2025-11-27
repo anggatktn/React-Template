@@ -12,6 +12,11 @@ export const theme: ThemeConfig = {
         },
         Segmented: {
             boxShadowTertiary: 'none',
+            trackBg: '#ffffff',
+            itemSelectedBg: '#ECF2FF',
+            itemSelectedColor: '#265CD7',
+            borderRadius: 20,
+            trackPadding: 4
         }
     }
 };

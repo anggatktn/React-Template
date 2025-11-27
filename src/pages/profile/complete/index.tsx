@@ -1,11 +1,9 @@
 import { useMemo } from "react";
 import { ProfileCompleteModel } from "./profile-complete-model";
 import { useStateFlow } from "../../../utils/StateFlow";
-import { Form, Input, Button, Select, Row, Col, Avatar, Typography } from "antd";
+import { Form, Input, Button, Select, Row, Col, Typography } from "antd";
 import classes from "./index.module.less";
-import { UserOutlined } from "@ant-design/icons";
-import Layout, { Header } from "antd/es/layout/layout";
-import MenuLayout, { TopBarMenu } from "../../../components/layout/menu-layout";
+import MenuLayout from "../../../components/layout/menu-layout";
 import { useNavigate } from "react-router-dom";
 
 const { Title } = Typography;

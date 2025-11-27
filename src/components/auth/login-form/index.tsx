@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 // Assuming Ant Design components are available globally or imported via a build system.
-import { Form, Input, Button, Checkbox, Typography, Alert, InputNumber } from 'antd';
+import { Form, Input, Button, Checkbox, Typography } from 'antd';
 import classes from './index.module.less';
 import { AuthFormType } from '../../../pages/auth/auth-screen-state';
 

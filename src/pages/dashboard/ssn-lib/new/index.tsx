@@ -47,7 +47,7 @@ const NewSSNPage: React.FC = () => {
             />
 
             {/* Header */}
-            <Title level={2} style={{ margin: '0 0 24px 0', fontWeight: 600 }}>
+            <Title level={2} style={{ margin: '24px 0 24px 0', fontWeight: 600 }}>
                 Add new SSN
             </Title>
             <Divider style={{ backgroundColor: '#D2DAE5' }} />
