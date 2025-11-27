@@ -12,6 +12,21 @@ interface ShippingInfoCardProps {
     proofOfDelivery?: string;
 }
 
+const getStatusColor = (status: string) => {
+    switch (status) {
+        case 'Update Shipping Cost': return '#DF7021';
+        case 'Awaiting Shipment Acceptance': return '#1590A0';
+        case 'Pending Courier Pickup': return '#DF7021';
+        case 'Order Shipped': return '#672DB7';
+        case 'Order Delivered': return '#3A9448';
+        case 'Awaiting Collection': return '#1590A0';
+        case 'Order Collected': return '#3A9448';
+        case 'Not Collected': return '#CF3030';
+        case 'Updated Self Collection Status': return '#1551A0';
+        default: return '#8c8c8c';
+    }
+};
+
 const ShippingInfoCard: React.FC<ShippingInfoCardProps> = ({
     deliveryType = 'Door Step Delivery',
     weight = 4,
@@ -80,7 +95,7 @@ const ShippingInfoCard: React.FC<ShippingInfoCardProps> = ({
                                 <Text style={{ color: '#262626', fontWeight: 600 }}>Status</Text>
                             </Col>
                             <Col span={18}>
-                                <Text strong style={{ color: '#1590A0' }}>{status}</Text>
+                                <Text strong style={{ color: getStatusColor(status) }}>{status}</Text>
                             </Col>
                         </Row>
                         <Row>
@@ -88,7 +103,31 @@ const ShippingInfoCard: React.FC<ShippingInfoCardProps> = ({
                                 <Text style={{ color: '#262626', fontWeight: 600 }}>Proof of Delivery</Text>
                             </Col>
                             <Col span={18}>
-                                <Text style={{ color: '#595959' }}>{proofOfDelivery}</Text>
+                                {proofOfDelivery && proofOfDelivery !== '-' ? (
+                                    <div style={{
+                                        width: '300px',
+                                        border: '1px solid #d9d9d9',
+                                        borderRadius: '8px',
+                                        padding: '8px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        background: '#fafafa'
+                                    }}>
+                                        <img
+                                            src={proofOfDelivery}
+                                            alt="Proof of Delivery"
+                                            style={{
+                                                maxWidth: '100%',
+                                                maxHeight: '100%',
+                                                objectFit: 'contain',
+                                                borderRadius: '4px'
+                                            }}
+                                        />
+                                    </div>
+                                ) : (
+                                    <Text style={{ color: '#595959' }}>{proofOfDelivery}</Text>
+                                )}
                             </Col>
                         </Row>
                     </Col>

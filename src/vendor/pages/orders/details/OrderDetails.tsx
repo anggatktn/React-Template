@@ -13,6 +13,7 @@ import classes from './OrderDetails.module.less';
 import CustomerInfoSection from '../../../components/orders/details/CustomerInfoCard';
 import DeliveryInfoSection from '../../../components/orders/details/DeliveryInfoSection';
 import OrderTrackingCard from '../../../components/orders/details/OrderTrackingCard';
+import UploadPhotoCard from '../../../components/orders/details/UploadPhotoCard';
 import { vendorOrderService, type OrderDetail } from '../../../../services/vendor.service-base';
 
 const { Content } = Layout;
@@ -24,6 +25,7 @@ const OrderDetails: React.FC = () => {
     const [orderDetail, setOrderDetail] = useState<OrderDetail | null>(null);
     const [loading, setLoading] = useState(false);
     const [currentStatus, setCurrentStatus] = useState<string>('');
+    const [podUrl, setPodUrl] = useState<string | null>(null);
 
     useEffect(() => {
         if (id) {
@@ -103,6 +105,24 @@ const OrderDetails: React.FC = () => {
 
         } catch (error) {
             message.error('Failed to mark as ready for collection');
+        }
+    };
+
+    const handleUpdateStatusAsDelivered = async (file: File | null) => {
+        if (!id) return;
+        try {
+            // TODO: Implement API call for marking as delivered with file
+            // const response = await vendorOrderService.markAsDelivered(id, file);
+            // if (response.success) {
+            if (file) {
+                const url = URL.createObjectURL(file);
+                setPodUrl(url);
+            }
+            message.success('Order marked as delivered');
+            setCurrentStatus('Order Delivered');
+            // }
+        } catch (error) {
+            message.error('Failed to mark as delivered');
         }
     };
 
@@ -189,20 +209,32 @@ const OrderDetails: React.FC = () => {
                         />
                     )}
 
-                    {currentStatus === 'Awaiting Shipment Acceptance' && (
-                        <ShippingInfoCard
-                            weight={4}
-                            shippingCost={orderDetail.shippingCost}
-                            duties={10.00}
-                            status={currentStatus}
-                        />
-                    )}
-
                     {currentStatus === 'Pending Courier Pickup' && (
                         <MarkAsShippedCard
                             onUpdate={handleMarkAsShipped}
                         />
                     )}
+
+                    {currentStatus === 'Order Shipped' && (
+                        <UploadPhotoCard
+                            onUpdateStatus={handleUpdateStatusAsDelivered}
+                        />
+                    )}
+
+                    {(currentStatus === 'Awaiting Shipment Acceptance' ||
+                        currentStatus === 'Pending Courier Pickup' ||
+                        currentStatus === 'Order Shipped' ||
+                        currentStatus === 'Order Delivered') && (
+                            <ShippingInfoCard
+                                weight={4}
+                                shippingCost={orderDetail.shippingCost}
+                                duties={10.00}
+                                status={currentStatus}
+                                proofOfDelivery={podUrl || '-'}
+                            />
+                        )}
+
+
 
                     {currentStatus === 'Updated Self Collection Status' && (
                         <UpdateOrderStatusCard
