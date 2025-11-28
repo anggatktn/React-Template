@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Button, Input, Typography, Row, Col, message, Select } from 'antd';
+import { Card, Button, Input, Typography, Row, Col, message, Select, Avatar } from 'antd';
 
 const { Text, Title } = Typography;
 const { Option } = Select;
@@ -12,10 +12,10 @@ interface ShippingUpdateProps {
 }
 
 const CURRENCIES = [
-    { label: 'SGD', value: 'SGD', symbol: 'S$' },
-    { label: 'MYR', value: 'MYR', symbol: 'RM' },
-    { label: 'IDR', value: 'IDR', symbol: 'Rp' },
-    { label: 'THB', value: 'THB', symbol: '฿' },
+    { label: 'SGD', value: 'SGD', symbol: 'S$', flag: 'https://flagcdn.com/sg.svg' },
+    { label: 'MYR', value: 'MYR', symbol: 'RM', flag: 'https://flagcdn.com/my.svg' },
+    { label: 'IDR', value: 'IDR', symbol: 'Rp', flag: 'https://flagcdn.com/id.svg' },
+    { label: 'THB', value: 'THB', symbol: '฿', flag: 'https://flagcdn.com/th.svg' },
 ];
 
 const ShippingUpdateCard: React.FC<ShippingUpdateProps> = ({
@@ -72,12 +72,21 @@ const ShippingUpdateCard: React.FC<ShippingUpdateProps> = ({
                 value={currency}
                 onChange={onCurrencyChange}
                 bordered={false}
-                style={{ width: 75, fontWeight: 'bold' }}
+                style={{ width: 90, fontWeight: 'bold' }}
                 dropdownMatchSelectWidth={false}
+                optionLabelProp="label"
             >
                 {CURRENCIES.map(c => (
-                    <Option key={c.value} value={c.value}>
-                        <span style={{ fontWeight: 'bold', color: '#000' }}>{c.value}</span>
+                    <Option key={c.value} value={c.value} label={
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <Avatar src={c.flag} size={20} shape="circle" style={{ flexShrink: 0 }} />
+                            <span>{c.value}</span>
+                        </div>
+                    }>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <Avatar src={c.flag} size={20} shape="circle" style={{ flexShrink: 0 }} />
+                            <span style={{ fontWeight: 'bold', color: '#000' }}>{c.value}</span>
+                        </div>
                     </Option>
                 ))}
             </Select>

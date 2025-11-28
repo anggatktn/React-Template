@@ -2,7 +2,7 @@ import React from 'react';
 import { Table, Button } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { Order } from '../../pages/orders/data';
-import { FileTextOutlined } from '@ant-design/icons';
+
 import { useNavigate } from 'react-router-dom';
 import classes from './OrdersTable.module.less';
 
@@ -83,9 +83,7 @@ const OrdersTable: React.FC<OrdersTableProps> = ({ data }) => {
             key: 'action',
             render: (_, record) => (
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    {record.status === 'Order Shipped' && (
-                        <FileTextOutlined style={{ color: '#1890ff', fontSize: '18px', cursor: 'pointer' }} />
-                    )}
+
                     <Button
                         type="link"
                         size="small"

@@ -14,6 +14,7 @@ import CustomerInfoSection from '../../../components/orders/details/CustomerInfo
 import DeliveryInfoSection from '../../../components/orders/details/DeliveryInfoSection';
 import OrderTrackingCard from '../../../components/orders/details/OrderTrackingCard';
 import UploadPhotoCard from '../../../components/orders/details/UploadPhotoCard';
+import TrackingInfoCard from '../../../components/orders/details/TrackingInfoCard';
 import { vendorOrderService, type OrderDetail } from '../../../../services/vendor.service-base';
 
 const { Content } = Layout;
@@ -26,6 +27,7 @@ const OrderDetails: React.FC = () => {
     const [loading, setLoading] = useState(false);
     const [currentStatus, setCurrentStatus] = useState<string>('');
     const [podUrl, setPodUrl] = useState<string | null>(null);
+    const [trackingInfo, setTrackingInfo] = useState<{ id: string; url: string; note: string } | null>(null);
 
     useEffect(() => {
         if (id) {
@@ -75,6 +77,7 @@ const OrderDetails: React.FC = () => {
             if (response.success) {
                 message.success('Order marked as shipped');
                 setCurrentStatus('Order Shipped');
+                setTrackingInfo({ id: trackingId, url: trackingUrl, note });
             }
         } catch (error) {
             message.error('Failed to mark as shipped');
@@ -108,15 +111,18 @@ const OrderDetails: React.FC = () => {
         }
     };
 
-    const handleUpdateStatusAsDelivered = async (file: File | null) => {
+    const handleUpdateStatusAsDelivered = async (file: File | null, remarks?: string) => {
         if (!id) return;
         try {
-            // TODO: Implement API call for marking as delivered with file
-            // const response = await vendorOrderService.markAsDelivered(id, file);
+            // TODO: Implement API call for marking as delivered with file and remarks
+            // const response = await vendorOrderService.markAsDelivered(id, file, remarks);
             // if (response.success) {
             if (file) {
                 const url = URL.createObjectURL(file);
                 setPodUrl(url);
+            }
+            if (remarks) {
+                console.log('Remarks:', remarks);
             }
             message.success('Order marked as delivered');
             setCurrentStatus('Order Delivered');
@@ -216,9 +222,18 @@ const OrderDetails: React.FC = () => {
                     )}
 
                     {currentStatus === 'Order Shipped' && (
-                        <UploadPhotoCard
-                            onUpdateStatus={handleUpdateStatusAsDelivered}
-                        />
+                        <>
+                            <UploadPhotoCard
+                                onUpdateStatus={handleUpdateStatusAsDelivered}
+                            />
+                            {trackingInfo && (
+                                <TrackingInfoCard
+                                    trackingId={trackingInfo.id}
+                                    trackingUrl={trackingInfo.url}
+                                    note={trackingInfo.note}
+                                />
+                            )}
+                        </>
                     )}
 
                     {(currentStatus === 'Awaiting Shipment Acceptance' ||
