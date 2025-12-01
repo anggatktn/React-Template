@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Card, Button, Input, Typography, Row, Col, message, Select, Avatar } from 'antd';
+import ConfirmationDialog from './ConfirmationDialog';
 
 const { Text, Title } = Typography;
 const { Option } = Select;
@@ -30,13 +31,19 @@ const ShippingUpdateCard: React.FC<ShippingUpdateProps> = ({
     const [duties, setDuties] = useState<string>(initialDuties.toString());
     const [dutiesCurrency, setDutiesCurrency] = useState<string>('SGD');
     const [loading, setLoading] = useState(false);
+    const [showConfirmDialog, setShowConfirmDialog] = useState(false);
 
-    const handleUpdate = () => {
+    const handleUpdateClick = () => {
+        setShowConfirmDialog(true);
+    };
+
+    const handleConfirmUpdate = () => {
         setLoading(true);
         // Simulate API call
         setTimeout(() => {
             onUpdate(parseFloat(weight), parseFloat(shippingCost), parseFloat(duties));
             setLoading(false);
+            setShowConfirmDialog(false);
             message.success('Shipping details updated successfully');
         }, 1000);
     };
@@ -142,7 +149,7 @@ const ShippingUpdateCard: React.FC<ShippingUpdateProps> = ({
                     <Col span={6}>
                         <Button
                             type="primary"
-                            onClick={handleUpdate}
+                            onClick={handleUpdateClick}
                             loading={loading}
                             block
                             style={{ height: '40px', backgroundColor: '#2563EB', fontWeight: 500 }}
@@ -152,6 +159,14 @@ const ShippingUpdateCard: React.FC<ShippingUpdateProps> = ({
                     </Col>
                 </Row>
             </Card>
+
+            <ConfirmationDialog
+                open={showConfirmDialog}
+                title="Confirm Update Shipping Cost?"
+                onConfirm={handleConfirmUpdate}
+                onCancel={() => setShowConfirmDialog(false)}
+                loading={loading}
+            />
         </div>
     );
 };

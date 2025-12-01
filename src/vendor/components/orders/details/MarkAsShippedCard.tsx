@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Card, Button, Input, Typography, Row, Col, message } from 'antd';
+import ConfirmationDialog from './ConfirmationDialog';
 
 const { Title, Text } = Typography;
 
@@ -12,17 +13,23 @@ const MarkAsShippedCard: React.FC<MarkAsShippedCardProps> = ({ onUpdate }) => {
     const [trackingUrl, setTrackingUrl] = useState('');
     const [note, setNote] = useState('');
     const [loading, setLoading] = useState(false);
+    const [showConfirmDialog, setShowConfirmDialog] = useState(false);
 
-    const handleUpdate = () => {
+    const handleUpdateClick = () => {
         if (!trackingId) {
             message.error('Please enter Tracking ID');
             return;
         }
+        setShowConfirmDialog(true);
+    };
+
+    const handleConfirmUpdate = () => {
         setLoading(true);
         // Simulate API call
         setTimeout(() => {
             onUpdate(trackingId, trackingUrl, note);
             setLoading(false);
+            setShowConfirmDialog(false);
         }, 1000);
     };
 
@@ -73,7 +80,7 @@ const MarkAsShippedCard: React.FC<MarkAsShippedCardProps> = ({ onUpdate }) => {
                     <Col>
                         <Button
                             type="primary"
-                            onClick={handleUpdate}
+                            onClick={handleUpdateClick}
                             loading={loading}
                             style={{
                                 height: '40px',
@@ -88,6 +95,14 @@ const MarkAsShippedCard: React.FC<MarkAsShippedCardProps> = ({ onUpdate }) => {
                     </Col>
                 </Row>
             </Card>
+
+            <ConfirmationDialog
+                open={showConfirmDialog}
+                title="Confirm Update Status as Shipped?"
+                onConfirm={handleConfirmUpdate}
+                onCancel={() => setShowConfirmDialog(false)}
+                loading={loading}
+            />
         </div>
     );
 };

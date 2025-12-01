@@ -226,13 +226,11 @@ const OrderDetails: React.FC = () => {
                             <UploadPhotoCard
                                 onUpdateStatus={handleUpdateStatusAsDelivered}
                             />
-                            {trackingInfo && (
-                                <TrackingInfoCard
-                                    trackingId={trackingInfo.id}
-                                    trackingUrl={trackingInfo.url}
-                                    note={trackingInfo.note}
-                                />
-                            )}
+                            <TrackingInfoCard
+                                trackingId={trackingInfo?.id || 'TRK123456789'}
+                                trackingUrl={trackingInfo?.url || 'https://www.dhl.com/track/TRK123456789'}
+                                note={trackingInfo?.note}
+                            />
                         </>
                     )}
 
@@ -248,8 +246,6 @@ const OrderDetails: React.FC = () => {
                                 proofOfDelivery={podUrl || '-'}
                             />
                         )}
-
-
 
                     {currentStatus === 'Updated Self Collection Status' && (
                         <UpdateOrderStatusCard
