@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 // Assuming Ant Design components are available globally or imported via a build system.
-import { Form, Input, Button, Checkbox, Typography } from 'antd';
+import { Form, Input, Button, Checkbox, Typography, Space } from 'antd';
 import classes from './index.module.less';
 import { AuthFormType } from '../../../pages/auth/auth-screen-state';
+import GoogleIcon from '../../../assets/google_icon.svg?react';
 
 const { Link } = Typography;
 
@@ -28,7 +29,7 @@ const ButtonSecondaryLabels: Record<AuthFormType, string> = {
 };
 
 const ButtonPrimaryLabels: Record<AuthFormType, string> = {
-    [AuthFormType.SignIn]: "Log In",
+    [AuthFormType.SignIn]: "Sign In",
     [AuthFormType.CreateAccount]: "Next",
     [AuthFormType.EnterOTP]: "Create Account",
 };
@@ -97,72 +98,82 @@ const LoginForm: React.FC<LoginFormArgs> = ({
                     layout="vertical"
                     size="large"
                 >
-                    {formType === AuthFormType.EnterOTP ? <>
-                        <Form.Item
-                            label="Enter OTP"
-                            name="otp"
-                            className={classes["form-row"]}
-                            colon={false}
-                            rules={[
-                                { required: true, message: 'Please input your OTP!' },
-                                {
-                                    pattern: /^[0-9]+$/,
-                                    message: 'Please enter only numbers!'
-                                }
-                            ]}
-                            required
-                        >
-                            <Input
-                                maxLength={6}
-                                onKeyDown={(e) => {
-                                    // Allow: backspace, delete, tab, escape, enter, arrows
-                                    if (
-                                        ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight'].includes(e.key) ||
-                                        // Allow Ctrl+A, Ctrl+C, Ctrl+V, Ctrl+X
-                                        (e.key === 'a' && e.ctrlKey) ||
-                                        (e.key === 'c' && e.ctrlKey) ||
-                                        (e.key === 'v' && e.ctrlKey) ||
-                                        (e.key === 'x' && e.ctrlKey)
-                                    ) {
-                                        return;
-                                    }
-                                    // Prevent if not a number
-                                    if (!/[0-9]/.test(e.key)) {
-                                        e.preventDefault();
-                                    }
+                    {/* Email Input */}
+                    <Form.Item
+                        label="Email"
+                        name="email"
+                        className={classes["form-row"]}
+                        colon={false}
+                        rules={[
+                            { required: true, message: '' },
+                            { type: 'email', message: '' }
+                        ]}
+                        required
+                    >
+                        <Input
+                            placeholder="johndoe@customer.com"
+                            suffix={
+                                <span style={{
+                                    color: '#265CD7',
+                                    fontWeight: 600,
+                                    cursor: "pointer",
+                                    fontSize: 14
                                 }}
-                                placeholder='Enter your OTP here!'
-                            />
-                        </Form.Item>
-                    </> : <>
-                        {/* Email Input */}
-                        <Form.Item
-                            label="Email"
-                            name="email"
-                            className={classes["form-row"]}
-                            colon={false}
-                            rules={[
-                                { required: true, message: '' },
-                                { type: 'email', message: '' }
-                            ]}
-                            required
-                        >
-                            <Input placeholder="johndoe@customer.com" />
-                        </Form.Item>
+                                    onClick={() => {
 
-                        {/* Password Input */}
-                        <Form.Item
-                            label={formType === AuthFormType.SignIn ? "Password" : "Set a Password"}
-                            className={classes["form-row"]}
-                            name="password"
-                            rules={[{ required: true, message: '' }]}
-                            required
-                        >
-                            <Input.Password placeholder="••••••" />
-                        </Form.Item>
-                    </>}
+                                    }}
+                                >Send OTP</span>
+                            }
+                        />
+                    </Form.Item>
+                    <Form.Item
+                        label="Enter OTP"
+                        name="otp"
+                        className={classes["form-row"]}
+                        colon={false}
+                        rules={[
+                            { required: true, message: 'Please input your OTP!' },
+                            {
+                                pattern: /^[0-9]+$/,
+                                message: 'Please enter only numbers!'
+                            }
+                        ]}
+                        required
+                    >
+                        <Input
+                            maxLength={6}
+                            onKeyDown={(e) => {
+                                // Allow: backspace, delete, tab, escape, enter, arrows
+                                if (
+                                    ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight'].includes(e.key) ||
+                                    // Allow Ctrl+A, Ctrl+C, Ctrl+V, Ctrl+X
+                                    (e.key === 'a' && e.ctrlKey) ||
+                                    (e.key === 'c' && e.ctrlKey) ||
+                                    (e.key === 'v' && e.ctrlKey) ||
+                                    (e.key === 'x' && e.ctrlKey)
+                                ) {
+                                    return;
+                                }
+                                // Prevent if not a number
+                                if (!/[0-9]/.test(e.key)) {
+                                    e.preventDefault();
+                                }
+                            }}
+                            placeholder='Enter your OTP here!'
+                        />
+                    </Form.Item>
+                    {/* Password Input */}
+                    {/* <Form.Item
+                        label={formType === AuthFormType.SignIn ? "Password" : "Set a Password"}
+                        className={classes["form-row"]}
+                        name="password"
+                        rules={[{ required: true, message: '' }]}
+                        required
+                    >
+                        <Input.Password placeholder="••••••" />
+                    </Form.Item> */}
 
-                    {formType === AuthFormType.SignIn ? <Form.Item>
+                    {/* {formType === AuthFormType.SignIn ? <Form.Item>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                             <Form.Item name="remember" valuePropName="checked" noStyle>
                                 <Checkbox>Keep me signed in</Checkbox>
@@ -177,7 +188,7 @@ const LoginForm: React.FC<LoginFormArgs> = ({
                                 Forgot Password?
                             </Link>
                         </div>
-                    </Form.Item> : <></>}
+                    </Form.Item> : <></>} */}
 
                     {/* Log In Button */}
                     <Form.Item style={{ marginBottom: 12, marginTop: 32 }}>
@@ -194,7 +205,7 @@ const LoginForm: React.FC<LoginFormArgs> = ({
                     </Form.Item>
 
                     {/* Create Account Button */}
-                    <Form.Item>
+                    {/* <Form.Item>
                         <Button
                             onClick={onSecondaryButtonClicked}
                             type="default"
@@ -204,8 +215,38 @@ const LoginForm: React.FC<LoginFormArgs> = ({
                         >
                             {ButtonSecondaryLabels[formType]}
                         </Button>
-                    </Form.Item>
+                    </Form.Item> */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, margin: '16px 32px' }}>
+                        <div style={{ flex: 1, height: 1, backgroundColor: '#c7c7c7' }} />
+                        <span style={{ color: '#76879D', fontWeight: 500 }}>OR</span>
+                        <div style={{ flex: 1, height: 1, backgroundColor: '#c7c7c7' }} />
+                    </div>
 
+                    <Form.Item style={{}}>
+                        <Button
+                            type="default"
+                            htmlType="submit"
+                            block
+                            style={{
+                                height: 42,
+                                backgroundColor: 'white',
+                                fontWeight: 600,
+                                borderColor: '#265CD7',
+                                color: '#265CD7',
+                                border: '1px solid #265CD7',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 8
+                            }}
+                            icon={
+                                <div style={{ width: 24, height: "100%", display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                    <GoogleIcon />
+                                </div>
+                            }
+                        >
+                            Sign in with Google
+                        </Button>
+                    </Form.Item>
                 </Form>
             </div>
         </div>
