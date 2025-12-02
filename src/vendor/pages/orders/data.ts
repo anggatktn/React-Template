@@ -28,7 +28,7 @@ export const newOrdersData: Order[] = [
         totalQty: 500,
         deliverTo: 'Malaysia',
         deliveryType: 'Door Step Delivery',
-        status: 'Awaiting Shipment Payment',
+        status: 'Awaiting Shipment Acceptance',
     },
     {
         key: '3',
@@ -51,7 +51,7 @@ export const readyToShipData: Order[] = [
         totalQty: 1200,
         deliverTo: 'Indonesia',
         deliveryType: 'Door Step Delivery',
-        status: 'Ready to Ship',
+        status: 'Pending Courier Pickup',
     },
     {
         key: '2',
@@ -61,7 +61,7 @@ export const readyToShipData: Order[] = [
         totalQty: 150,
         deliverTo: 'Singapore',
         deliveryType: 'Door Step Delivery',
-        status: 'Ready to Ship',
+        status: 'Pending Courier Pickup',
     },
     {
         key: '3',

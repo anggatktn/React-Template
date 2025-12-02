@@ -7,11 +7,14 @@ import OrderInfoCard from '../../../components/orders/details/OrderInfoCard';
 import ShippingUpdateCard from '../../../components/orders/details/ShippingUpdateCard';
 import ShippingInfoCard from '../../../components/orders/details/ShippingInfoCard';
 import UpdateOrderStatusCard from '../../../components/orders/details/UpdateOrderStatusCard';
+import MarkAsShippedCard from '../../../components/orders/details/MarkAsShippedCard';
 import PackingListTable from '../../../components/orders/details/PackingListTable';
 import classes from './OrderDetails.module.less';
 import CustomerInfoSection from '../../../components/orders/details/CustomerInfoCard';
 import DeliveryInfoSection from '../../../components/orders/details/DeliveryInfoSection';
 import OrderTrackingCard from '../../../components/orders/details/OrderTrackingCard';
+import UploadPhotoCard from '../../../components/orders/details/UploadPhotoCard';
+import TrackingInfoCard from '../../../components/orders/details/TrackingInfoCard';
 import { vendorOrderService, type OrderDetail } from '../../../../services/vendor.service-base';
 
 const { Content } = Layout;
@@ -23,6 +26,8 @@ const OrderDetails: React.FC = () => {
     const [orderDetail, setOrderDetail] = useState<OrderDetail | null>(null);
     const [loading, setLoading] = useState(false);
     const [currentStatus, setCurrentStatus] = useState<string>('');
+    const [podUrl, setPodUrl] = useState<string | null>(null);
+    const [trackingInfo, setTrackingInfo] = useState<{ id: string; url: string; note: string } | null>(null);
 
     useEffect(() => {
         if (id) {
@@ -46,13 +51,14 @@ const OrderDetails: React.FC = () => {
         }
     };
 
-    const handleShippingUpdate = async (newWeight: number, newCost: number) => {
+    const handleShippingUpdate = async (newWeight: number, newCost: number, newDuties: number) => {
         if (!id) return;
         try {
+            // TODO: Pass newDuties to backend when supported
             const response = await vendorOrderService.updateShippingCost(id, newCost);
             if (response.success) {
                 message.success('Shipping cost updated');
-                setCurrentStatus('Awaiting Shipment Payment');
+                setCurrentStatus('Awaiting Shipment Acceptance');
             }
         } catch (error) {
             message.error('Failed to update shipping cost');
@@ -63,13 +69,15 @@ const OrderDetails: React.FC = () => {
         setCurrentStatus('Update Shipping Cost');
     };
 
-    const handleMarkAsShipped = async () => {
+    const handleMarkAsShipped = async (trackingId: string, trackingUrl: string, note: string) => {
         if (!id) return;
         try {
+            // TODO: Pass tracking info to backend when supported
             const response = await vendorOrderService.markAsShipped(id);
             if (response.success) {
                 message.success('Order marked as shipped');
                 setCurrentStatus('Order Shipped');
+                setTrackingInfo({ id: trackingId, url: trackingUrl, note });
             }
         } catch (error) {
             message.error('Failed to mark as shipped');
@@ -100,6 +108,27 @@ const OrderDetails: React.FC = () => {
 
         } catch (error) {
             message.error('Failed to mark as ready for collection');
+        }
+    };
+
+    const handleUpdateStatusAsDelivered = async (file: File | null, remarks?: string) => {
+        if (!id) return;
+        try {
+            // TODO: Implement API call for marking as delivered with file and remarks
+            // const response = await vendorOrderService.markAsDelivered(id, file, remarks);
+            // if (response.success) {
+            if (file) {
+                const url = URL.createObjectURL(file);
+                setPodUrl(url);
+            }
+            if (remarks) {
+                console.log('Remarks:', remarks);
+            }
+            message.success('Order marked as delivered');
+            setCurrentStatus('Order Delivered');
+            // }
+        } catch (error) {
+            message.error('Failed to mark as delivered');
         }
     };
 
@@ -186,22 +215,37 @@ const OrderDetails: React.FC = () => {
                         />
                     )}
 
-                    {currentStatus === 'Awaiting Shipment Payment' && (
-                        <ShippingInfoCard
-                            weight={4}
-                            shippingCost={orderDetail.shippingCost}
-                            status={currentStatus}
-                            onEdit={handleEditShipping}
+                    {currentStatus === 'Pending Courier Pickup' && (
+                        <MarkAsShippedCard
+                            onUpdate={handleMarkAsShipped}
                         />
                     )}
 
-                    {currentStatus === 'Ready to Ship' && (
-                        <UpdateOrderStatusCard
-                            onAction={handleMarkAsShipped}
-                            buttonText="Mark Order as Shipped"
-                            successMessage="Order marked as shipped"
-                        />
+                    {currentStatus === 'Order Shipped' && (
+                        <>
+                            <UploadPhotoCard
+                                onUpdateStatus={handleUpdateStatusAsDelivered}
+                            />
+                            <TrackingInfoCard
+                                trackingId={trackingInfo?.id || 'TRK123456789'}
+                                trackingUrl={trackingInfo?.url || 'https://www.dhl.com/track/TRK123456789'}
+                                note={trackingInfo?.note}
+                            />
+                        </>
                     )}
+
+                    {(currentStatus === 'Awaiting Shipment Acceptance' ||
+                        currentStatus === 'Pending Courier Pickup' ||
+                        currentStatus === 'Order Shipped' ||
+                        currentStatus === 'Order Delivered') && (
+                            <ShippingInfoCard
+                                weight={4}
+                                shippingCost={orderDetail.shippingCost}
+                                duties={10.00}
+                                status={currentStatus}
+                                proofOfDelivery={podUrl || '-'}
+                            />
+                        )}
 
                     {currentStatus === 'Updated Self Collection Status' && (
                         <UpdateOrderStatusCard

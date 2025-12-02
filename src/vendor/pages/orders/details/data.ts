@@ -33,7 +33,7 @@ export const getMockOrderData = (orderId?: string) => {
         status: order.status,
         itemCount: Math.floor(order.totalQty / 100), // Estimate based on totalQty
         amountPaid: order.totalQty * 0.50, // Mock calculation
-        shipmentPaid: order.status === 'Awaiting Shipment Payment' ? null : 50.00,
+        shipmentPaid: order.status === 'Awaiting Shipment Acceptance' ? null : 50.00,
         deliveryAddress: `123 Main Street, ${order.deliverTo}`,
         contactPerson: 'John Doe',
         contactPhone: '+65 98765432',

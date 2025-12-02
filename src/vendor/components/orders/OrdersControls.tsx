@@ -20,6 +20,20 @@ const OrdersControls: React.FC<OrdersControlsProps> = ({
     onSortChange,
     onSearchChange
 }) => {
+    const [inputValue, setInputValue] = React.useState(searchQuery);
+
+    React.useEffect(() => {
+        setInputValue(searchQuery);
+    }, [searchQuery]);
+
+    React.useEffect(() => {
+        const timer = setTimeout(() => {
+            onSearchChange(inputValue);
+        }, 500);
+
+        return () => clearTimeout(timer);
+    }, [inputValue, onSearchChange]);
+
     return (
         <div style={{
             display: 'flex',
@@ -63,8 +77,8 @@ const OrdersControls: React.FC<OrdersControlsProps> = ({
                         color: '#bfbfbf',
                         marginRight: '8px'
                     }} />}
-                    value={searchQuery}
-                    onChange={(e) => onSearchChange(e.target.value)}
+                    value={inputValue}
+                    onChange={(e) => setInputValue(e.target.value)}
                     style={{
                         width: '280px',
                         borderRadius: '8px',
