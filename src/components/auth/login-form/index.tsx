@@ -1,10 +1,11 @@
 import React, { useEffect, useState, useRef } from 'react';
 // Assuming Ant Design components are available globally or imported via a build system.
-import { Form, Input, Button, Typography } from 'antd';
+import { Form, Input, Button, Typography, message } from 'antd';
 import ReCAPTCHA from 'react-google-recaptcha';
 import classes from './index.module.less';
 import { AuthFormType } from '../../../pages/auth/auth-screen-state';
 import GoogleIcon from '../../../assets/google_icon.svg?react';
+import { signInWithGoogle } from '../../../services/google-auth';
 
 const { Link } = Typography;
 
@@ -47,6 +48,7 @@ const LoginForm: React.FC<LoginFormArgs> = ({
     const [isValidated, setValidated] = useState(false)
     const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null)
     const recaptchaRef = useRef<ReCAPTCHA>(null)
+    const [isGoogleLoading, setIsGoogleLoading] = useState(false)
 
     useEffect(() => {
         form.validateFields({
@@ -61,6 +63,35 @@ const LoginForm: React.FC<LoginFormArgs> = ({
     // onFinishFailed uses a specific Ant Design type for error info
     const onFinishFailed = (errorInfo: any) => { // Using 'any' for brevity as Ant's type is complex
         console.log('Failed:', errorInfo);
+    };
+
+    // Handle Google Sign-In
+    const handleGoogleSignIn = async () => {
+        setIsGoogleLoading(true);
+        try {
+            const result = await signInWithGoogle();
+            message.success(`Welcome, ${result.user.displayName || result.user.email}!`);
+
+            // You can handle the successful sign-in here
+            // For example, redirect to dashboard or call a callback
+            console.log('User signed in:', result.user);
+
+            // If you need to pass the user data to parent component,
+            // you can add a callback prop like onGoogleSignIn
+        } catch (error: any) {
+            console.error('Google Sign-In failed:', error);
+
+            // Handle specific error codes
+            if (error.code === 'auth/popup-closed-by-user') {
+                message.warning('Sign-in cancelled');
+            } else if (error.code === 'auth/popup-blocked') {
+                message.error('Popup blocked. Please allow popups for this site.');
+            } else {
+                message.error('Failed to sign in with Google. Please try again.');
+            }
+        } finally {
+            setIsGoogleLoading(false);
+        }
     };
 
     return (
@@ -238,8 +269,10 @@ const LoginForm: React.FC<LoginFormArgs> = ({
                     <Form.Item style={{}}>
                         <Button
                             type="default"
-                            htmlType="submit"
+                            onClick={handleGoogleSignIn}
                             block
+                            loading={isGoogleLoading}
+                            disabled={isGoogleLoading}
                             style={{
                                 height: 42,
                                 backgroundColor: 'white',
