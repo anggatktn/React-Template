@@ -116,22 +116,9 @@ const PackingListTable: React.FC<PackingListProps> = ({ items }) => {
                 fontWeight: '700',
                 boxShadow: '0px 0px 4px 0px rgba(106, 77, 187, 0.12)'
             }}>
-                Download Shipping Label
+                Download Files
             </Button>
-            <Button style={{
-                borderColor: '#265CD7',
-                borderWidth: '1px',
-                color: '#265CD7',
-                background: '#ECF2FF',
-                borderRadius: '6px',
-                padding: '15px 25px',
-                height: 'auto',
-                fontSize: '15px',
-                fontWeight: '700',
-                boxShadow: '0px 0px 4px 0px rgba(106, 77, 187, 0.12)'
-            }}>
-                Download Packing List
-            </Button>
+
         </Space>
     );
 

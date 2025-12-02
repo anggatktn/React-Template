@@ -15,6 +15,7 @@ import DeliveryInfoSection from '../../../components/orders/details/DeliveryInfo
 import OrderTrackingCard from '../../../components/orders/details/OrderTrackingCard';
 import UploadPhotoCard from '../../../components/orders/details/UploadPhotoCard';
 import TrackingInfoCard from '../../../components/orders/details/TrackingInfoCard';
+import SelfCollectionCard from '../../../components/orders/details/SelfCollectionCard';
 import { vendorOrderService, type OrderDetail } from '../../../../services/vendor.service-base';
 
 const { Content } = Layout;
@@ -27,6 +28,7 @@ const OrderDetails: React.FC = () => {
     const [loading, setLoading] = useState(false);
     const [currentStatus, setCurrentStatus] = useState<string>('');
     const [podUrl, setPodUrl] = useState<string | null>(null);
+    const [remarks, setRemarks] = useState<string>('');
     const [trackingInfo, setTrackingInfo] = useState<{ id: string; url: string; note: string } | null>(null);
 
     useEffect(() => {
@@ -84,12 +86,19 @@ const OrderDetails: React.FC = () => {
         }
     };
 
-    const handleMarkAsCollected = async () => {
+    const handleMarkAsCollected = async (file: File | null, remarks?: string) => {
         if (!id) return;
         try {
             const response = await vendorOrderService.markAsCollected(id);
             if (response.success) {
-                message.success('Order marked as collected');
+                if (file) {
+                    const url = URL.createObjectURL(file);
+                    setPodUrl(url);
+                }
+                if (remarks) {
+                    setRemarks(remarks);
+                }
+                // message.success('Order marked as collected'); // Handled by UploadPhotoCard
                 setCurrentStatus('Order Collected');
             }
         } catch (error) {
@@ -198,7 +207,7 @@ const OrderDetails: React.FC = () => {
                     </div>
                     <div className={classes.titleRow}>
                         <Title level={2} style={{ margin: 0 }}>Order details</Title>
-                        <Button type="primary" size="large" style={{ fontWeight: 600, paddingLeft: 32, paddingRight: 32 }}>Download Packing List</Button>
+                        <Button type="primary" size="large" style={{ fontWeight: 600, padding: '15px 25px', }}>Download Files</Button>
                     </div>
                     <Divider style={{ margin: '16px 0', borderColor: '#D2DAE5' }} />
                 </div>
@@ -247,20 +256,38 @@ const OrderDetails: React.FC = () => {
                             />
                         )}
 
+                    {currentStatus === 'Order Collected' && (
+                        <SelfCollectionCard
+                            statusText="Order Collected"
+                            statusColor="#3A9448"
+                            showAction={false}
+                            proofOfCollection={podUrl || undefined}
+                            remarks={remarks}
+                        />
+                    )}
+
                     {currentStatus === 'Updated Self Collection Status' && (
-                        <UpdateOrderStatusCard
-                            onAction={handleMarkAsReadyForCollection}
-                            buttonText="Mark it ready for self collection"
-                            successMessage="Order marked as ready for self collection"
+                        <SelfCollectionCard
+                            onMarkReady={handleMarkAsReadyForCollection}
                         />
                     )}
 
                     {currentStatus === 'Awaiting Collection' && (
-                        <UpdateOrderStatusCard
-                            onAction={handleMarkAsCollected}
-                            buttonText="Mark Order as Collected"
-                            successMessage="Order marked as collected"
-                        />
+                        <>
+                            <UploadPhotoCard
+                                onUpdateStatus={handleMarkAsCollected}
+                                cardTitle="Update Order Status"
+                                buttonText="Mark Order as Collected"
+                                modalTitle="Confirm Order Collection"
+                                successMessage="Order marked as collected"
+                            />
+                            <SelfCollectionCard
+                                statusText="Ready to Collect"
+                                statusColor="#3A9448"
+                                showAction={false}
+                            />
+
+                        </>
                     )}
 
                     <PackingListTable items={orderDetail.items.map(item => ({
