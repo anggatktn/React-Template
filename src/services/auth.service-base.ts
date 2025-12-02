@@ -40,6 +40,12 @@ export interface OtpResponse {
 export class AuthService extends BaseService {
     private readonly basePath = '/auth';
 
+    async requestOTPViaEmail(email: string): Promise<ApiResponse<OtpResponse>> {
+        return this.execute(() =>
+            apiClient.post<OtpResponse>(`${this.basePath}/email/otp`, { email })
+        );
+    }
+
     /**
      * Sign in user
      */

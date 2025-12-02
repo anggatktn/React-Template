@@ -20,6 +20,7 @@ interface LoginFormArgs {
     onPrimaryButtonClicked: (values: FormValues) => void,
     onSecondaryButtonClicked: () => void,
     onRetypeEmail: () => void,
+    onRequestOtpViaEmail: (email: string) => void,
     formType: AuthFormType,
     isLoading: boolean
 }
@@ -40,6 +41,7 @@ const LoginForm: React.FC<LoginFormArgs> = ({
     onPrimaryButtonClicked,
     onSecondaryButtonClicked,
     onRetypeEmail,
+    onRequestOtpViaEmail,
     formType,
     isLoading
 }) => {
@@ -145,16 +147,18 @@ const LoginForm: React.FC<LoginFormArgs> = ({
                         required
                     >
                         <Input
+                            size="large"
                             placeholder="johndoe@customer.com"
                             suffix={
-                                <span style={{
-                                    color: '#265CD7',
-                                    fontWeight: 600,
-                                    cursor: "pointer",
-                                    fontSize: 14
-                                }}
+                                <span
+                                    style={{
+                                        color: '#265CD7',
+                                        fontWeight: 600,
+                                        cursor: "pointer",
+                                        fontSize: 14
+                                    }}
                                     onClick={() => {
-
+                                        onRequestOtpViaEmail(form.getFieldValue('email'))
                                     }}
                                 >Send OTP</span>
                             }
@@ -175,6 +179,7 @@ const LoginForm: React.FC<LoginFormArgs> = ({
                         required
                     >
                         <Input
+                            size="large"
                             maxLength={6}
                             onKeyDown={(e) => {
                                 // Allow: backspace, delete, tab, escape, enter, arrows
@@ -240,6 +245,7 @@ const LoginForm: React.FC<LoginFormArgs> = ({
                             type="primary"
                             htmlType="submit"
                             block
+                            size='large'
                             loading={isLoading}
                             style={{ height: 42, backgroundColor: `${isValidated && recaptchaToken ? '#265CD7' : '#c7c7c7ff'}`, fontWeight: 600 }}
                             disabled={!isValidated || !recaptchaToken}
@@ -273,6 +279,7 @@ const LoginForm: React.FC<LoginFormArgs> = ({
                             block
                             loading={isGoogleLoading}
                             disabled={isGoogleLoading}
+                            size="large"
                             style={{
                                 height: 42,
                                 backgroundColor: 'white',

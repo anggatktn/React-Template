@@ -29,6 +29,22 @@ export class AuthScreenModel extends BaseModel<AuthScreenState> {
         }));
     }
 
+    public onRequestOtpViaEmail = async (email: string) => {
+        authService.requestOTPViaEmail(email).then((response) => {
+            if (response.success) {
+                this.state.setValue({
+                    ...this.state.getValue(),
+                    authFormType: AuthFormType.EnterOTP
+                })
+            }
+        }).catch((error) => {
+            // Handle API errors (network errors, server errors, etc.)
+            console.error('Request OTP failed:', error);
+            // Show user-friendly error message
+            alert(`Request OTP failed: ${error.message || 'Unable to connect to server. Please check your connection and try again.'}`);
+        })
+    }
+
     public onFormPrimaryButtonPressed = async (
         values: FormValues,
         onSignUpOtpSuccess: () => void

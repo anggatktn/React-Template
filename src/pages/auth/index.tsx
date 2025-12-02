@@ -37,6 +37,7 @@ const AuthPage: React.FC = () => {
             </div>
             <div className={classes["right-pane"]}>
                 <LoginForm
+                    onRequestOtpViaEmail={model.onRequestOtpViaEmail}
                     onPrimaryButtonClicked={(values: FormValues) => {
                         model.onFormPrimaryButtonPressed(values, () => {
                             navigate('/profile/complete')
