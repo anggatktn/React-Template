@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 // Assuming Ant Design components are available globally or imported via a build system.
-import { Form, Input, Button, Checkbox, Typography, Space } from 'antd';
+import { Form, Input, Button, Typography } from 'antd';
+import ReCAPTCHA from 'react-google-recaptcha';
 import classes from './index.module.less';
 import { AuthFormType } from '../../../pages/auth/auth-screen-state';
 import GoogleIcon from '../../../assets/google_icon.svg?react';
@@ -44,6 +45,8 @@ const LoginForm: React.FC<LoginFormArgs> = ({
     const [form] = Form.useForm<FormValues>();
     const formValues = Form.useWatch([], form)
     const [isValidated, setValidated] = useState(false)
+    const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null)
+    const recaptchaRef = useRef<ReCAPTCHA>(null)
 
     useEffect(() => {
         form.validateFields({
@@ -190,15 +193,25 @@ const LoginForm: React.FC<LoginFormArgs> = ({
                         </div>
                     </Form.Item> : <></>} */}
 
+                    {/* Google reCAPTCHA */}
+                    <Form.Item style={{ marginBottom: 16, display: 'flex', justifyContent: 'center' }}>
+                        <ReCAPTCHA
+                            ref={recaptchaRef}
+                            sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY || ''}
+                            onChange={(token) => setRecaptchaToken(token)}
+                            onExpired={() => setRecaptchaToken(null)}
+                        />
+                    </Form.Item>
+
                     {/* Log In Button */}
-                    <Form.Item style={{ marginBottom: 12, marginTop: 32 }}>
+                    <Form.Item style={{ marginBottom: 12, marginTop: 16 }}>
                         <Button
                             type="primary"
                             htmlType="submit"
                             block
                             loading={isLoading}
-                            style={{ height: 42, backgroundColor: `${isValidated ? '#265CD7' : '#c7c7c7ff'}`, fontWeight: 600 }}
-                            disabled={!isValidated}
+                            style={{ height: 42, backgroundColor: `${isValidated && recaptchaToken ? '#265CD7' : '#c7c7c7ff'}`, fontWeight: 600 }}
+                            disabled={!isValidated || !recaptchaToken}
                         >
                             {ButtonPrimaryLabels[formType]}
                         </Button>
