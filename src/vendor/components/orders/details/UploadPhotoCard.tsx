@@ -9,9 +9,19 @@ const { TextArea } = Input;
 
 interface UploadPhotoCardProps {
     onUpdateStatus: (file: File | null, remarks?: string) => void;
+    cardTitle?: string;
+    buttonText?: string;
+    modalTitle?: string;
+    successMessage?: string;
 }
 
-const UploadPhotoCard: React.FC<UploadPhotoCardProps> = ({ onUpdateStatus }) => {
+const UploadPhotoCard: React.FC<UploadPhotoCardProps> = ({
+    onUpdateStatus,
+    cardTitle = "Update Status",
+    buttonText = "Update Status as Delivered",
+    modalTitle = "Confirm Order Delivery",
+    successMessage = "Status updated to Delivered"
+}) => {
     const [fileList, setFileList] = useState<any[]>([]);
     const [loading, setLoading] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -58,7 +68,7 @@ const UploadPhotoCard: React.FC<UploadPhotoCardProps> = ({ onUpdateStatus }) => 
             onUpdateStatus(file, remarks);
             setLoading(false);
             setIsModalOpen(false);
-            message.success('Status updated to Delivered');
+            message.success(successMessage);
         }, 1000);
     };
 
@@ -122,7 +132,7 @@ const UploadPhotoCard: React.FC<UploadPhotoCardProps> = ({ onUpdateStatus }) => 
 
     return (
         <div style={{ marginBottom: 24 }}>
-            <Title level={4} style={{ marginBottom: 16, marginTop: 30 }}>Update Status</Title>
+            <Title level={4} style={{ marginBottom: 16, marginTop: 30 }}>{cardTitle}</Title>
             <Card
                 bordered={false}
                 style={{ borderRadius: 8, width: '100%' }}
@@ -138,12 +148,12 @@ const UploadPhotoCard: React.FC<UploadPhotoCardProps> = ({ onUpdateStatus }) => 
                         width: '240px'
                     }}
                 >
-                    Update Status as Delivered
+                    {buttonText}
                 </Button>
             </Card>
 
             <Modal
-                title={<Title level={4} style={{ textAlign: 'center', marginBottom: 24 }}>Confirm Order Delivery</Title>}
+                title={<Title level={4} style={{ textAlign: 'center', marginBottom: 24 }}>{modalTitle}</Title>}
                 open={isModalOpen}
                 onCancel={handleCancel}
                 footer={[
