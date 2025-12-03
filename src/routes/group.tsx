@@ -2,6 +2,7 @@ import React from "react"
 import HomePage from "../pages/home"
 import ProfileCompletePage from "../pages/profile/complete"
 import OrdersPage from "../vendor/pages/orders"
+import VendorHistoryPage from "../vendor/pages/history"
 import OrderDetails from "../vendor/pages/orders/details/OrderDetails"
 import SSNLibraryPage from "../pages/dashboard/ssn-lib/landing"
 import NewSSNPage from "../pages/dashboard/ssn-lib/new"
@@ -65,6 +66,11 @@ const routeGroup: IRouteGroup[] = [
     {
         path: '/vendor/orders/:id',
         element: OrderDetails,
+        isProtected: true
+    },
+    {
+        path: '/vendor/history',
+        element: VendorHistoryPage,
         isProtected: true
     }
 ]
