@@ -2,12 +2,17 @@ import { Avatar, Row } from "antd";
 import Layout, { Header } from "antd/es/layout/layout";
 import { UserOutlined } from "@ant-design/icons";
 import { NavLink } from "react-router-dom";
-
+import { getUserType } from "../../../utils/local-storage/auth-local";
+import { UserType } from "../../../services/models/user-type";
+import { BaseMenu } from "./base-menu";
+import { MENU_BY_USER_TYPE } from "./menu-registry";
+import { SuperAdminMenu } from "./super-admin-menu";
+import { CustomerMenu } from "./customer-menu";
 
 interface MenuLayoutProps {
-    selectedMenu?: TopBarMenu;
-    onSelectMenu?: (menu: TopBarMenu) => void;
-    isMenuVisible?: boolean,
+    selectedMenu?: CustomerMenu | SuperAdminMenu;
+    onSelectMenu?: (menu: CustomerMenu | SuperAdminMenu) => void;
+    isMenuVisible?: boolean;
     children?: React.ReactNode;
 }
 
@@ -17,9 +22,37 @@ const MenuLayout: React.FC<MenuLayoutProps> = ({
     isMenuVisible = true,
     children
 }) => {
-    const menuValues = Object.keys(TopBarMenu)
-        .filter((key) => isNaN(Number(key)))
-        .map((key) => TopBarMenu[key as keyof typeof TopBarMenu]);
+    const userType = getUserType();
+
+    const renderMenuItems = (menuInstance: BaseMenu) => {
+        const menuEnum = menuInstance.getMenuEnum();
+        const menuValues = (
+            Object.keys(menuEnum) as (keyof typeof menuEnum)[]
+        ).filter((key) => isNaN(Number(key)))
+            .filter((key) => key !== 'getLabel')
+            .filter((key) => key !== 'getRoute')
+            .map((key) => menuEnum[key]);
+
+        return menuValues.map((menu) => (
+            <NavLink
+                to={menuInstance.getRoute(menu)}
+                key={menu}
+                style={{
+                    color: selectedMenu === menu ? "#265CD7" : "#000",
+                    fontWeight: 500,
+                }}
+            >
+                {menuInstance.getLabel(menu)}
+            </NavLink>
+        ));
+    };
+
+    const renderMenu = () => {
+        // Get menu instance based on user type (polymorphic behavior!)
+        const menuInstance = MENU_BY_USER_TYPE[userType || UserType.Customer];
+        return renderMenuItems(menuInstance);
+    };
+
     return <Layout style={{
         minHeight: "100vh",
         backgroundColor: "#f4f6f8",
@@ -65,20 +98,10 @@ const MenuLayout: React.FC<MenuLayoutProps> = ({
                         left: "50%",
                         top: "50%",
                         transform: "translate(-50%, -50%)",
-
                         display: "flex",
                         gap: "20px",
                     }}>
-                        {menuValues.map((menu) => {
-                            return <NavLink
-                                to={GetMenuRoute[menu]}
-                                key={menu}
-                                style={{
-                                    color: selectedMenu === menu ? "#265CD7" : "#000",
-                                    fontWeight: 500,
-                                }}
-                            >{GetMenuLabel[menu]}</NavLink>
-                        })}
+                        {renderMenu()}
                     </Row> : <></>
                 }
 
@@ -97,29 +120,3 @@ const MenuLayout: React.FC<MenuLayoutProps> = ({
 }
 
 export default MenuLayout;
-
-export enum TopBarMenu {
-    SSNLibrary,
-    NewOrder,
-    OrderTracking,
-    FAQ,
-    Contact
-}
-
-const GetMenuLabel: Record<TopBarMenu, string> = {
-    [TopBarMenu.SSNLibrary]: "SSN Library",
-    [TopBarMenu.NewOrder]: "New Order",
-    [TopBarMenu.OrderTracking]: "Order Tracking",
-    [TopBarMenu.FAQ]: "FAQ",
-    [TopBarMenu.Contact]: "Contact"
-}
-
-const GetMenuRoute: Record<TopBarMenu, string> = {
-    [TopBarMenu.SSNLibrary]: "/dashboard/ssn-lib",
-    [TopBarMenu.NewOrder]: "/dashboard/new-order",
-    [TopBarMenu.OrderTracking]: "/dashboard/order-tracking",
-    [TopBarMenu.FAQ]: "/dashboard/faq",
-    [TopBarMenu.Contact]: "/dashboard/contact"
-}
-
-export { GetMenuRoute };

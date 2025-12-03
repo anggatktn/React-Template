@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import MenuLayout, { TopBarMenu } from "../../../../components/layout/menu-layout";
+import MenuLayout from "../../../../components/layout/top-bar-menu/menu-layout";
 import { Typography, Card, Breadcrumb, Divider } from 'antd';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { CheckoutModel } from './checkout-model';
@@ -8,6 +8,7 @@ import CheckoutCartList from "../../../../components/dashboard/new-order/checkou
 import ShippingMethodSelector from "../../../../components/dashboard/new-order/shipping-method-selector";
 import PaymentSummaryCard from "../../../../components/dashboard/new-order/checkout-payment-summary";
 import PageBreadcrumb from '../../../../components/dashboard/page-breadcrumb';
+import { CustomerMenu } from '../../../../components/layout/top-bar-menu/customer-menu';
 
 const { Title, Text } = Typography;
 
@@ -18,7 +19,7 @@ const CheckoutPage: React.FC = () => {
     const state = useStateFlow(model.state);
 
     return (
-        <MenuLayout selectedMenu={TopBarMenu.NewOrder}>
+        <MenuLayout selectedMenu={CustomerMenu.NewOrder}>
             <div style={{
                 width: "100%",
                 minHeight: '100vh',

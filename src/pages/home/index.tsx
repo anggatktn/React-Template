@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom"
-import classes from "./index.module.less"
 import { HomeScreenModel } from "./home-model"
 import { useEffect, useMemo } from "react"
 import { useStateFlow } from "../../utils/StateFlow"

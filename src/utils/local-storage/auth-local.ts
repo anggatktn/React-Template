@@ -3,7 +3,10 @@
  * Provides helpers for checking authentication status and managing auth tokens
  */
 
+import { UserType } from "../../services/models/user-type";
+
 const AUTH_TOKEN_KEY = 'auth_token';
+const USER_TYPE_KEY = 'user_type';
 
 /**
  * Check if user is authenticated
@@ -47,4 +50,21 @@ export const requireAuth = (requiresAuth: boolean): string | null => {
         return '/';
     }
     return null;
+};
+
+export const getUserType = (): UserType | null => {
+    const userType = localStorage.getItem(USER_TYPE_KEY);
+    return userType ? UserType.getUserType(userType) : null;
+};
+
+export const setUserType = (userType: UserType): void => {
+    localStorage.setItem(USER_TYPE_KEY, UserType.getString(userType));
+};
+
+export const clearUserType = (): void => {
+    localStorage.removeItem(USER_TYPE_KEY);
+};
+
+export const clearLocalStorage = (): void => {
+    localStorage.clear();
 };

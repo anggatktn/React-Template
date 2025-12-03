@@ -1,6 +1,6 @@
 import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-import { isAuthenticated } from '../../utils/auth.utils';
+import { isAuthenticated } from '../../utils/local-storage/auth-local';
 
 interface ProtectedRouteProps {
     children: React.ReactElement;

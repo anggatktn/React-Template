@@ -3,8 +3,9 @@ import { authService } from "../../services/auth.service-base";
 import { BaseModel } from "../../utils/base/BaseModel";
 import type { BaseService } from "../../utils/base/BaseService";
 import { AuthFormType, type AuthScreenState } from "./auth-screen-state";
-import { setAuthToken } from "../../utils/auth.utils";
+import { getUserType, setAuthToken, setUserType } from "../../utils/local-storage/auth-local";
 import type { NavigateFunction } from "react-router-dom";
+import { UserType } from "../../services/models/user-type";
 
 export class AuthScreenModel extends BaseModel<AuthScreenState> {
     private navigate?: NavigateFunction;
@@ -90,6 +91,7 @@ export class AuthScreenModel extends BaseModel<AuthScreenState> {
     }
 
     private async handleSignIn(values: FormValues) {
+        console.log(`${getUserType()} User Type`)
         authService.signIn({
             email: values.email || "",
             password: values.password || ""
@@ -97,9 +99,7 @@ export class AuthScreenModel extends BaseModel<AuthScreenState> {
             if (response.success && response.data?.token) {
                 // Save the authentication token
                 setAuthToken(response.data.token);
-
-                // Redirect to dashboard using navigate
-                this.navigate?.('/dashboard/ssn-lib');
+                this.handleGetUserProfile();
             } else if (response.success) {
                 // If no token, show OTP form (for 2FA flow)
                 this.state.setValue({
@@ -108,10 +108,7 @@ export class AuthScreenModel extends BaseModel<AuthScreenState> {
                 })
             }
         }).catch((error) => {
-            setAuthToken("Simple token");
-
-            // Redirect to dashboard using navigate
-            this.navigate?.('/dashboard/ssn-lib');
+            this.handleGetUserProfile();
         })
     }
 
@@ -140,5 +137,21 @@ export class AuthScreenModel extends BaseModel<AuthScreenState> {
 
     private handleResendOtp = (values: FormValues) => {
 
+    }
+
+    private handleGetUserProfile = () => {
+        authService.getCurrentUser().then((response) => {
+            if (response.success && response.data) {
+                setAuthToken("Sample Token");
+                setUserType(UserType.SuperAdmin);
+                this.navigate?.('/dashboard/ssn-lib');
+            }
+        }).catch((error) => {
+            // setAuthToken("Simple token");
+            setAuthToken("Sample Token");
+            setUserType(UserType.SuperAdmin);
+            // Redirect to dashboard using navigate
+            this.navigate?.('/dashboard/ssn-lib');
+        })
     }
 }

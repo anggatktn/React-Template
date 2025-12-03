@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Typography, Tabs } from 'antd';
-import MenuLayout, { TopBarMenu } from '../../../components/layout/menu-layout';
 import FilterBar from '../../../components/dashboard/order-tracking/filter-bar';
 import OrderList from '../../../components/dashboard/order-tracking/order-list';
 import { type Order } from '../../../components/dashboard/order-tracking/order-card';
+import MenuLayout from '../../../components/layout/top-bar-menu/menu-layout';
+import { CustomerMenu } from '../../../components/layout/top-bar-menu/customer-menu';
 
 const { Title } = Typography;
 
@@ -155,7 +156,7 @@ const OrderTrackingPage: React.FC = () => {
     ];
 
     return (
-        <MenuLayout selectedMenu={TopBarMenu.OrderTracking}>
+        <MenuLayout selectedMenu={CustomerMenu.OrderTracking}>
             <div style={{
                 width: "100%",
                 minHeight: '100vh',

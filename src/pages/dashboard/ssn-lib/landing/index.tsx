@@ -1,4 +1,5 @@
-import MenuLayout, { TopBarMenu } from "../../../../components/layout/menu-layout";
+import MenuLayout from "../../../../components/layout/top-bar-menu/menu-layout";
+import { CustomerMenu } from "../../../../components/layout/top-bar-menu/customer-menu";
 import React, { useMemo } from 'react';
 import { SSNLibModel } from "./ssn-lib-model";
 import { useStateFlow } from "../../../../utils/StateFlow";
@@ -149,7 +150,7 @@ const SSNLibraryPage: React.FC = () => {
     ];
 
 
-    return <MenuLayout selectedMenu={TopBarMenu.SSNLibrary}>
+    return <MenuLayout selectedMenu={CustomerMenu.SSNLibrary}>
 
         <div className={classes["landing-container"]}>
             <SSNLibraryHeader onAddNew={model.handleAddSSN} />

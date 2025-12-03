@@ -1,4 +1,4 @@
-import MenuLayout, { TopBarMenu } from "../../../../components/layout/menu-layout";
+import MenuLayout from "../../../../components/layout/top-bar-menu/menu-layout";
 import React, { useMemo } from 'react';
 import { Typography, Row, Col, Card, Divider } from 'antd';
 import { NewOrderModel } from "./new-order-model";
@@ -8,6 +8,7 @@ import OrderFormInputs from "../../../../components/dashboard/new-order/order-fo
 import CartItemsList from "../../../../components/dashboard/new-order/cart-items-list";
 import OrderSummaryCard from "../../../../components/dashboard/new-order/order-summary-card";
 import AddDeliveryAddressModal from "../../../../components/dashboard/new-order/add-delivery-address-modal";
+import { CustomerMenu } from "../../../../components/layout/top-bar-menu/customer-menu";
 
 const { Title } = Typography;
 
@@ -33,7 +34,7 @@ const NewOrderPage: React.FC = () => {
 
     const canAddToCart = state.selectedSSN && state.deliveryDestination && state.quantity > 0;
 
-    return <MenuLayout selectedMenu={TopBarMenu.NewOrder}>
+    return <MenuLayout selectedMenu={CustomerMenu.NewOrder}>
         <div style={{
             width: "100%",
             minHeight: '100vh',
