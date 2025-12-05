@@ -17,6 +17,7 @@ import UploadPhotoCard from '../../../components/orders/details/UploadPhotoCard'
 import TrackingInfoCard from '../../../components/orders/details/TrackingInfoCard';
 import SelfCollectionCard from '../../../components/orders/details/SelfCollectionCard';
 import { vendorOrderService, type OrderDetail } from '../../../../services/vendor.service-base';
+import DraggableWidget from '../../../components/orders/details/DraggableWidget';
 
 const { Content } = Layout;
 const { Title } = Typography;
@@ -112,7 +113,7 @@ const OrderDetails: React.FC = () => {
             const response = await vendorOrderService.markAsReadyToCollect(id);
             if (response.success) {
                 message.success('Order marked as ready for self collection');
-                setCurrentStatus('Awaiting Collection');
+                setCurrentStatus('Awaiting Customer Collection');
             }
 
         } catch (error) {
@@ -272,7 +273,7 @@ const OrderDetails: React.FC = () => {
                         />
                     )}
 
-                    {currentStatus === 'Awaiting Collection' && (
+                    {currentStatus === 'Awaiting Customer Collection' && (
                         <>
                             <UploadPhotoCard
                                 onUpdateStatus={handleMarkAsCollected}
@@ -329,6 +330,7 @@ const OrderDetails: React.FC = () => {
                     </Row>
                 </div>
             </Content>
+            <DraggableWidget />
         </Layout>
     );
 };

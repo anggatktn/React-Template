@@ -124,7 +124,7 @@ export const selfCollectionData: Order[] = [
         totalQty: 50,
         deliverTo: 'Warehouse A',
         deliveryType: 'Self Collection',
-        status: 'Awaiting Collection',
+        status: 'Awaiting Customer Collection',
     },
     {
         key: '2',

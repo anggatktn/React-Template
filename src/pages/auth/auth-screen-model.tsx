@@ -94,7 +94,7 @@ export class AuthScreenModel extends BaseModel<AuthScreenState> {
         console.log(`${getUserType()} User Type`)
         authService.signIn({
             email: values.email || "",
-            password: values.password || ""
+            otp: values.otp || ""
         }).then((response) => {
             if (response.success && response.data?.token) {
                 // Save the authentication token

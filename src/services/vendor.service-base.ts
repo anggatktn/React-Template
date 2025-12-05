@@ -88,6 +88,10 @@ export class VendorOrderService extends BaseService {
                     filtered = [...readyToShipData];
                 } else if (filter.status === '3') {
                     filtered = [...selfCollectionData];
+                } else if (filter.status === 'history') {
+                    // Filter for history statuses
+                    const historyStatuses = ['Order Delivered', 'Order Collected', 'Not Collected'];
+                    filtered = this.allMockOrders.filter(o => historyStatuses.includes(o.status));
                 }
             }
 
