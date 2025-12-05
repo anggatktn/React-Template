@@ -31,6 +31,7 @@ const MenuLayout: React.FC<MenuLayoutProps> = ({
         ).filter((key) => isNaN(Number(key)))
             .filter((key) => key !== 'getLabel')
             .filter((key) => key !== 'getRoute')
+            .filter((key) => key !== 'getMenuEnum')
             .map((key) => menuEnum[key]);
 
         return menuValues.map((menu) => (

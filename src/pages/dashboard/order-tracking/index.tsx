@@ -4,7 +4,11 @@ import FilterBar from '../../../components/dashboard/order-tracking/filter-bar';
 import OrderList from '../../../components/dashboard/order-tracking/order-list';
 import { type Order } from '../../../components/dashboard/order-tracking/order-card';
 import MenuLayout from '../../../components/layout/top-bar-menu/menu-layout';
-import { CustomerMenu } from '../../../components/layout/top-bar-menu/customer-menu';
+import { CustomerMenu, CustomerMenuClass } from '../../../components/layout/top-bar-menu/customer-menu';
+import { SuperAdminMenu, SuperAdminMenuClass } from '../../../components/layout/top-bar-menu/super-admin-menu';
+import { UserType } from '../../../services/models/user-type';
+import { MENU_BY_USER_TYPE } from '../../../components/layout/top-bar-menu/menu-registry';
+import { getUserType } from '../../../utils/local-storage/auth-local';
 
 const { Title } = Typography;
 
@@ -156,7 +160,11 @@ const OrderTrackingPage: React.FC = () => {
     ];
 
     return (
-        <MenuLayout selectedMenu={CustomerMenu.OrderTracking}>
+        <MenuLayout
+            selectedMenu={
+                getUserType() === UserType.Customer ? CustomerMenu.NewOrder : SuperAdminMenu.Orders
+            }
+        >
             <div style={{
                 width: "100%",
                 minHeight: '100vh',
