@@ -4,9 +4,9 @@ import { BaseService } from '../utils/base/BaseService';
 /**
  * Auth API request/response types
  */
-export interface SignInRequest {
+
+export interface EmailOtpRequest {
     email: string;
-    password: string;
 }
 
 export interface SignUpRequest {
@@ -49,9 +49,9 @@ export class AuthService extends BaseService {
     /**
      * Sign in user
      */
-    async signIn(credentials: SignInRequest): Promise<ApiResponse<AuthResponse>> {
+    async signIn(credentials: VerifyOtpRequest): Promise<ApiResponse<AuthResponse>> {
         return this.execute(() =>
-            apiClient.post<AuthResponse>(`${this.basePath}/signin`, credentials)
+            apiClient.post<AuthResponse>(`${this.basePath}/email/verify`, credentials)
         );
     }
 

@@ -92,7 +92,7 @@ export class AuthScreenModel extends BaseModel<AuthScreenState> {
     private async handleSignIn(values: FormValues) {
         authService.signIn({
             email: values.email || "",
-            password: values.password || ""
+            otp: values.otp || ""
         }).then((response) => {
             if (response.success && response.data?.token) {
                 // Save the authentication token
