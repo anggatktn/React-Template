@@ -10,6 +10,9 @@ import NewOrderPage from "../pages/dashboard/new-order/landing"
 import CheckoutPage from "../pages/dashboard/new-order/checkout"
 import OrderTrackingPage from "../pages/dashboard/order-tracking"
 import OrderDetailsPage from "../pages/dashboard/order-tracking/details"
+import UserListPage from "../pages/dashboard/user-management/user-list"
+import AddUserPage from "../pages/dashboard/user-management/add-user"
+import ViewEditUserPage from "../pages/dashboard/user-management/view-edit-user"
 
 interface IRouteGroup {
     path: string,
@@ -56,6 +59,21 @@ const routeGroup: IRouteGroup[] = [
     {
         path: '/dashboard/order-tracking/:id',
         element: OrderDetailsPage,
+        isProtected: true
+    },
+    {
+        path: '/dashboard/user-management',
+        element: UserListPage,
+        isProtected: true
+    },
+    {
+        path: '/dashboard/user-management/add-user',
+        element: AddUserPage,
+        isProtected: true
+    },
+    {
+        path: '/dashboard/user-management/view-edit-user/:userId',
+        element: ViewEditUserPage,
         isProtected: true
     },
     {
