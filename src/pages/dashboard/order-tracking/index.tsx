@@ -3,7 +3,7 @@ import { Typography, Tabs } from 'antd';
 import FilterBar from '../../../components/dashboard/order-tracking/filter-bar';
 import OrderList from '../../../components/dashboard/order-tracking/order-list';
 import { type Order } from '../../../components/dashboard/order-tracking/order-card';
-import MenuLayout from '../../../components/layout/top-bar-menu/menu-layout';
+import MenuLayout from '../../../components/layout/top-bar-menu/MenuLayout';
 import { CustomerMenu, CustomerMenuClass } from '../../../components/layout/top-bar-menu/customer-menu';
 import { SuperAdminMenu, SuperAdminMenuClass } from '../../../components/layout/top-bar-menu/super-admin-menu';
 import { UserType } from '../../../services/models/user-type';
@@ -162,7 +162,7 @@ const OrderTrackingPage: React.FC = () => {
     return (
         <MenuLayout
             selectedMenu={
-                getUserType() === UserType.Customer ? CustomerMenu.NewOrder : SuperAdminMenu.Orders
+                getUserType() === UserType.Customer ? CustomerMenu.OrderTracking : SuperAdminMenu.Orders
             }
         >
             <div style={{

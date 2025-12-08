@@ -1,4 +1,4 @@
-import MenuLayout from "../../../../components/layout/top-bar-menu/menu-layout";
+import MenuLayout from "../../../../components/layout/top-bar-menu/MenuLayout";
 import React, { useMemo } from 'react';
 import { AddUserModel } from "./add-user-model";
 import { useStateFlow } from "../../../../utils/StateFlow";

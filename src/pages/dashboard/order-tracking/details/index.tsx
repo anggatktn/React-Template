@@ -9,7 +9,7 @@ import ShipmentConfirmation from '../../../../components/dashboard/order-trackin
 import TrackingTimeline from '../../../../components/dashboard/order-tracking/details/tracking-timeline';
 import CustomerInfoCard from '../../../../components/dashboard/order-tracking/details/customer-info-card';
 import OrderItemsSummary from '../../../../components/dashboard/order-tracking/details/order-items-summary';
-import MenuLayout from '../../../../components/layout/top-bar-menu/menu-layout';
+import MenuLayout from '../../../../components/layout/top-bar-menu/MenuLayout';
 import { CustomerMenu } from '../../../../components/layout/top-bar-menu/customer-menu';
 
 const { Title } = Typography;

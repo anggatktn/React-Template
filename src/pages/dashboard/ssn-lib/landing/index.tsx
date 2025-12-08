@@ -1,4 +1,4 @@
-import MenuLayout from "../../../../components/layout/top-bar-menu/menu-layout";
+import MenuLayout from "../../../../components/layout/top-bar-menu/MenuLayout";
 import { CustomerMenu } from "../../../../components/layout/top-bar-menu/customer-menu";
 import React, { useMemo } from 'react';
 import { SSNLibModel } from "./ssn-lib-model";

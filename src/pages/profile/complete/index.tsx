@@ -3,7 +3,7 @@ import { ProfileCompleteModel } from "./profile-complete-model";
 import { useStateFlow } from "../../../utils/StateFlow";
 import { Form, Input, Button, Select, Row, Col, Typography } from "antd";
 import classes from "./index.module.less";
-import MenuLayout from "../../../components/layout/top-bar-menu/menu-layout";
+import MenuLayout from "../../../components/layout/top-bar-menu/MenuLayout";
 import { useNavigate } from "react-router-dom";
 
 const { Title } = Typography;

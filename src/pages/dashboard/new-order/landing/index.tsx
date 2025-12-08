@@ -1,4 +1,4 @@
-import MenuLayout from "../../../../components/layout/top-bar-menu/menu-layout";
+import MenuLayout from "../../../../components/layout/top-bar-menu/MenuLayout";
 import React, { useMemo } from 'react';
 import { Typography, Row, Col, Card, Divider } from 'antd';
 import { NewOrderModel } from "./new-order-model";

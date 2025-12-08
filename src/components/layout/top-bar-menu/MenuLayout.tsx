@@ -1,7 +1,7 @@
 import { Avatar, Row } from "antd";
 import Layout, { Header } from "antd/es/layout/layout";
 import { UserOutlined } from "@ant-design/icons";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { getUserType } from "../../../utils/local-storage/auth-local";
 import { UserType } from "../../../services/models/user-type";
 import { BaseMenu } from "./base-menu";
@@ -23,7 +23,7 @@ const MenuLayout: React.FC<MenuLayoutProps> = ({
     children
 }) => {
     const userType = getUserType();
-
+    const navigate = useNavigate();
     const renderMenuItems = (menuInstance: BaseMenu) => {
         const menuEnum = menuInstance.getMenuEnum();
         const menuValues = (
@@ -40,8 +40,9 @@ const MenuLayout: React.FC<MenuLayoutProps> = ({
                 key={menu}
                 style={{
                     color: selectedMenu === menu ? "#265CD7" : "#000",
-                    fontWeight: 500,
+                    fontWeight: selectedMenu === menu ? 700 : 500,
                 }}
+                onClick={() => onSelectMenu?.(menu)}
             >
                 {menuInstance.getLabel(menu)}
             </NavLink>
@@ -92,7 +93,14 @@ const MenuLayout: React.FC<MenuLayoutProps> = ({
                 alignItems: "center",
             }}>
 
-                <img src="/images/rfid-logo.svg" alt="Logo" />
+                <img
+                    src="/images/rfid-logo.svg"
+                    alt="Logo"
+                    onClick={() => navigate('/dashboard')}
+                    style={{
+                        cursor: "pointer"
+                    }}
+                />
                 {
                     isMenuVisible ? <Row style={{
                         position: "absolute",

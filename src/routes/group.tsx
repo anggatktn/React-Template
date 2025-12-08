@@ -13,6 +13,7 @@ import OrderDetailsPage from "../pages/dashboard/order-tracking/details"
 import UserListPage from "../pages/dashboard/user-management/user-list"
 import AddUserPage from "../pages/dashboard/user-management/add-user"
 import ViewEditUserPage from "../pages/dashboard/user-management/view-edit-user"
+import DashboardPage from "../pages/dashboard"
 
 interface IRouteGroup {
     path: string,
@@ -29,6 +30,11 @@ const routeGroup: IRouteGroup[] = [
     {
         path: '/profile/complete',
         element: ProfileCompletePage,
+        isProtected: true
+    },
+    {
+        path: '/dashboard',
+        element: DashboardPage,
         isProtected: true
     },
     {

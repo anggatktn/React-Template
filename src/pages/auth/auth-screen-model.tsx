@@ -1,5 +1,5 @@
-import type { FormValues } from "../../components/auth/login-form";
-import { authService } from "../../services/auth.service-base";
+import type { FormValues } from "../../components/auth/login-form/LoginForm";
+import { authService } from "../../services/auth-service";
 import { BaseModel } from "../../utils/base/BaseModel";
 import type { BaseService } from "../../utils/base/BaseService";
 import { AuthFormType, type AuthScreenState } from "./auth-screen-state";
@@ -113,15 +113,12 @@ export class AuthScreenModel extends BaseModel<AuthScreenState> {
     }
 
     private async handleSignUp(values: FormValues) {
-        authService.signUp({
+        authService.verifyOtp({
             email: values.email || "",
-            password: values.password || ""
+            otp: values.otp || ""
         }).then((response) => {
             if (response.success) {
-                this.state.setValue({
-                    ...this.state.getValue(),
-                    authFormType: AuthFormType.EnterOTP
-                })
+                this.handleGetUserProfile();
             }
         }).catch((error) => {
             // Handle API errors (network errors, server errors, etc.)
@@ -129,10 +126,6 @@ export class AuthScreenModel extends BaseModel<AuthScreenState> {
             // Show user-friendly error message
             alert(`Sign up failed: ${error.message || 'Unable to connect to server. Please check your connection and try again.'}`);
         })
-    }
-
-    private handleVerifyOtp = (values: FormValues) => {
-
     }
 
     private handleResendOtp = (values: FormValues) => {
@@ -144,14 +137,12 @@ export class AuthScreenModel extends BaseModel<AuthScreenState> {
             if (response.success && response.data) {
                 setAuthToken("Sample Token");
                 setUserType(UserType.SuperAdmin);
-                this.navigate?.('/dashboard/ssn-lib');
+                this.navigate?.('/dashboard');
             }
-        }).catch((error) => {
-            // setAuthToken("Simple token");
+        }).catch(() => {
             setAuthToken("Sample Token");
             setUserType(UserType.SuperAdmin);
-            // Redirect to dashboard using navigate
-            this.navigate?.('/dashboard/ssn-lib');
+            this.navigate?.('/dashboard');
         })
     }
 }

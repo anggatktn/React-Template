@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import MenuLayout from "../../../../components/layout/top-bar-menu/menu-layout";
+import MenuLayout from "../../../../components/layout/top-bar-menu/MenuLayout";
 import { Typography, Card, Breadcrumb, Divider } from 'antd';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { CheckoutModel } from './checkout-model';

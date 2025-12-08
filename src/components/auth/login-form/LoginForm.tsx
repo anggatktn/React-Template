@@ -101,9 +101,14 @@ const LoginForm: React.FC<LoginFormArgs> = ({
             <div className={classes["sign-in-card"]}>
 
                 {/* Title */}
-                <h3 style={{ textAlign: 'center' }}>
+                <span style={{
+                    textAlign: 'center',
+                    fontSize: 24,
+                    fontWeight: 600,
+                    width: '100%'
+                }}>
                     {formType === AuthFormType.SignIn ? "Sign In" : "Create Account"}
-                </h3>
+                </span>
 
                 {/* OTP NOTICE */}
                 {formType === AuthFormType.EnterOTP ? <div className={classes["otp-notice"]}>
@@ -266,7 +271,10 @@ const LoginForm: React.FC<LoginFormArgs> = ({
                             {ButtonSecondaryLabels[formType]}
                         </Button>
                     </Form.Item> */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, margin: '16px 32px' }}>
+
+                    {/* TODO: Google Sign In wait until the api ready */}
+
+                    {/* <div style={{ display: 'flex', alignItems: 'center', gap: 8, margin: '16px 32px' }}>
                         <div style={{ flex: 1, height: 1, backgroundColor: '#c7c7c7' }} />
                         <span style={{ color: '#76879D', fontWeight: 500 }}>OR</span>
                         <div style={{ flex: 1, height: 1, backgroundColor: '#c7c7c7' }} />
@@ -299,7 +307,7 @@ const LoginForm: React.FC<LoginFormArgs> = ({
                         >
                             Sign in with Google
                         </Button>
-                    </Form.Item>
+                    </Form.Item> */}
                 </Form>
             </div>
         </div>
