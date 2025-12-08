@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Typography, Tabs } from 'antd';
 import FilterBar from '../../../components/dashboard/order-tracking/filter-bar';
 import OrderList from '../../../components/dashboard/order-tracking/order-list';
@@ -109,6 +109,15 @@ const OrderTrackingPage: React.FC = () => {
     const [, setSort] = useState('sn'); // Ignore unused sort value
     const [filter, setFilter] = useState('all');
     const [search, setSearch] = useState('');
+    const [userType, setUserType] = useState<UserType | null>(null);
+
+    useEffect(() => {
+        const loadUserType = async () => {
+            const type = await getUserType();
+            setUserType(type);
+        };
+        loadUserType();
+    }, []);
 
     // Filter logic (mock)
     const filteredOrders = mockOrders.filter(order => {
@@ -162,7 +171,7 @@ const OrderTrackingPage: React.FC = () => {
     return (
         <MenuLayout
             selectedMenu={
-                getUserType() === UserType.Customer ? CustomerMenu.OrderTracking : SuperAdminMenu.Orders
+                userType === UserType.Customer ? CustomerMenu.OrderTracking : SuperAdminMenu.Orders
             }
         >
             <div style={{

@@ -8,6 +8,7 @@ import { BaseMenu } from "./base-menu";
 import { MENU_BY_USER_TYPE } from "./menu-registry";
 import { SuperAdminMenu } from "./super-admin-menu";
 import { CustomerMenu } from "./customer-menu";
+import { useEffect, useState } from "react";
 
 interface MenuLayoutProps {
     selectedMenu?: CustomerMenu | SuperAdminMenu;
@@ -22,8 +23,17 @@ const MenuLayout: React.FC<MenuLayoutProps> = ({
     isMenuVisible = true,
     children
 }) => {
-    const userType = getUserType();
+    const [userType, setUserType] = useState<UserType | null>(null);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const loadUserType = async () => {
+            const type = await getUserType();
+            setUserType(type);
+        };
+        loadUserType();
+    }, []);
+
     const renderMenuItems = (menuInstance: BaseMenu) => {
         const menuEnum = menuInstance.getMenuEnum();
         const menuValues = (

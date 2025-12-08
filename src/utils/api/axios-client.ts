@@ -1,4 +1,5 @@
 import axios, { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse, type InternalAxiosRequestConfig } from 'axios';
+import { getAuthToken, setAuthToken as setEncryptedAuthToken, clearAuthToken as clearEncryptedAuthToken } from '../local-storage/auth-local';
 
 /**
  * API Response wrapper for consistent response handling
@@ -47,9 +48,9 @@ class AxiosClient {
     private setupInterceptors(): void {
         // Request interceptor
         this.instance.interceptors.request.use(
-            (config: InternalAxiosRequestConfig) => {
+            async (config: InternalAxiosRequestConfig) => {
                 // Add auth token if available
-                const token = this.getAuthToken();
+                const token = await this.getAuthToken();
                 if (token && config.headers) {
                     config.headers.Authorization = `Bearer ${token}`;
                 }
@@ -84,12 +85,10 @@ class AxiosClient {
     }
 
     /**
-     * Get authentication token from storage
+     * Get authentication token from storage (decrypted)
      */
-    private getAuthToken(): string | null {
-        // Implement your token retrieval logic here
-        // Example: return localStorage.getItem('auth_token');
-        return localStorage.getItem('auth_token');
+    private async getAuthToken(): Promise<string | null> {
+        return await getAuthToken();
     }
 
     /**
@@ -159,17 +158,17 @@ class AxiosClient {
     }
 
     /**
-     * Set authentication token
+     * Set authentication token (encrypted)
      */
-    public setAuthToken(token: string): void {
-        localStorage.setItem('auth_token', token);
+    public async setAuthToken(token: string): Promise<void> {
+        await setEncryptedAuthToken(token);
     }
 
     /**
      * Clear authentication token
      */
-    public clearAuthToken(): void {
-        localStorage.removeItem('auth_token');
+    public async clearAuthToken(): Promise<void> {
+        await clearEncryptedAuthToken();
     }
 
     /**

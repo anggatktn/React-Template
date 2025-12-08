@@ -8,14 +8,18 @@ const DashboardPage: React.FC = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (getUserType() === UserType.Customer) {
-            navigate('/dashboard/ssn-lib');
-        } else if (getUserType() === UserType.Vendor) {
-            navigate('/dashboard/vendor');
-        } else if (getUserType() === UserType.SuperAdmin) {
-            navigate('/dashboard/order-tracking');
-        }
-    }, []);
+        const redirectUser = async () => {
+            const userType = await getUserType();
+            if (userType === UserType.Customer) {
+                navigate('/dashboard/ssn-lib');
+            } else if (userType === UserType.Vendor) {
+                navigate('/dashboard/vendor');
+            } else if (userType === UserType.SuperAdmin) {
+                navigate('/dashboard/order-tracking');
+            }
+        };
+        redirectUser();
+    }, [navigate]);
 
     return (
         <div style={{

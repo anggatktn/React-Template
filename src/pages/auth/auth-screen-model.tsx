@@ -91,15 +91,16 @@ export class AuthScreenModel extends BaseModel<AuthScreenState> {
     }
 
     private async handleSignIn(values: FormValues) {
-        console.log(`${getUserType()} User Type`)
+        const userType = await getUserType();
+        console.log(`${userType} User Type`);
         authService.signIn({
             email: values.email || "",
             otp: values.otp || ""
-        }).then((response) => {
+        }).then(async (response) => {
+            console.log("Sign in successful");
             if (response.success && response.data?.token) {
                 // Save the authentication token
-                setAuthToken(response.data.token);
-                this.handleGetUserProfile();
+                await setAuthToken(response.data.token);
             } else if (response.success) {
                 // If no token, show OTP form (for 2FA flow)
                 this.state.setValue({
@@ -107,7 +108,9 @@ export class AuthScreenModel extends BaseModel<AuthScreenState> {
                     authFormType: AuthFormType.EnterOTP
                 })
             }
+            this.handleGetUserProfile();
         }).catch((error) => {
+            console.log("Sign in failed");
             this.handleGetUserProfile();
         })
     }
@@ -132,16 +135,18 @@ export class AuthScreenModel extends BaseModel<AuthScreenState> {
 
     }
 
-    private handleGetUserProfile = () => {
-        authService.getCurrentUser().then((response) => {
+    private handleGetUserProfile = async () => {
+        authService.getCurrentUser().then(async (response) => {
             if (response.success && response.data) {
-                setAuthToken("Sample Token");
-                setUserType(UserType.SuperAdmin);
+                console.log("User profile retrieved successfully");
+                await setAuthToken("Sample Token");
+                await setUserType(UserType.SuperAdmin);
                 this.navigate?.('/dashboard');
             }
-        }).catch(() => {
-            setAuthToken("Sample Token");
-            setUserType(UserType.SuperAdmin);
+        }).catch(async () => {
+            console.log("Failed to get user profile");
+            await setAuthToken("Sample Token");
+            await setUserType(UserType.SuperAdmin);
             this.navigate?.('/dashboard');
         })
     }

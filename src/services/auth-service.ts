@@ -94,7 +94,7 @@ export class AuthService extends BaseService {
      */
     async getCurrentUser(): Promise<ApiResponse<AuthResponse['user']>> {
         return this.execute(() =>
-            apiClient.get<AuthResponse['user']>(`${this.basePath}/me`)
+            apiClient.get<AuthResponse['user']>(`${this.basePath}/users`)
         );
     }
 }

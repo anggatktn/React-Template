@@ -1,9 +1,11 @@
 /**
  * Authentication utility functions
  * Provides helpers for checking authentication status and managing auth tokens
+ * All values are encrypted using AES-GCM encryption before storing in localStorage
  */
 
 import { UserType } from "../../services/models/user-type";
+import { storageEncryption } from "../encryption/StorageEncryption";
 
 const AUTH_TOKEN_KEY = 'auth_token';
 const USER_TYPE_KEY = 'user_type';
@@ -13,31 +15,32 @@ const USER_TYPE_KEY = 'user_type';
  * @returns true if user has a valid auth token
  */
 export const isAuthenticated = (): boolean => {
-    const token = getAuthToken();
-    return token !== null && token.trim() !== '';
+    // Synchronous check - just verify the encrypted token exists
+    const encryptedToken = localStorage.getItem(AUTH_TOKEN_KEY);
+    return encryptedToken !== null && encryptedToken.trim() !== '';
 };
 
 /**
- * Get the current authentication token from localStorage
+ * Get the current authentication token from localStorage (decrypted)
  * @returns the auth token or null if not found
  */
-export const getAuthToken = (): string | null => {
-    return localStorage.getItem(AUTH_TOKEN_KEY);
+export const getAuthToken = async (): Promise<string | null> => {
+    return await storageEncryption.getItem(AUTH_TOKEN_KEY);
 };
 
 /**
- * Set the authentication token in localStorage
+ * Set the authentication token in localStorage (encrypted)
  * @param token - The authentication token to store
  */
-export const setAuthToken = (token: string): void => {
-    localStorage.setItem(AUTH_TOKEN_KEY, token);
+export const setAuthToken = async (token: string): Promise<void> => {
+    await storageEncryption.setItem(AUTH_TOKEN_KEY, token);
 };
 
 /**
  * Remove the authentication token from localStorage
  */
 export const clearAuthToken = (): void => {
-    localStorage.removeItem(AUTH_TOKEN_KEY);
+    storageEncryption.removeItem(AUTH_TOKEN_KEY);
 };
 
 /**
@@ -52,19 +55,33 @@ export const requireAuth = (requiresAuth: boolean): string | null => {
     return null;
 };
 
-export const getUserType = (): UserType | null => {
-    const userType = localStorage.getItem(USER_TYPE_KEY);
+/**
+ * Get the user type from localStorage (decrypted)
+ * @returns UserType or null if not found
+ */
+export const getUserType = async (): Promise<UserType | null> => {
+    const userType = await storageEncryption.getItem(USER_TYPE_KEY);
     return userType ? UserType.getUserType(userType) : null;
 };
 
-export const setUserType = (userType: UserType): void => {
-    localStorage.setItem(USER_TYPE_KEY, UserType.getString(userType));
+/**
+ * Set the user type in localStorage (encrypted)
+ * @param userType - The user type to store
+ */
+export const setUserType = async (userType: UserType): Promise<void> => {
+    await storageEncryption.setItem(USER_TYPE_KEY, UserType.getString(userType));
 };
 
+/**
+ * Remove the user type from localStorage
+ */
 export const clearUserType = (): void => {
-    localStorage.removeItem(USER_TYPE_KEY);
+    storageEncryption.removeItem(USER_TYPE_KEY);
 };
 
+/**
+ * Clear all data from localStorage
+ */
 export const clearLocalStorage = (): void => {
     localStorage.clear();
 };
