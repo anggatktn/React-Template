@@ -152,6 +152,10 @@ export class StorageEncryption {
     public clearCache(): void {
         this.cachedKey = null;
     }
+
+    public clearStorage(): void {
+        localStorage.clear();
+    }
 }
 
 // Export singleton instance with default configuration

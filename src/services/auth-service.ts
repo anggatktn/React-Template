@@ -19,13 +19,32 @@ export interface VerifyOtpRequest {
     otp: string;
 }
 
+/* 
+{
+    "id": "01H8XGJWBWBAQ2V3B6B0W0B0Z0",
+    "name": "John Doe",
+    "email": "johndoe@example.com",
+    "emailVerified": false,
+    "image": "https://example.com/avatar.png",
+    "status": "pending-business-profile",
+    "createdAt": "2025-12-09T00:52:47.322Z",
+    "updatedAt": "2025-12-09T00:52:47.322Z"
+  }
+*/
+
 export interface AuthResponse {
+    id: string;
+    name: string;
+    email: string;
+    emailVerified: boolean;
+    image: string;
+    status: string;
+    createdAt: string;
+    updatedAt: string;
+}
+
+export interface VerifyOtpResponse {
     token: string;
-    user: {
-        id: string;
-        email: string;
-        name: string;
-    };
 }
 
 export interface OtpResponse {
@@ -38,20 +57,19 @@ export interface OtpResponse {
  * Extends BaseService to track loading state automatically
  */
 export class AuthService extends BaseService {
-    private readonly basePath = '/auth';
 
     async requestOTPViaEmail(email: string): Promise<ApiResponse<OtpResponse>> {
         return this.execute(() =>
-            apiClient.post<OtpResponse>(`${this.basePath}/email/otp`, { email })
+            apiClient.post<OtpResponse>(`/auth/email/otp`, { email })
         );
     }
 
     /**
      * Sign in user
      */
-    async signIn(credentials: VerifyOtpRequest): Promise<ApiResponse<AuthResponse>> {
+    async signIn(credentials: VerifyOtpRequest): Promise<ApiResponse<VerifyOtpResponse>> {
         return this.execute(() =>
-            apiClient.post<AuthResponse>(`${this.basePath}/email/verify`, credentials)
+            apiClient.post<VerifyOtpResponse>(`/auth/email/verify`, credentials)
         );
     }
 
@@ -60,7 +78,7 @@ export class AuthService extends BaseService {
      */
     async signUp(userData: SignUpRequest): Promise<ApiResponse<OtpResponse>> {
         return this.execute(() =>
-            apiClient.post<OtpResponse>(`${this.basePath}/signup`, userData)
+            apiClient.post<OtpResponse>(`/auth/signup`, userData)
         );
     }
 
@@ -69,7 +87,7 @@ export class AuthService extends BaseService {
      */
     async verifyOtp(otpData: VerifyOtpRequest): Promise<ApiResponse<AuthResponse>> {
         return this.execute(() =>
-            apiClient.post<AuthResponse>(`${this.basePath}/verify-otp`, otpData)
+            apiClient.post<AuthResponse>(`/auth/verify-otp`, otpData)
         );
     }
 
@@ -78,7 +96,7 @@ export class AuthService extends BaseService {
      */
     async resendOtp(email: string): Promise<ApiResponse<OtpResponse>> {
         return this.execute(() =>
-            apiClient.post<OtpResponse>(`${this.basePath}/resend-otp`, { email })
+            apiClient.post<OtpResponse>(`/auth/resend-otp`, { email })
         );
     }
 
@@ -92,9 +110,9 @@ export class AuthService extends BaseService {
     /**
      * Get current user profile
      */
-    async getCurrentUser(): Promise<ApiResponse<AuthResponse['user']>> {
+    async getCurrentUser(): Promise<ApiResponse<AuthResponse>> {
         return this.execute(() =>
-            apiClient.get<AuthResponse['user']>(`${this.basePath}/users`)
+            apiClient.get<AuthResponse>(`/users`)
         );
     }
 }

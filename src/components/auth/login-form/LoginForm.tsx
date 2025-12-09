@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 // Assuming Ant Design components are available globally or imported via a build system.
-import { Form, Input, Button, Typography, message } from 'antd';
+import { Form, Input, Button, Typography, message, Spin } from 'antd';
 import ReCAPTCHA from 'react-google-recaptcha';
 import classes from './index.module.less';
 import { AuthFormType } from '../../../pages/auth/auth-screen-state';
@@ -155,7 +155,7 @@ const LoginForm: React.FC<LoginFormArgs> = ({
                             size="large"
                             placeholder="johndoe@customer.com"
                             suffix={
-                                <span
+                                isLoading ? <Spin size="small" /> : <span
                                     style={{
                                         color: '#265CD7',
                                         fontWeight: 600,

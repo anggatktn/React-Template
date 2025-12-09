@@ -1,6 +1,6 @@
-import { Avatar, Row } from "antd";
+import { Avatar, Button, Divider, Row, Typography } from "antd";
 import Layout, { Header } from "antd/es/layout/layout";
-import { UserOutlined } from "@ant-design/icons";
+import { LogoutOutlined, UserOutlined } from "@ant-design/icons";
 import { NavLink, useNavigate } from "react-router-dom";
 import { getUserType } from "../../../utils/local-storage/auth-local";
 import { UserType } from "../../../services/models/user-type";
@@ -9,6 +9,9 @@ import { MENU_BY_USER_TYPE } from "./menu-registry";
 import { SuperAdminMenu } from "./super-admin-menu";
 import { CustomerMenu } from "./customer-menu";
 import { useEffect, useState } from "react";
+import { storageEncryption } from "../../../utils/encryption/StorageEncryption";
+
+const { Text } = Typography;
 
 interface MenuLayoutProps {
     selectedMenu?: CustomerMenu | SuperAdminMenu;
@@ -25,7 +28,7 @@ const MenuLayout: React.FC<MenuLayoutProps> = ({
 }) => {
     const [userType, setUserType] = useState<UserType | null>(null);
     const navigate = useNavigate();
-
+    const [isPopUpAvatarVisible, setIsPopUpAvatarVisible] = useState(false);
     useEffect(() => {
         const loadUserType = async () => {
             const type = await getUserType();
@@ -60,8 +63,11 @@ const MenuLayout: React.FC<MenuLayoutProps> = ({
     };
 
     const renderMenu = () => {
+        // Return nothing if userType is not loaded yet
+        if (!userType) return null;
+
         // Get menu instance based on user type (polymorphic behavior!)
-        const menuInstance = MENU_BY_USER_TYPE[userType || UserType.Customer];
+        const menuInstance = MENU_BY_USER_TYPE[userType];
         return renderMenuItems(menuInstance);
     };
 
@@ -124,10 +130,103 @@ const MenuLayout: React.FC<MenuLayoutProps> = ({
                     </Row> : <></>
                 }
 
-                <Avatar icon={<UserOutlined />} src="/images/avatar-placeholder.png" />
-
+                <Avatar
+                    icon={<UserOutlined />}
+                    src="/images/avatar-placeholder.png"
+                    onClick={() => {
+                        setIsPopUpAvatarVisible(!isPopUpAvatarVisible);
+                    }}
+                    style={{
+                        cursor: "pointer"
+                    }}
+                />
             </div>
+
+            {isPopUpAvatarVisible ? <div
+                style={{
+                    position: "absolute",
+                    right: "0%",
+                    top: "100%",
+                    marginTop: "10px",
+                    display: "flex",
+                    width: "max-content",
+                    flexDirection: "column",
+                    backgroundColor: "white",
+                    borderRadius: "16px",
+                    boxShadow: "0 2px 8px rgba(0, 0, 0, 0.05)",
+                }}
+            >
+                <div
+                    style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "16px",
+                        padding: "16px 20px",
+                        flexDirection: "row",
+                    }}
+                >
+                    <Avatar
+                        icon={<UserOutlined />}
+                        src="/images/avatar-placeholder.png"
+                        onClick={() => {
+                            console.log("Avatar clicked");
+                        }}
+                        style={{
+                            cursor: "pointer"
+                        }}
+                    />
+                    <div
+                        style={{
+                            display: "flex",
+                            flexDirection: "column",
+                        }}
+                    >
+                        <Text
+                            style={{
+                                fontSize: "14px",
+                                fontWeight: 500,
+                            }}
+                        >
+                            John Doe
+                        </Text>
+                        <Text
+                            style={{
+                                fontSize: "14px",
+                                fontWeight: 400,
+                            }}
+                        >
+                            Gear Turf Technology
+                        </Text>
+                    </div>
+                </div>
+                <Divider
+                    style={{
+                        margin: "0px 0px",
+                        backgroundColor: "#E5E7EB",
+                    }}
+                />
+                <Button
+                    type="text"
+                    onClick={() => {
+                        storageEncryption.clearStorage();
+                        navigate('');
+                        setIsPopUpAvatarVisible(false);
+                    }}
+                    style={{
+                        cursor: "pointer",
+                        padding: "24px 20px",
+                        borderRadius: "0 0 16px 16px",
+                        display: "flex",
+                        gap: "10px",
+                        justifyContent: "flex-start",
+                    }}
+                    icon={<LogoutOutlined />}
+                >
+                    Logout
+                </Button>
+            </div> : <></>}
         </Header>
+
         <div style={{
             width: "100%",
             maxWidth: "1200px",

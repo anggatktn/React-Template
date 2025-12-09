@@ -4,11 +4,13 @@
  * All values are encrypted using AES-GCM encryption before storing in localStorage
  */
 
+import type { AuthResponse } from "../../services/auth-service";
 import { UserType } from "../../services/models/user-type";
 import { storageEncryption } from "../encryption/StorageEncryption";
 
 const AUTH_TOKEN_KEY = 'auth_token';
 const USER_TYPE_KEY = 'user_type';
+const USER_KEY = 'user';
 
 /**
  * Check if user is authenticated
@@ -72,16 +74,19 @@ export const setUserType = async (userType: UserType): Promise<void> => {
     await storageEncryption.setItem(USER_TYPE_KEY, UserType.getString(userType));
 };
 
+
+export const getUser = async (): Promise<AuthResponse | null> => {
+    const user = await storageEncryption.getItem(USER_KEY);
+    return user ? JSON.parse(user) : null;
+};
+
+export const setUser = async (user: AuthResponse): Promise<void> => {
+    await storageEncryption.setItem(USER_KEY, JSON.stringify(user));
+};
+
 /**
  * Remove the user type from localStorage
  */
 export const clearUserType = (): void => {
     storageEncryption.removeItem(USER_TYPE_KEY);
-};
-
-/**
- * Clear all data from localStorage
- */
-export const clearLocalStorage = (): void => {
-    localStorage.clear();
 };
