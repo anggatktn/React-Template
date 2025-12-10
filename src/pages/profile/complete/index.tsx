@@ -117,14 +117,23 @@ const ProfileCompletePage: React.FC = () => {
                                     <Input placeholder="+65 98765432" size="large" />
                                 </Form.Item>
                             </Col>
+
+                            <Col span={12}>
+                                <Form.Item>
+                                    <Button
+                                        type="primary"
+                                        htmlType="submit"
+                                        className={classes.submitButton}
+                                        style={{
+                                            width: "100%"
+                                        }}
+                                    >
+                                        Complete Sign Up
+                                    </Button>
+                                </Form.Item>
+                            </Col>
                         </Row>
                     </div>
-
-                    <Form.Item>
-                        <Button type="primary" htmlType="submit" className={classes.submitButton}>
-                            Complete Sign Up
-                        </Button>
-                    </Form.Item>
                 </Form>
             </div>
         </MenuLayout>

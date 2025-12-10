@@ -106,7 +106,11 @@ export class AuthScreenModel extends BaseModel<AuthScreenState> {
         authService.getCurrentUser().then(async (response) => {
             if (response.data) {
                 await setUser(response.data);
-                this.navigate?.('/dashboard');
+                if (response.data.status === "pending-business-profile") {
+                    this.navigate?.('/profile/complete');
+                } else {
+                    this.navigate?.('/dashboard');
+                }
             }
         }).catch(async () => {
             console.log("Failed to get user profile");

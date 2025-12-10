@@ -19,7 +19,8 @@ const USER_KEY = 'user';
 export const isAuthenticated = (): boolean => {
     // Synchronous check - just verify the encrypted token exists
     const encryptedToken = localStorage.getItem(AUTH_TOKEN_KEY);
-    return encryptedToken !== null && encryptedToken.trim() !== '';
+    const encryptedUser = localStorage.getItem(USER_KEY);
+    return encryptedToken !== null && encryptedToken.trim() !== '' && encryptedUser !== null && encryptedUser.trim() !== '';
 };
 
 /**
@@ -62,8 +63,9 @@ export const requireAuth = (requiresAuth: boolean): string | null => {
  * @returns UserType or null if not found
  */
 export const getUserType = async (): Promise<UserType | null> => {
-    const userType = await storageEncryption.getItem(USER_TYPE_KEY);
-    return userType ? UserType.getUserType(userType) : null;
+    const user = await getUser();
+    const userType = user ? UserType.getUserType(user.userType) : null;
+    return userType;
 };
 
 /**

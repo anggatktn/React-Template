@@ -39,6 +39,7 @@ export interface AuthResponse {
     emailVerified: boolean;
     image: string;
     status: string;
+    userType: string;
     createdAt: string;
     updatedAt: string;
 }
@@ -112,7 +113,7 @@ export class AuthService extends BaseService {
      */
     async getCurrentUser(): Promise<ApiResponse<AuthResponse>> {
         return this.execute(() =>
-            apiClient.get<AuthResponse>(`/users`)
+            apiClient.get<AuthResponse>(`http://localhost:5432/api/v1/users`)
         );
     }
 }

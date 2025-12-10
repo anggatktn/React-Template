@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { getUserType } from "../../utils/local-storage/auth-local";
+import { getUser, getUserType } from "../../utils/local-storage/auth-local";
 import { UserType } from "../../services/models/user-type";
 import { Spin } from "antd";
 
