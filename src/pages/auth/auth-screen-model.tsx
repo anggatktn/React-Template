@@ -106,7 +106,7 @@ export class AuthScreenModel extends BaseModel<AuthScreenState> {
         authService.getCurrentUser().then(async (response) => {
             if (response.data) {
                 await setUser(response.data);
-                if (response.data.status === "pending-business-profile") {
+                if (response.data.status === "pending-business-profile" && UserType.getUserType(response.data.userType) === UserType.Customer) {
                     this.navigate?.('/profile/complete');
                 } else {
                     this.navigate?.('/dashboard');
