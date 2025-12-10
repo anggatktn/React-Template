@@ -32,9 +32,6 @@ class AxiosClient {
         this.instance = axios.create({
             baseURL: this.baseURL,
             timeout: 30000, // 30 seconds
-            headers: {
-                'Content-Type': 'application/json',
-            },
         });
 
         this.setupInterceptors();
@@ -51,6 +48,15 @@ class AxiosClient {
                 const token = await this.getAuthToken();
                 if (token && config.headers) {
                     config.headers.Authorization = `Bearer ${token}`;
+                }
+
+                // Set Content-Type only for requests with data (POST, PUT, PATCH)
+                const method = config.method?.toUpperCase();
+                if (method && ['POST', 'PUT', 'PATCH'].includes(method) && config.headers) {
+                    // Only set if not already set (e.g., for file uploads)
+                    if (!config.headers['Content-Type']) {
+                        config.headers['Content-Type'] = 'application/json';
+                    }
                 }
 
                 // Log request in development
