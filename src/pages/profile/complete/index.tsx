@@ -9,10 +9,10 @@ import { useNavigate } from "react-router-dom";
 const { Title } = Typography;
 
 const ProfileCompletePage: React.FC = () => {
-    const model = useMemo(() => new ProfileCompleteModel(), []);
+    const navigate = useNavigate();
+    const model = useMemo(() => new ProfileCompleteModel(navigate), []);
     const state = useStateFlow(model.state);
     const [form] = Form.useForm();
-    const navigate = useNavigate();
     return (
         <MenuLayout selectedMenu={undefined} onSelectMenu={() => { }} isMenuVisible={false}>
             <div className={classes.content}>
@@ -22,13 +22,11 @@ const ProfileCompletePage: React.FC = () => {
                 <Form
                     form={form}
                     layout="vertical"
-                    onFinish={(v) => {
-                        model.onCompleteSignUpPressed(v)
-                        navigate('/dashboard/ssn-lib')
-                    }}
+                    onFinish={model.onCompleteSignUpPressed}
                     initialValues={state.formValues}
                     className={classes.form}
                     requiredMark={false}
+                    disabled={state.isLoading}
                 >
                     <div className={classes.section}>
                         <Title level={4} className={classes.sectionTitle}>Business Information</Title>
@@ -127,6 +125,8 @@ const ProfileCompletePage: React.FC = () => {
                                         style={{
                                             width: "100%"
                                         }}
+                                        loading={state.isLoading}
+                                        disabled={state.isLoading}
                                     >
                                         Complete Sign Up
                                     </Button>

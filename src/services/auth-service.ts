@@ -1,5 +1,6 @@
 import { apiClient, type ApiResponse } from '../utils/api/axios-client';
 import { BaseService } from '../utils/base/BaseService';
+import { getUser } from '../utils/local-storage/auth-local';
 
 /**
  * Auth API request/response types
@@ -51,6 +52,38 @@ export interface VerifyOtpResponse {
 export interface OtpResponse {
     message: string;
     expiresIn: number;
+}
+
+/* 
+{
+  "vendorCode": "string",
+  "customerName": "string",
+  "companyName": "string",
+  "companyUen": "string",
+  "companyEmail": "user@example.com",
+  "customerMobile": "string",
+  "addressLine1": "string",
+  "addressLine2": "string",
+  "city": "string",
+  "state": "string",
+  "postalCode": "string",
+  "country": "string"
+}
+*/
+
+export interface UpdateProfileRequest {
+    vendorCode: string;
+    customerName: string;
+    companyName: string;
+    companyUen: string;
+    companyEmail: string;
+    customerMobile: string;
+    addressLine1: string;
+    addressLine2: string;
+    city: string;
+    state: string;
+    postalCode: string;
+    country: string;
 }
 
 /**
@@ -115,6 +148,13 @@ export class AuthService extends BaseService {
         return this.execute(() =>
             // apiClient.get<AuthResponse>(`http://localhost:5432/api/v1/users`)
             apiClient.get<AuthResponse>(`/users`)
+        );
+    }
+
+    async updateUserProfile(userData: UpdateProfileRequest): Promise<ApiResponse<any>> {
+        const user = getUser();
+        return this.execute(() =>
+            apiClient.post<any>(`/users/${user?.id}/business`, userData)
         );
     }
 }

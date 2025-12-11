@@ -86,7 +86,7 @@ export class AuthScreenModel extends BaseModel<AuthScreenState> {
     }
 
     private async handleSignIn(values: FormValues) {
-        const userType = await getUserType();
+        const userType = getUserType();
         console.log(`${userType} User Type`);
         authService.signIn({
             email: values.email || "",
@@ -94,7 +94,7 @@ export class AuthScreenModel extends BaseModel<AuthScreenState> {
         }).then(async (response) => {
             if (response.data?.token) {
                 // Save the authentication token
-                await setAuthToken(response.data.token);
+                setAuthToken(response.data.token);
                 this.handleGetUserProfile();
             }
         }).catch((error) => {
@@ -105,8 +105,8 @@ export class AuthScreenModel extends BaseModel<AuthScreenState> {
     private handleGetUserProfile = async () => {
         authService.getCurrentUser().then(async (response) => {
             if (response.data) {
-                await setUser(response.data);
-                if (response.data.status === "pending-business-profile" && await getUserType() === UserType.Customer) {
+                setUser(response.data);
+                if (response.data.status === "pending-business-profile" && getUserType() === UserType.Customer) {
                     this.navigate?.('/profile/complete');
                 } else {
                     this.navigate?.('/dashboard');

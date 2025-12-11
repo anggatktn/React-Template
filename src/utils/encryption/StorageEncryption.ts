@@ -1,113 +1,65 @@
 /**
  * Storage Encryption Utility
- * Provides AES-GCM encryption/decryption for localStorage values
+ * Provides synchronous AES-256 encryption/decryption for localStorage values using crypto-js
+ * In development mode, encryption is disabled for easier debugging
+ * In production mode, values are encrypted using AES-256
  */
+
+import CryptoJS from 'crypto-js';
 
 export class StorageEncryption {
     private readonly secretKey: string;
-    private readonly saltValue: string;
-    private readonly iterations: number;
-    private cachedKey: CryptoKey | null = null;
+    private readonly isDevelopment: boolean;
 
     /**
      * Create a new StorageEncryption instance
      * @param secretKey - The secret key for encryption (should be stored in env variables in production)
-     * @param saltValue - Salt value for key derivation (should be unique per user in production)
-     * @param iterations - Number of PBKDF2 iterations (default: 100000)
      */
     constructor(
-        secretKey: string = 'your-secret-key-change-this-in-production',
-        saltValue: string = 'salt-value',
-        iterations: number = 100000
+        secretKey: string = 'your-secret-key-change-this-in-production'
     ) {
         this.secretKey = secretKey;
-        this.saltValue = saltValue;
-        this.iterations = iterations;
+        this.isDevelopment = import.meta.env.DEV;
+
+        if (this.isDevelopment) {
+            console.log('[StorageEncryption] Running in development mode - encryption disabled');
+        }
     }
 
     /**
-     * Derive a cryptographic key from the secret
-     * Results are cached to avoid repeated derivation
+     * Encrypt a string value using AES-256 (only in production)
+     * @param value - The plain text value to encrypt
+     * @returns Encrypted value as a string (or plain text in dev mode)
      */
-    private async getEncryptionKey(): Promise<CryptoKey> {
-        if (this.cachedKey) {
-            return this.cachedKey;
+    public encrypt(value: string): string {
+        // Skip encryption in development mode
+        if (this.isDevelopment) {
+            return value;
         }
 
-        const encoder = new TextEncoder();
-        const keyMaterial = await crypto.subtle.importKey(
-            'raw',
-            encoder.encode(this.secretKey),
-            { name: 'PBKDF2' },
-            false,
-            ['deriveBits', 'deriveKey']
-        );
-
-        this.cachedKey = await crypto.subtle.deriveKey(
-            {
-                name: 'PBKDF2',
-                salt: encoder.encode(this.saltValue),
-                iterations: this.iterations,
-                hash: 'SHA-256'
-            },
-            keyMaterial,
-            { name: 'AES-GCM', length: 256 },
-            false,
-            ['encrypt', 'decrypt']
-        );
-
-        return this.cachedKey;
+        try {
+            return CryptoJS.AES.encrypt(value, this.secretKey).toString();
+        } catch (error) {
+            console.error('Encryption failed:', error);
+            return '';
+        }
     }
 
     /**
-     * Encrypt a string value using AES-GCM
-     * @param value - The plain text value to encrypt
-     * @returns Base64 encoded encrypted value with IV
-     */
-    public async encrypt(value: string): Promise<string> {
-        const encoder = new TextEncoder();
-        const key = await this.getEncryptionKey();
-        const iv = crypto.getRandomValues(new Uint8Array(12)); // 12 bytes IV for AES-GCM
-
-        const encryptedData = await crypto.subtle.encrypt(
-            { name: 'AES-GCM', iv },
-            key,
-            encoder.encode(value)
-        );
-
-        // Combine IV and encrypted data
-        const combined = new Uint8Array(iv.length + encryptedData.byteLength);
-        combined.set(iv, 0);
-        combined.set(new Uint8Array(encryptedData), iv.length);
-
-        // Convert to base64
-        return btoa(String.fromCharCode(...combined));
-    }
-
-    /**
-     * Decrypt an encrypted string value
-     * @param encryptedValue - Base64 encoded encrypted value with IV
+     * Decrypt an encrypted string value (only in production)
+     * @param encryptedValue - Encrypted value string (or plain text in dev mode)
      * @returns Decrypted plain text value
      */
-    public async decrypt(encryptedValue: string): Promise<string> {
+    public decrypt(encryptedValue: string): string {
+        // Skip decryption in development mode
+        if (this.isDevelopment) {
+            return encryptedValue;
+        }
+
         try {
-            const decoder = new TextDecoder();
-            const key = await this.getEncryptionKey();
-
-            // Decode from base64
-            const combined = Uint8Array.from(atob(encryptedValue), c => c.charCodeAt(0));
-
-            // Extract IV and encrypted data
-            const iv = combined.slice(0, 12);
-            const encryptedData = combined.slice(12);
-
-            const decryptedData = await crypto.subtle.decrypt(
-                { name: 'AES-GCM', iv },
-                key,
-                encryptedData
-            );
-
-            return decoder.decode(decryptedData);
+            const bytes = CryptoJS.AES.decrypt(encryptedValue, this.secretKey);
+            const decrypted = bytes.toString(CryptoJS.enc.Utf8);
+            return decrypted;
         } catch (error) {
             console.error('Decryption failed:', error);
             return '';
@@ -115,26 +67,26 @@ export class StorageEncryption {
     }
 
     /**
-     * Set an encrypted value in localStorage
+     * Set a value in localStorage (encrypted in production, plain text in dev)
      * @param key - The storage key
      * @param value - The value to encrypt and store
      */
-    public async setItem(key: string, value: string): Promise<void> {
-        const encrypted = await this.encrypt(value);
-        localStorage.setItem(key, encrypted);
+    public setItem(key: string, value: string): void {
+        const processedValue = this.encrypt(value);
+        localStorage.setItem(key, processedValue);
     }
 
     /**
-     * Get and decrypt a value from localStorage
+     * Get and decrypt a value from localStorage (decrypted in production, plain text in dev)
      * @param key - The storage key
      * @returns Decrypted value or null if not found
      */
-    public async getItem(key: string): Promise<string | null> {
-        const encrypted = localStorage.getItem(key);
-        if (!encrypted) return null;
+    public getItem(key: string): string | null {
+        const storedValue = localStorage.getItem(key);
+        if (!storedValue) return null;
 
-        const decrypted = await this.decrypt(encrypted);
-        return decrypted || null;
+        const decryptedValue = this.decrypt(storedValue);
+        return decryptedValue || null;
     }
 
     /**
@@ -146,13 +98,8 @@ export class StorageEncryption {
     }
 
     /**
-     * Clear the cached encryption key
-     * Call this when changing encryption parameters
+     * Clear all items from localStorage
      */
-    public clearCache(): void {
-        this.cachedKey = null;
-    }
-
     public clearStorage(): void {
         localStorage.clear();
     }

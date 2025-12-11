@@ -43,9 +43,9 @@ class AxiosClient {
     private setupInterceptors(): void {
         // Request interceptor
         this.instance.interceptors.request.use(
-            async (config: InternalAxiosRequestConfig) => {
+            (config: InternalAxiosRequestConfig) => {
                 // Add auth token if available
-                const token = await this.getAuthToken();
+                const token = this.getAuthToken();
                 if (token && config.headers) {
                     config.headers.Authorization = `Bearer ${token}`;
                 }
@@ -91,8 +91,8 @@ class AxiosClient {
     /**
      * Get authentication token from storage (decrypted)
      */
-    private async getAuthToken(): Promise<string | null> {
-        return await getAuthToken();
+    private getAuthToken(): string | null {
+        return getAuthToken();
     }
 
     /**
@@ -164,15 +164,15 @@ class AxiosClient {
     /**
      * Set authentication token (encrypted)
      */
-    public async setAuthToken(token: string): Promise<void> {
-        await setEncryptedAuthToken(token);
+    public setAuthToken(token: string): void {
+        setEncryptedAuthToken(token);
     }
 
     /**
      * Clear authentication token
      */
-    public async clearAuthToken(): Promise<void> {
-        await clearEncryptedAuthToken();
+    public clearAuthToken(): void {
+        clearEncryptedAuthToken();
     }
 
     /**

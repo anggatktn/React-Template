@@ -112,8 +112,8 @@ const OrderTrackingPage: React.FC = () => {
     const [userType, setUserType] = useState<UserType | null>(null);
 
     useEffect(() => {
-        const loadUserType = async () => {
-            const type = await getUserType();
+        const loadUserType = () => {
+            const type = getUserType();
             setUserType(type);
         };
         loadUserType();

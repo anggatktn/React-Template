@@ -8,8 +8,8 @@ const DashboardPage: React.FC = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const redirectUser = async () => {
-            const userType = await getUserType();
+        const redirectUser = () => {
+            const userType = getUserType();
             if (userType === UserType.Customer) {
                 navigate('/dashboard/ssn-lib');
             } else if (userType === UserType.Vendor) {

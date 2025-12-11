@@ -23,20 +23,34 @@ export const isAuthenticated = (): boolean => {
     return encryptedToken !== null && encryptedToken.trim() !== '' && encryptedUser !== null && encryptedUser.trim() !== '';
 };
 
+export const isProfileCompleted = (): boolean => {
+    const user = storageEncryption.getItem(USER_KEY);
+    const userObj = user ? JSON.parse(user) : null;
+    if (UserType.getUserType(userObj?.userType || '') === UserType.Customer) {
+        if (userObj?.status === "pending-business-profile") {
+            return false;
+        }
+        return true;
+    } else {
+        return true
+    }
+};
+
+
 /**
  * Get the current authentication token from localStorage (decrypted)
  * @returns the auth token or null if not found
  */
-export const getAuthToken = async (): Promise<string | null> => {
-    return await storageEncryption.getItem(AUTH_TOKEN_KEY);
+export const getAuthToken = (): string | null => {
+    return storageEncryption.getItem(AUTH_TOKEN_KEY);
 };
 
 /**
  * Set the authentication token in localStorage (encrypted)
  * @param token - The authentication token to store
  */
-export const setAuthToken = async (token: string): Promise<void> => {
-    await storageEncryption.setItem(AUTH_TOKEN_KEY, token);
+export const setAuthToken = (token: string): void => {
+    storageEncryption.setItem(AUTH_TOKEN_KEY, token);
 };
 
 /**
@@ -62,8 +76,8 @@ export const requireAuth = (requiresAuth: boolean): string | null => {
  * Get the user type from localStorage (decrypted)
  * @returns UserType or null if not found
  */
-export const getUserType = async (): Promise<UserType | null> => {
-    const user = await getUser();
+export const getUserType = (): UserType | null => {
+    const user = getUser();
     const userType = user ? UserType.getUserType(user.userType) : null;
     return userType;
 };
@@ -72,18 +86,18 @@ export const getUserType = async (): Promise<UserType | null> => {
  * Set the user type in localStorage (encrypted)
  * @param userType - The user type to store
  */
-export const setUserType = async (userType: UserType): Promise<void> => {
-    await storageEncryption.setItem(USER_TYPE_KEY, UserType.getString(userType));
+export const setUserType = (userType: UserType): void => {
+    storageEncryption.setItem(USER_TYPE_KEY, UserType.getString(userType));
 };
 
 
-export const getUser = async (): Promise<AuthResponse | null> => {
-    const user = await storageEncryption.getItem(USER_KEY);
+export const getUser = (): AuthResponse | null => {
+    const user = storageEncryption.getItem(USER_KEY);
     return user ? JSON.parse(user) : null;
 };
 
-export const setUser = async (user: AuthResponse): Promise<void> => {
-    await storageEncryption.setItem(USER_KEY, JSON.stringify(user));
+export const setUser = (user: AuthResponse): void => {
+    storageEncryption.setItem(USER_KEY, JSON.stringify(user));
 };
 
 /**

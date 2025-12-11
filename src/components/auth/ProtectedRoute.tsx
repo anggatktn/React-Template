@@ -1,6 +1,6 @@
 import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-import { isAuthenticated } from '../../utils/local-storage/auth-local';
+import { isAuthenticated, isProfileCompleted } from '../../utils/local-storage/auth-local';
 
 interface ProtectedRouteProps {
     children: React.ReactElement;
@@ -18,10 +18,17 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 }) => {
     const location = useLocation();
     const authenticated = isAuthenticated();
+    const profileCompleted = isProfileCompleted();
 
     if (!authenticated) {
         // Redirect to login page, preserving the attempted location
         return <Navigate to={redirectTo} state={{ from: location }} replace />;
+    }
+
+    // If authenticated but profile not completed, redirect to profile completion page
+    // But allow access to the profile completion page itself to avoid redirect loop
+    if (!profileCompleted && location.pathname !== '/profile/complete') {
+        return <Navigate to="/profile/complete" state={{ from: location }} replace />;
     }
 
     return children;

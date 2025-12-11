@@ -30,8 +30,8 @@ const MenuLayout: React.FC<MenuLayoutProps> = ({
     const navigate = useNavigate();
     const [isPopUpAvatarVisible, setIsPopUpAvatarVisible] = useState(false);
     useEffect(() => {
-        const loadUserType = async () => {
-            const type = await getUserType();
+        const loadUserType = () => {
+            const type = getUserType();
             setUserType(type);
         };
         loadUserType();
