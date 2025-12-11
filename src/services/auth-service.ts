@@ -1,6 +1,6 @@
 import { apiClient, type ApiResponse } from '../utils/api/axios-client';
 import { BaseService } from '../utils/base/BaseService';
-import { getUser } from '../utils/local-storage/auth-local';
+import { getUser, setUser } from '../utils/local-storage/auth-local';
 
 /**
  * Auth API request/response types
@@ -147,7 +147,10 @@ export class AuthService extends BaseService {
     async getCurrentUser(): Promise<ApiResponse<AuthResponse>> {
         return this.execute(() =>
             // apiClient.get<AuthResponse>(`http://localhost:5432/api/v1/users`)
-            apiClient.get<AuthResponse>(`/users`)
+            apiClient.get<AuthResponse>(`/users`).then((res) => {
+                setUser(res.data);
+                return res;
+            })
         );
     }
 

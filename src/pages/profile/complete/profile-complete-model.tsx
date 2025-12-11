@@ -9,6 +9,7 @@ export class ProfileCompleteModel extends BaseModel<ProfileCompleteState> {
 
     private navigate?: NavigateFunction;
 
+
     protected get registeredServices(): BaseService[] {
         return [authService];
     }
@@ -40,6 +41,7 @@ export class ProfileCompleteModel extends BaseModel<ProfileCompleteState> {
             }
         } as ProfileCompleteState);
         this.navigate = navigate;
+        this.checkIsUserProfileComplete();
     }
 
     public readonly countries: Record<string, string> = {
@@ -55,13 +57,11 @@ export class ProfileCompleteModel extends BaseModel<ProfileCompleteState> {
         "Cambodia": "Cambodia",
     };
 
-    public onCompleteSignUpPressed = (values: ProfileCompleteForms) => async () => {
-        console.log(values)
-        this.state.setValue({
-            ...this.state.getValue(),
+    public onCompleteSignUpPressed = async (values: ProfileCompleteForms) => {
+        this.updateState(state => ({
+            ...state,
             formValues: values
-        });
-
+        }));
         await authService.updateUserProfile({
             vendorCode: values.vendorCode,
             customerName: values.customerName,
@@ -76,7 +76,17 @@ export class ProfileCompleteModel extends BaseModel<ProfileCompleteState> {
             country: values.country || "",
             state: ""
         }).then((response) => {
-            console.log(response)
+            this.checkIsUserProfileComplete();
+        }).catch((error) => {
+            console.log(error)
+        })
+    }
+
+    private checkIsUserProfileComplete = async () => {
+        await authService.getCurrentUser().then((response) => {
+            if (response.data.status !== "pending-business-profile") {
+                this.navigate?.("/dashboard");
+            }
         }).catch((error) => {
             console.log(error)
         })
