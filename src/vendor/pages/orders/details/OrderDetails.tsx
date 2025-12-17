@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Layout, Typography, Row, Col, Divider, Spin, message, Button } from 'antd';
 import { ArrowLeftOutlined, RightOutlined } from '@ant-design/icons';
 import { useNavigate, useParams } from 'react-router-dom';
-import Navbar from '../../../../components/layout/Navbar';
+import MenuLayout from '../../../../components/layout/top-bar-menu/MenuLayout';
+import { VendorMenu } from '../../../../components/layout/top-bar-menu/vendor-menu';
+import { UserType } from '../../../../services/models/user-type';
 import OrderInfoCard from '../../../components/orders/details/OrderInfoCard';
 import ShippingUpdateCard from '../../../components/orders/details/ShippingUpdateCard';
 import ShippingInfoCard from '../../../components/orders/details/ShippingInfoCard';
@@ -42,7 +44,7 @@ const OrderDetails: React.FC = () => {
         setLoading(true);
         try {
             const response = await vendorOrderService.getOrderDetails(orderId);
-            if (response.success) {
+            if (response.data) {
                 setOrderDetail(response.data);
                 setCurrentStatus(response.data.status);
             }
@@ -59,7 +61,7 @@ const OrderDetails: React.FC = () => {
         try {
             // TODO: Pass newDuties to backend when supported
             const response = await vendorOrderService.updateShippingCost(id, newCost);
-            if (response.success) {
+            if (response) {
                 message.success('Shipping cost updated');
                 setCurrentStatus('Awaiting Shipment Acceptance');
             }
@@ -77,7 +79,7 @@ const OrderDetails: React.FC = () => {
         try {
             // TODO: Pass tracking info to backend when supported
             const response = await vendorOrderService.markAsShipped(id);
-            if (response.success) {
+            if (response) {
                 message.success('Order marked as shipped');
                 setCurrentStatus('Order Shipped');
                 setTrackingInfo({ id: trackingId, url: trackingUrl, note });
@@ -91,7 +93,7 @@ const OrderDetails: React.FC = () => {
         if (!id) return;
         try {
             const response = await vendorOrderService.markAsCollected(id);
-            if (response.success) {
+            if (response) {
                 if (file) {
                     const url = URL.createObjectURL(file);
                     setPodUrl(url);
@@ -111,7 +113,7 @@ const OrderDetails: React.FC = () => {
         if (!id) return;
         try {
             const response = await vendorOrderService.markAsReadyToCollect(id);
-            if (response.success) {
+            if (response) {
                 message.success('Order marked as ready for self collection');
                 setCurrentStatus('Awaiting Customer Collection');
             }
@@ -144,12 +146,11 @@ const OrderDetails: React.FC = () => {
 
     if (loading || !orderDetail) {
         return (
-            <Layout>
-                <Navbar />
+            <MenuLayout selectedMenu={VendorMenu.Orders} activeUserType={UserType.Vendor}>
                 <Content className={classes.pageContainer} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                     <Spin size="large" />
                 </Content>
-            </Layout>
+            </MenuLayout>
         );
     }
 
@@ -178,8 +179,7 @@ const OrderDetails: React.FC = () => {
     };
 
     return (
-        <Layout>
-            <Navbar />
+        <MenuLayout selectedMenu={VendorMenu.Orders} activeUserType={UserType.Vendor}>
             <Content className={classes.pageContainer}>
                 {/* Header */}
                 <div className={classes.header}>
@@ -331,7 +331,7 @@ const OrderDetails: React.FC = () => {
                 </div>
             </Content>
             <DraggableWidget />
-        </Layout>
+        </MenuLayout>
     );
 };
 

@@ -16,6 +16,7 @@
     "@mui/x-charts": "^8.4.0",
     "@types/react-google-recaptcha": "^2.1.9",
     "axios": "^1.13.2",
+    "crypto-js": "^4.2.0",
     "firebase": "^12.6.0",
     "i": "^0.3.7",
     "npm": "^11.4.0",
