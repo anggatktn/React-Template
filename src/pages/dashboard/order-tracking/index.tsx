@@ -1,9 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Typography, Tabs } from 'antd';
-import MenuLayout, { TopBarMenu } from '../../../components/layout/menu-layout';
 import FilterBar from '../../../components/dashboard/order-tracking/filter-bar';
 import OrderList from '../../../components/dashboard/order-tracking/order-list';
 import { type Order } from '../../../components/dashboard/order-tracking/order-card';
+import MenuLayout from '../../../components/layout/top-bar-menu/MenuLayout';
+import { CustomerMenu, CustomerMenuClass } from '../../../components/layout/top-bar-menu/customer-menu';
+import { SuperAdminMenu, SuperAdminMenuClass } from '../../../components/layout/top-bar-menu/super-admin-menu';
+import { UserType } from '../../../services/models/user-type';
+import { MENU_BY_USER_TYPE } from '../../../components/layout/top-bar-menu/menu-registry';
+import { getUserType } from '../../../utils/local-storage/auth-local';
 
 const { Title } = Typography;
 
@@ -104,6 +109,15 @@ const OrderTrackingPage: React.FC = () => {
     const [, setSort] = useState('sn'); // Ignore unused sort value
     const [filter, setFilter] = useState('all');
     const [search, setSearch] = useState('');
+    const [userType, setUserType] = useState<UserType | null>(null);
+
+    useEffect(() => {
+        const loadUserType = () => {
+            const type = getUserType();
+            setUserType(type);
+        };
+        loadUserType();
+    }, []);
 
     // Filter logic (mock)
     const filteredOrders = mockOrders.filter(order => {
@@ -155,7 +169,11 @@ const OrderTrackingPage: React.FC = () => {
     ];
 
     return (
-        <MenuLayout selectedMenu={TopBarMenu.OrderTracking}>
+        <MenuLayout
+            selectedMenu={
+                userType === UserType.Customer ? CustomerMenu.OrderTracking : SuperAdminMenu.Orders
+            }
+        >
             <div style={{
                 width: "100%",
                 minHeight: '100vh',

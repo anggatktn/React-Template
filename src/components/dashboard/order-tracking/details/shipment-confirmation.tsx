@@ -1,6 +1,8 @@
 import React from 'react';
 import { Card, Row, Col, Typography, Button, Space } from 'antd';
 import type { OrderDetailsState } from '../../../../pages/dashboard/order-tracking/details/order-details-state';
+import { getUserType as getUserRoleType } from '../../../../utils/local-storage/auth-local';
+import { UserType as UserRoleType } from '../../../../services/models/user-type';
 
 const { Text, Title } = Typography;
 
@@ -56,63 +58,53 @@ const ShipmentConfirmation: React.FC<ShipmentConfirmationProps> = ({ data, onAcc
                                 style={{
                                     backgroundColor: '#265CD7',
                                     borderRadius: '4px',
-                                    height: '40px'
+                                    height: '40px',
+                                    opacity: getUserRoleType() === UserRoleType.SuperAdmin ? 0.5 : 1
                                 }}
+                                disabled={getUserRoleType() === UserRoleType.SuperAdmin}
                             >
                                 Accept Charges
                             </Button>
-
-                            <div style={{
-                                backgroundColor: '#fffbe6',
-                                padding: '8px',
-                                borderRadius: '4px',
-                                border: '1px solid #ffe58f'
-                            }}>
-                                <Text style={{ fontSize: '12px' }}>
-                                    Shipping cost and taxes to be borne by the recipient. Paid before good receipt. Please ask delivery partner for invoice if required.
-                                </Text>
-                            </div>
                         </Space>
                     </Col>
 
                     {/* Self Collection */}
                     <Col xs={24} md={16}>
-                        <div style={{
-                            width: '100%',
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center'
-                        }}>
-                            <Space
-                                direction="vertical"
-                                size={16}
-                                style={{
-                                    width: 'max-content'
-                                }}
-                            >
-                                <Text strong>Self Collection</Text>
+                        <Space
+                            direction="vertical"
+                            size={16}
+                            style={{
+                                width: 'max-content',
+                                height: '100%',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                justifyContent: 'space-between',
+                            }}
+                        >
+                            <Text strong>Self Collection</Text>
 
-                                <Space direction="vertical" size={4}>
-                                    <Text strong>Collection Address</Text>
-                                    <Text type="secondary" style={{ whiteSpace: 'pre-line' }}>{data.collectionAddress}</Text>
-                                </Space>
-
-                                <Button
-                                    block
-                                    onClick={onOptForSelfCollection}
-                                    style={{
-                                        marginTop: 'auto',
-                                        borderRadius: '4px',
-                                        height: '40px',
-                                        backgroundColor: '#EEF3FE',
-                                        color: '#265CD7',
-                                        border: '1px solid #265CD7'
-                                    }}
-                                >
-                                    Opt for Self Collection
-                                </Button>
+                            <Space direction="vertical" size={4}>
+                                <Text strong>Collection Address</Text>
+                                <Text type="secondary" style={{ whiteSpace: 'pre-line' }}>{data.collectionAddress}</Text>
                             </Space>
-                        </div>
+                            <div style={{ flex: 1 }} />
+                            <Button
+                                block
+                                onClick={onOptForSelfCollection}
+                                style={{
+                                    marginTop: 'auto',
+                                    borderRadius: '4px',
+                                    height: '40px',
+                                    backgroundColor: '#EEF3FE',
+                                    color: '#265CD7',
+                                    border: '1px solid #265CD7',
+                                    opacity: getUserRoleType() === UserRoleType.SuperAdmin ? 0.5 : 1
+                                }}
+                                disabled={getUserRoleType() === UserRoleType.SuperAdmin}
+                            >
+                                Opt for Self Collection
+                            </Button>
+                        </Space>
                     </Col>
                 </Row>
             </Card>

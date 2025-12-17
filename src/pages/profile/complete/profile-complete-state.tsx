@@ -1,6 +1,7 @@
 
 export interface ProfileCompleteState {
     readonly formValues: ProfileCompleteForms;
+    readonly isLoading: boolean;
 }
 
 

@@ -1,10 +1,11 @@
-import type { FormValues } from "../../components/auth/login-form";
-import { authService } from "../../services/auth.service-base";
+import type { FormValues } from "../../components/auth/login-form/LoginForm";
+import { authService } from "../../services/auth-service";
 import { BaseModel } from "../../utils/base/BaseModel";
 import type { BaseService } from "../../utils/base/BaseService";
 import { AuthFormType, type AuthScreenState } from "./auth-screen-state";
-import { setAuthToken } from "../../utils/auth.utils";
+import { getUserType, setAuthToken, setUser, setUserType } from "../../utils/local-storage/auth-local";
 import type { NavigateFunction } from "react-router-dom";
+import { UserType } from "../../services/models/user-type";
 
 export class AuthScreenModel extends BaseModel<AuthScreenState> {
     private navigate?: NavigateFunction;
@@ -31,12 +32,7 @@ export class AuthScreenModel extends BaseModel<AuthScreenState> {
 
     public onRequestOtpViaEmail = async (email: string) => {
         authService.requestOTPViaEmail(email).then((response) => {
-            if (response.success) {
-                this.state.setValue({
-                    ...this.state.getValue(),
-                    authFormType: AuthFormType.EnterOTP
-                })
-            }
+
         }).catch((error) => {
             // Handle API errors (network errors, server errors, etc.)
             console.error('Request OTP failed:', error);
@@ -54,7 +50,7 @@ export class AuthScreenModel extends BaseModel<AuthScreenState> {
                 await this.handleSignIn(values)
                 break
             case AuthFormType.CreateAccount:
-                await this.handleSignUp(values)
+
                 break
             case AuthFormType.EnterOTP:
                 onSignUpOtpSuccess()
@@ -90,55 +86,34 @@ export class AuthScreenModel extends BaseModel<AuthScreenState> {
     }
 
     private async handleSignIn(values: FormValues) {
+        const userType = getUserType();
+        console.log(`${userType} User Type`);
         authService.signIn({
             email: values.email || "",
             otp: values.otp || ""
-        }).then((response) => {
-            if (response.success && response.data?.token) {
+        }).then(async (response) => {
+            if (response.data?.token) {
                 // Save the authentication token
                 setAuthToken(response.data.token);
-
-                // Redirect to dashboard using navigate
-                this.navigate?.('/dashboard/ssn-lib');
-            } else if (response.success) {
-                // If no token, show OTP form (for 2FA flow)
-                this.state.setValue({
-                    ...this.state.getValue(),
-                    authFormType: AuthFormType.EnterOTP
-                })
+                this.handleGetUserProfile();
             }
         }).catch((error) => {
-            setAuthToken("Simple token");
-
-            // Redirect to dashboard using navigate
-            this.navigate?.('/dashboard/ssn-lib');
+            console.log("Sign in failed");
         })
     }
 
-    private async handleSignUp(values: FormValues) {
-        authService.signUp({
-            email: values.email || "",
-            password: values.password || ""
-        }).then((response) => {
-            if (response.success) {
-                this.state.setValue({
-                    ...this.state.getValue(),
-                    authFormType: AuthFormType.EnterOTP
-                })
+    private handleGetUserProfile = async () => {
+        authService.getCurrentUser().then(async (response) => {
+            if (response.data) {
+                setUser(response.data);
+                if (response.data.status === "pending-business-profile" && getUserType() === UserType.Customer) {
+                    this.navigate?.('/profile/complete');
+                } else {
+                    this.navigate?.('/dashboard');
+                }
             }
-        }).catch((error) => {
-            // Handle API errors (network errors, server errors, etc.)
-            console.error('Sign up failed:', error);
-            // Show user-friendly error message
-            alert(`Sign up failed: ${error.message || 'Unable to connect to server. Please check your connection and try again.'}`);
+        }).catch(async () => {
+            console.log("Failed to get user profile");
         })
-    }
-
-    private handleVerifyOtp = (values: FormValues) => {
-
-    }
-
-    private handleResendOtp = (values: FormValues) => {
-
     }
 }

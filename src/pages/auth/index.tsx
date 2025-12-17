@@ -3,7 +3,7 @@ import classes from './index.module.less';
 import { AuthScreenModel } from "./auth-screen-model";
 import { useStateFlow } from "../../utils/StateFlow";
 import { useMemo } from "react";
-import LoginForm, { type FormValues } from "../../components/auth/login-form";
+import LoginForm, { type FormValues } from "../../components/auth/login-form/LoginForm";
 import { useModelLoading } from "../../utils/base/BaseModel";
 
 const AuthPage: React.FC = () => {

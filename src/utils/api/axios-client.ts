@@ -1,4 +1,5 @@
 import axios, { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse, type InternalAxiosRequestConfig } from 'axios';
+import { getAuthToken, setAuthToken as setEncryptedAuthToken, clearAuthToken as clearEncryptedAuthToken } from '../local-storage/auth-local';
 
 /**
  * API Response wrapper for consistent response handling
@@ -6,8 +7,6 @@ import axios, { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse,
 export interface ApiResponse<T = any> {
     data: T;
     message?: string;
-    success: boolean;
-    statusCode: number;
 }
 
 /**
@@ -33,9 +32,6 @@ class AxiosClient {
         this.instance = axios.create({
             baseURL: this.baseURL,
             timeout: 30000, // 30 seconds
-            headers: {
-                'Content-Type': 'application/json',
-            },
         });
 
         this.setupInterceptors();
@@ -52,6 +48,15 @@ class AxiosClient {
                 const token = this.getAuthToken();
                 if (token && config.headers) {
                     config.headers.Authorization = `Bearer ${token}`;
+                }
+
+                // Set Content-Type only for requests with data (POST, PUT, PATCH)
+                const method = config.method?.toUpperCase();
+                if (method && ['POST', 'PUT', 'PATCH'].includes(method) && config.headers) {
+                    // Only set if not already set (e.g., for file uploads)
+                    if (!config.headers['Content-Type']) {
+                        config.headers['Content-Type'] = 'application/json';
+                    }
                 }
 
                 // Log request in development
@@ -84,12 +89,10 @@ class AxiosClient {
     }
 
     /**
-     * Get authentication token from storage
+     * Get authentication token from storage (decrypted)
      */
     private getAuthToken(): string | null {
-        // Implement your token retrieval logic here
-        // Example: return localStorage.getItem('auth_token');
-        return localStorage.getItem('auth_token');
+        return getAuthToken();
     }
 
     /**
@@ -159,17 +162,17 @@ class AxiosClient {
     }
 
     /**
-     * Set authentication token
+     * Set authentication token (encrypted)
      */
     public setAuthToken(token: string): void {
-        localStorage.setItem('auth_token', token);
+        setEncryptedAuthToken(token);
     }
 
     /**
      * Clear authentication token
      */
     public clearAuthToken(): void {
-        localStorage.removeItem('auth_token');
+        clearEncryptedAuthToken();
     }
 
     /**

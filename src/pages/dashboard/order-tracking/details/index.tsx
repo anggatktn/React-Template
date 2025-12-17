@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Typography, Row, Col, Button, Divider } from 'antd';
-import MenuLayout, { TopBarMenu } from '../../../../components/layout/menu-layout';
 import PageBreadcrumb from '../../../../components/dashboard/page-breadcrumb';
 import { OrderDetailsModel } from './order-details-model';
 import { useStateFlow } from '../../../../utils/StateFlow';
@@ -10,6 +9,8 @@ import ShipmentConfirmation from '../../../../components/dashboard/order-trackin
 import TrackingTimeline from '../../../../components/dashboard/order-tracking/details/tracking-timeline';
 import CustomerInfoCard from '../../../../components/dashboard/order-tracking/details/customer-info-card';
 import OrderItemsSummary from '../../../../components/dashboard/order-tracking/details/order-items-summary';
+import MenuLayout from '../../../../components/layout/top-bar-menu/MenuLayout';
+import { CustomerMenu } from '../../../../components/layout/top-bar-menu/customer-menu';
 
 const { Title } = Typography;
 
@@ -25,7 +26,7 @@ const OrderDetailsPage: React.FC = () => {
     ];
 
     return (
-        <MenuLayout selectedMenu={TopBarMenu.OrderTracking}>
+        <MenuLayout selectedMenu={CustomerMenu.OrderTracking}>
             <div style={{
                 width: "100%",
                 minHeight: '100vh',

@@ -1,4 +1,4 @@
-import { isAuthenticated } from "../../utils/auth.utils";
+import { isAuthenticated } from "../../utils/local-storage/auth-local";
 import { StateFlow } from "../../utils/StateFlow";
 import type { HomeScreenState } from "./home-state";
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 // Assuming Ant Design components are available globally or imported via a build system.
-import { Form, Input, Button, Typography, message } from 'antd';
+import { Form, Input, Button, Typography, message, Spin } from 'antd';
 import ReCAPTCHA from 'react-google-recaptcha';
 import classes from './index.module.less';
 import { AuthFormType } from '../../../pages/auth/auth-screen-state';
@@ -101,9 +101,14 @@ const LoginForm: React.FC<LoginFormArgs> = ({
             <div className={classes["sign-in-card"]}>
 
                 {/* Title */}
-                <h3 style={{ textAlign: 'center' }}>
+                <span style={{
+                    textAlign: 'center',
+                    fontSize: 24,
+                    fontWeight: 600,
+                    width: '100%'
+                }}>
                     {formType === AuthFormType.SignIn ? "Sign In" : "Create Account"}
-                </h3>
+                </span>
 
                 {/* OTP NOTICE */}
                 {formType === AuthFormType.EnterOTP ? <div className={classes["otp-notice"]}>
@@ -150,7 +155,7 @@ const LoginForm: React.FC<LoginFormArgs> = ({
                             size="large"
                             placeholder="johndoe@customer.com"
                             suffix={
-                                <span
+                                isLoading ? <Spin size="small" /> : <span
                                     style={{
                                         color: '#265CD7',
                                         fontWeight: 600,
@@ -266,7 +271,10 @@ const LoginForm: React.FC<LoginFormArgs> = ({
                             {ButtonSecondaryLabels[formType]}
                         </Button>
                     </Form.Item> */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, margin: '16px 32px' }}>
+
+                    {/* TODO: Google Sign In wait until the api ready */}
+
+                    {/* <div style={{ display: 'flex', alignItems: 'center', gap: 8, margin: '16px 32px' }}>
                         <div style={{ flex: 1, height: 1, backgroundColor: '#c7c7c7' }} />
                         <span style={{ color: '#76879D', fontWeight: 500 }}>OR</span>
                         <div style={{ flex: 1, height: 1, backgroundColor: '#c7c7c7' }} />
@@ -299,7 +307,7 @@ const LoginForm: React.FC<LoginFormArgs> = ({
                         >
                             Sign in with Google
                         </Button>
-                    </Form.Item>
+                    </Form.Item> */}
                 </Form>
             </div>
         </div>

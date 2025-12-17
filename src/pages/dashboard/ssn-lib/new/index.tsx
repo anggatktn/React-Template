@@ -1,4 +1,4 @@
-import MenuLayout, { TopBarMenu } from "../../../../components/layout/menu-layout";
+import MenuLayout from "../../../../components/layout/top-bar-menu/MenuLayout";
 import React, { useMemo } from 'react';
 import { Typography, Row, Col, Divider } from 'antd';
 import { AddSSNModel as NewSSNModel } from "./new-ssn-model";
@@ -10,6 +10,7 @@ import SSNFormInputs from "../../../../components/dashboard/ssn-lib/new/ssn-form
 import SSNPreviewCard from "../../../../components/dashboard/ssn-lib/new/ssn-preview-card";
 import AddedSSNsTable from "../../../../components/dashboard/ssn-lib/new/added-ssns-table";
 import PageBreadcrumb from "../../../../components/dashboard/page-breadcrumb";
+import { CustomerMenu } from "../../../../components/layout/top-bar-menu/customer-menu";
 
 const { Title } = Typography;
 
@@ -26,7 +27,7 @@ const NewSSNPage: React.FC = () => {
 
     const selectedRFIDInfo = rfidTypes.find(type => type.id === state.selectedRFIDType);
 
-    return <MenuLayout selectedMenu={TopBarMenu.SSNLibrary}>
+    return <MenuLayout selectedMenu={CustomerMenu.SSNLibrary}>
         <div style={{
             width: "100%",
             minHeight: '100vh',
