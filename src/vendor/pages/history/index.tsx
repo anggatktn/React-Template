@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Layout, Typography, Spin } from 'antd';
-import Navbar from '../../../components/layout/Navbar';
+import { Typography, Spin } from 'antd';
 import OrdersTable from '../../components/orders/OrdersTable';
 import OrdersControls from '../../components/orders/OrdersControls';
-import classes from '../orders/index.module.less'; // Reusing styles
+import classes from '../orders/index.module.less';
 import { vendorOrderService, type Order } from '../../../services/vendor.service-base';
+import MenuLayout from '../../../components/layout/top-bar-menu/MenuLayout';
+import { VendorMenu } from '../../../components/layout/top-bar-menu/vendor-menu';
+import { UserType } from '../../../services/models/user-type';
 
-const { Content } = Layout;
 const { Title } = Typography;
 
 const VendorHistoryPage: React.FC = () => {
@@ -27,7 +28,7 @@ const VendorHistoryPage: React.FC = () => {
                 search: searchQuery,
                 sortBy: sortOrder
             });
-            if (response.success) {
+            if (response.data) {
                 setOrders(response.data);
             }
         } catch (error) {
@@ -38,9 +39,8 @@ const VendorHistoryPage: React.FC = () => {
     };
 
     return (
-        <Layout>
-            <Navbar />
-            <Content className={classes.pageContainer}>
+        <MenuLayout selectedMenu={VendorMenu.History} activeUserType={UserType.Vendor}>
+            <div className={classes.pageContainer}>
                 <div className={classes.header}>
                     <Title level={2} className={classes.title}>Order History</Title>
                 </div>
@@ -61,8 +61,8 @@ const VendorHistoryPage: React.FC = () => {
                         <OrdersTable data={orders} />
                     </>
                 )}
-            </Content>
-        </Layout>
+            </div>
+        </MenuLayout>
     );
 };
 

@@ -118,9 +118,7 @@ export class VendorOrderService extends BaseService {
             }
 
             return {
-                data: filtered,
-                success: true,
-                statusCode: 200
+                data: filtered
             };
         });
     }
@@ -163,9 +161,7 @@ export class VendorOrderService extends BaseService {
             };
 
             return {
-                data: orderDetail,
-                success: true,
-                statusCode: 200
+                data: orderDetail
             };
         });
     }
@@ -180,9 +176,7 @@ export class VendorOrderService extends BaseService {
         return this.execute(async () => {
             await new Promise(resolve => setTimeout(resolve, 500));
             return {
-                data: undefined,
-                success: true,
-                statusCode: 200
+                data: undefined
             };
         });
     }
@@ -197,9 +191,7 @@ export class VendorOrderService extends BaseService {
         return this.execute(async () => {
             await new Promise(resolve => setTimeout(resolve, 500));
             return {
-                data: undefined,
-                success: true,
-                statusCode: 200
+                data: undefined
             };
         });
     }
@@ -214,9 +206,7 @@ export class VendorOrderService extends BaseService {
         return this.execute(async () => {
             await new Promise(resolve => setTimeout(resolve, 500));
             return {
-                data: undefined,
-                success: true,
-                statusCode: 200
+                data: undefined
             };
         });
     }
@@ -228,9 +218,7 @@ export class VendorOrderService extends BaseService {
         return this.execute(async () => {
             await new Promise(resolve => setTimeout(resolve, 500));
             return {
-                data: undefined,
-                success: true,
-                statusCode: 200
+                data: undefined
             };
         });
     }

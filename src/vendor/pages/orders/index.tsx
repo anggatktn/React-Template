@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Layout, Tabs, Typography, Spin } from 'antd';
-import Navbar from '../../../components/layout/Navbar';
+import { Tabs, Typography, Spin } from 'antd';
 import OrdersTable from '../../components/orders/OrdersTable';
 import OrdersControls from '../../components/orders/OrdersControls';
 import classes from './index.module.less';
 import { vendorOrderService, type Order } from '../../../services/vendor.service-base';
+import MenuLayout from '../../../components/layout/top-bar-menu/MenuLayout';
+import { VendorMenu } from '../../../components/layout/top-bar-menu/vendor-menu';
+import { UserType } from '../../../services/models/user-type';
 
-const { Content } = Layout;
 const { Title } = Typography;
 
 const OrdersPage: React.FC = () => {
@@ -28,7 +29,7 @@ const OrdersPage: React.FC = () => {
                 search: searchQuery,
                 sortBy: sortOrder
             });
-            if (response.success) {
+            if (response.data) {
                 setOrders(response.data);
             }
         } catch (error) {
@@ -80,9 +81,8 @@ const OrdersPage: React.FC = () => {
     ];
 
     return (
-        <Layout>
-            <Navbar />
-            <Content className={classes.pageContainer}>
+        <MenuLayout selectedMenu={VendorMenu.Orders} activeUserType={UserType.Vendor}>
+            <div className={classes.pageContainer}>
                 <div className={classes.header}>
                     <Title level={2} className={classes.title}>Orders</Title>
                 </div>
@@ -94,8 +94,8 @@ const OrdersPage: React.FC = () => {
                     size="large"
                     tabBarStyle={{ marginBottom: 0 }}
                 />
-            </Content>
-        </Layout>
+            </div>
+        </MenuLayout>
     );
 };
 

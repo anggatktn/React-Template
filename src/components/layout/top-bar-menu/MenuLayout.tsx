@@ -13,18 +13,22 @@ import { storageEncryption } from "../../../utils/encryption/StorageEncryption";
 
 const { Text } = Typography;
 
+import { VendorMenu } from "./vendor-menu";
+
 interface MenuLayoutProps {
-    selectedMenu?: CustomerMenu | SuperAdminMenu;
-    onSelectMenu?: (menu: CustomerMenu | SuperAdminMenu) => void;
+    selectedMenu?: CustomerMenu | SuperAdminMenu | VendorMenu;
+    onSelectMenu?: (menu: CustomerMenu | SuperAdminMenu | VendorMenu) => void;
     isMenuVisible?: boolean;
     children?: React.ReactNode;
+    activeUserType?: UserType;
 }
 
 const MenuLayout: React.FC<MenuLayoutProps> = ({
     selectedMenu,
     onSelectMenu,
     isMenuVisible = true,
-    children
+    children,
+    activeUserType
 }) => {
     const [userType, setUserType] = useState<UserType | null>(null);
     const navigate = useNavigate();
@@ -63,11 +67,12 @@ const MenuLayout: React.FC<MenuLayoutProps> = ({
     };
 
     const renderMenu = () => {
+        const effectiveUserType = activeUserType ?? userType;
         // Return nothing if userType is not loaded yet
-        if (!userType) return null;
+        if (effectiveUserType === null || effectiveUserType === undefined) return null;
 
         // Get menu instance based on user type (polymorphic behavior!)
-        const menuInstance = MENU_BY_USER_TYPE[userType];
+        const menuInstance = MENU_BY_USER_TYPE[effectiveUserType];
         return renderMenuItems(menuInstance);
     };
 
