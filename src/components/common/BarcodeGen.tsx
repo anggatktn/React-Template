@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import JsBarcode from 'jsbarcode';
 import { Image } from 'antd';
 
@@ -19,6 +19,19 @@ const BarcodeGen: React.FC<BarcodeGenProps> = ({
 }) => {
     const [imageUrl, setImageUrl] = useState<string>('');
     const [displayDimensions, setDisplayDimensions] = useState<{ width: number, height: number }>({ width: 0, height: 0 });
+    const containerRef = useRef<HTMLDivElement>(null);
+    const [containerWidth, setContainerWidth] = useState<number>(0);
+
+    useEffect(() => {
+        if (!containerRef.current) return;
+        const resizeObserver = new ResizeObserver((entries) => {
+            for (const entry of entries) {
+                setContainerWidth(entry.contentRect.width);
+            }
+        });
+        resizeObserver.observe(containerRef.current);
+        return () => resizeObserver.disconnect();
+    }, []);
 
     useEffect(() => {
         // High-DPI scaling factor
@@ -55,7 +68,8 @@ const BarcodeGen: React.FC<BarcodeGenProps> = ({
                 const paddingHorizontal = 16 * scale;
 
                 // Force canvas width to match barcode width + padding
-                canvas.width = barcodeWidth + paddingHorizontal;
+                const minWidth = containerWidth > 0 ? containerWidth * scale : (barcodeWidth + paddingHorizontal);
+                canvas.width = Math.max(barcodeWidth + paddingHorizontal, minWidth);
                 canvas.height = barcodeHeight + textPadding + (8 * scale); // Scale bottom padding
 
                 // Draw white background
@@ -103,14 +117,15 @@ const BarcodeGen: React.FC<BarcodeGenProps> = ({
                 console.error("Barcode generation failed", e);
             }
         }
-    }, [value, description, width, height, fontSize]);
+    }, [value, description, width, height, fontSize, containerWidth]);
 
     return (
-        <div style={{
+        <div ref={containerRef} style={{
             border: '2px solid #D2DAE5',
             borderRadius: '8px',
             padding: '2px',
-            display: 'inline-flex',
+            display: 'flex',
+            width: '100%',
             background: 'white',
             justifyContent: 'center',
             alignItems: 'center',

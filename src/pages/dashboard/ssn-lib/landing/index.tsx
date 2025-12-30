@@ -11,18 +11,19 @@ import { Button, Divider, Table } from "antd";
 import type { ColumnsType } from 'antd/es/table';
 import { Typography } from "antd";
 import classes from "./index.module.less";
+import type { SsnListResponse } from "../../../../services/ssn-service";
+import BarcodeGen from "../../../../components/common/BarcodeGen";
 
 
 const { Title, Text } = Typography;
 
 
 const SSNLibraryPage: React.FC = () => {
-    const totalItems = 0;
     const navigate = useNavigate();
     const model = useMemo(() => new SSNLibModel(navigate), [navigate]);
     const state = useStateFlow(model.state);
 
-    const columns: ColumnsType<string> = [
+    const columns: ColumnsType<SsnListResponse> = [
         {
             title: 'S/N',
             dataIndex: 'sn',
@@ -44,25 +45,24 @@ const SSNLibraryPage: React.FC = () => {
         },
         {
             title: 'Barcode',
-            dataIndex: 'barcode',
-            key: 'barcode',
-            render: () => (
-                <div style={{
-                    width: '60px',
-                    height: '30px',
-                    background: '#FAFAFA',
-                    borderRadius: '4px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    border: '1px solid #E8E8E8'
-                }}>
-                    <div style={{
-                        width: '90%',
-                        height: '70%',
-                        background: 'repeating-linear-gradient(90deg, #262626 0px, #262626 1.5px, transparent 1.5px, transparent 3px)',
-                        opacity: 0.8
-                    }} />
+            dataIndex: 'ssn',
+            key: 'ssn',
+            align: 'center',
+            render: (text: string) => (
+                <div
+                    style={{
+                        display: 'flex',
+                        width: '100%',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    }}
+                >
+                    <BarcodeGen
+                        value={text}
+                        width={1}
+                        height={15}
+                        fontSize={6}
+                    />
                 </div>
             ),
         },
@@ -70,6 +70,7 @@ const SSNLibraryPage: React.FC = () => {
             title: 'SSN',
             dataIndex: 'ssn',
             key: 'ssn',
+            align: 'center',
             render: (text: string) => (
                 <Text strong style={{ fontSize: '14px', color: '#262626', whiteSpace: 'nowrap' }}>
                     {text}
@@ -78,25 +79,44 @@ const SSNLibraryPage: React.FC = () => {
         },
         {
             title: 'Tag Type',
-            dataIndex: 'tagType',
-            key: 'tagType',
+            dataIndex: 'type',
+            key: 'type',
+            align: 'center',
             onHeaderCell: () => ({
                 style: {
                     whiteSpace: 'nowrap',
                 },
             }),
             render: (text: string) => (
-                <Text style={{ fontSize: '14px', color: '#595959', whiteSpace: 'nowrap' }}>
+                <Text
+                    style={{
+                        fontSize: '14px',
+                        color: '#595959',
+                        whiteSpace: 'nowrap',
+                        width: '100%',
+                        textAlign: 'center',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    }}
+
+                >
                     {text}
                 </Text>
             ),
         },
         {
             title: 'Style',
-            dataIndex: 'style',
-            key: 'style',
+            dataIndex: 'layout_style',
+            key: 'layout_style',
+            align: 'center',
             render: (text: string) => (
-                <Text style={{ fontSize: '14px', color: '#595959', whiteSpace: 'nowrap' }}>
+                <Text
+                    style={{
+                        fontSize: '14px',
+                        color: '#595959',
+                        whiteSpace: 'nowrap'
+                    }}>
                     {text}
                 </Text>
             ),
@@ -112,6 +132,7 @@ const SSNLibraryPage: React.FC = () => {
                     style={{
                         fontSize: '14px',
                         color: '#595959',
+                        padding: '0px 6px'
                     }}
                     title={text}
                 >
@@ -176,7 +197,7 @@ const SSNLibraryPage: React.FC = () => {
             <SSNLibraryControls
                 sortBy={state.sortBy}
                 searchValue={state.searchValue}
-                totalItems={totalItems}
+                totalItems={state.ssnLibList.length}
                 onSortChange={(value) => model.handleSortChange(String(value))}
                 onSearchChange={model.handleSearch}
             />
