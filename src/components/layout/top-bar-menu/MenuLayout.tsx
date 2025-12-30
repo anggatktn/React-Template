@@ -2,7 +2,7 @@ import { Avatar, Button, Divider, Row, Typography } from "antd";
 import Layout, { Header } from "antd/es/layout/layout";
 import { LogoutOutlined, UserOutlined } from "@ant-design/icons";
 import { NavLink, useNavigate } from "react-router-dom";
-import { getUserType } from "../../../utils/local-storage/auth-local";
+import { getUser, getUserType } from "../../../utils/local-storage/auth-local";
 import { UserType } from "../../../services/models/user-type";
 import { BaseMenu } from "./base-menu";
 import { MENU_BY_USER_TYPE } from "./menu-registry";
@@ -10,6 +10,7 @@ import { SuperAdminMenu } from "./super-admin-menu";
 import { CustomerMenu } from "./customer-menu";
 import { useEffect, useState } from "react";
 import { storageEncryption } from "../../../utils/encryption/StorageEncryption";
+import type { AuthResponse } from "../../../services/auth-service";
 
 const { Text } = Typography;
 
@@ -31,12 +32,15 @@ const MenuLayout: React.FC<MenuLayoutProps> = ({
     activeUserType
 }) => {
     const [userType, setUserType] = useState<UserType | null>(null);
+    const [user, setUser] = useState<AuthResponse | null>(null);
     const navigate = useNavigate();
     const [isPopUpAvatarVisible, setIsPopUpAvatarVisible] = useState(false);
     useEffect(() => {
         const loadUserType = () => {
             const type = getUserType();
+            const userData = getUser();
             setUserType(type);
+            setUser(userData);
         };
         loadUserType();
     }, []);
@@ -192,7 +196,7 @@ const MenuLayout: React.FC<MenuLayoutProps> = ({
                                 fontWeight: 500,
                             }}
                         >
-                            John Doe
+                            {user?.email}
                         </Text>
                         <Text
                             style={{
