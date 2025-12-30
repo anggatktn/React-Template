@@ -28,9 +28,18 @@ const SSNLibraryPage: React.FC = () => {
             dataIndex: 'sn',
             key: 'sn',
             render: (text: string) => (
-                <Text style={{ fontSize: '13px', color: '#595959', whiteSpace: 'nowrap' }}>
-                    {text}
-                </Text>
+                <div
+                    style={{
+                        display: 'flex',
+                        width: '100%',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    }}
+                >
+                    <Text style={{ fontSize: '13px', color: '#595959', whiteSpace: 'nowrap' }}>
+                        {text}
+                    </Text>
+                </div>
             ),
         },
         {
@@ -115,9 +124,18 @@ const SSNLibraryPage: React.FC = () => {
             dataIndex: 'size',
             key: 'size',
             render: (text: string) => (
-                <Text style={{ fontSize: '14px', color: '#595959', whiteSpace: 'nowrap' }}>
-                    {text}
-                </Text>
+                <div
+                    style={{
+                        display: 'flex',
+                        width: '100%',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    }}
+                >
+                    <Text style={{ fontSize: '14px', color: '#595959', whiteSpace: 'nowrap' }}>
+                        {text}
+                    </Text>
+                </div>
             ),
         },
         {

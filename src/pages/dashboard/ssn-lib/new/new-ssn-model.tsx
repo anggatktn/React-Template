@@ -2,41 +2,22 @@ import type { NavigateFunction } from "react-router-dom";
 import { StateFlow } from "../../../../utils/StateFlow";
 import { type AddSSNState, type AddedSSNRecord } from "./new-ssn-state";
 import { v4 as uuidv4 } from 'uuid';
+import { BaseModel } from "../../../../utils/base/BaseModel";
+import { ssnService, type NewSSNRequestBody } from "../../../../services/ssn-service";
 
-export class AddSSNModel {
-    public readonly state: StateFlow<AddSSNState> = new StateFlow<AddSSNState>({
-        selectedRFIDType: null,
-        selectedLayout: 'standard',
-        ssnValue: '',
-        description: '',
-        size: '',
-        addedSSNs: [
-            {
-                addedOn: '2025-11-22 08:54:54',
-                barcode: 'barcode_123456789',
-                ssn: '123456789',
-                product: 'Normal',
-                style: 'Standard',
-                description: 'Description',
-                size: 'Size',
-                id: uuidv4(),
-            },
-            {
-                addedOn: '2025-11-22 08:54:54',
-                barcode: 'barcode_123456789',
-                ssn: '123456789',
-                product: 'Normal',
-                style: 'Standard',
-                description: 'Description',
-                size: 'Size',
-                id: uuidv4(),
-            },
-        ],
-    });
+export class AddSSNModel extends BaseModel<AddSSNState> {
 
     private navigate?: NavigateFunction;
 
     constructor(navigate?: NavigateFunction) {
+        super({
+            selectedRFIDType: null,
+            selectedLayout: 'standard',
+            ssnValue: '',
+            description: '',
+            size: '',
+            addedSSNs: [],
+        });
         this.navigate = navigate;
     }
 
@@ -99,6 +80,20 @@ export class AddSSNModel {
             hour12: false
         };
         return now.toLocaleString('en-US', options).replace(',', '');
+    }
+
+    public addNewSSN = () => {
+        const currentState = this.state.getValue();
+        const newSSN: NewSSNRequestBody = {
+            type: this.getProductName(currentState.selectedRFIDType),
+            layout_style: this.getLayoutName(currentState.selectedLayout),
+            ssn: currentState.ssnValue,
+            description: currentState.description,
+            size: currentState.size
+        };
+        ssnService.createNewSSN(newSSN).then((response) => {
+            console.log(response);
+        });
     }
 
     public handleAddToLibrary = () => {

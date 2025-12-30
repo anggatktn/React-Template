@@ -9,7 +9,7 @@ export interface RFIDType {
     name: string;
     dimensions: string;
     price: string;
-    icon: string;
+    icon: React.ReactNode;
 }
 
 interface RFIDTypeSelectorProps {
@@ -45,11 +45,12 @@ const RFIDTypeSelector: React.FC<RFIDTypeSelectorProps> = ({
                                 alignItems: 'center',
                                 gap: '16px'
                             }}>
-                                <span style={{ fontSize: '32px' }}>{type.icon}</span>
+                                <div>{type.icon}</div>
                                 <div>
                                     <Text strong style={{
                                         display: 'block',
-                                        fontSize: '15px'
+                                        fontSize: '15px',
+                                        color: selectedType === type.id ? '#1677ff' : '#000'
                                     }}>
                                         {type.name}
                                     </Text>

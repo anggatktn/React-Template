@@ -13,7 +13,7 @@ interface SSNFormInputsProps {
     onSizeChange: (value: string) => void;
 }
 
-const SSNFormInputs: React.FC<SSNFormInputsProps> = ({
+const NewSSNFormInputs: React.FC<SSNFormInputsProps> = ({
     ssnValue,
     description,
     size,
@@ -33,14 +33,13 @@ const SSNFormInputs: React.FC<SSNFormInputsProps> = ({
                 <Text strong style={{ fontSize: '16px', display: 'block', marginBottom: '8px' }}>
                     Enter SSN. <Text type="secondary" style={{ fontWeight: 400 }}>Max 13 characters</Text>
                 </Text>
-                <Select
+                <Input
                     placeholder="Type or select a previous SSN"
                     style={{ width: '100%', height: '48px' }}
                     value={ssnValue || undefined}
-                    onChange={onSSNChange}
-                    showSearch
-                    allowClear
-                    options={[]}
+                    onChange={(e) => onSSNChange(e.target.value)}
+                    type="number"
+                    maxLength={13}
                 />
             </div>
 
@@ -64,15 +63,33 @@ const SSNFormInputs: React.FC<SSNFormInputsProps> = ({
                 <Text strong style={{ fontSize: '16px', display: 'block', marginBottom: '8px' }}>
                     Enter Size <Text type="secondary" style={{ fontWeight: 400 }}>(Optional)</Text>
                 </Text>
-                <Input
+                <Select
                     placeholder="Example: S or XL"
-                    style={{ height: '48px', borderRadius: '8px' }}
-                    value={size}
-                    onChange={(e) => onSizeChange(e.target.value)}
+                    style={{ width: '100%', height: '48px' }}
+                    value={size || undefined}
+                    onChange={(e) => onSizeChange(e)}
+                    options={[
+                        {
+                            value: "S",
+                            label: "S"
+                        },
+                        {
+                            value: "M",
+                            label: "M"
+                        },
+                        {
+                            value: "L",
+                            label: "L"
+                        },
+                        {
+                            value: "XL",
+                            label: "XL"
+                        }
+                    ]}
                 />
             </div>
         </div>
     );
 };
 
-export default SSNFormInputs;
+export default NewSSNFormInputs;

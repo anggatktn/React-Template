@@ -6,18 +6,39 @@ import { useStateFlow } from "../../../../utils/StateFlow";
 import { useNavigate } from "react-router-dom";
 import RFIDTypeSelector, { type RFIDType } from "../../../../components/dashboard/ssn-lib/new/rfid-type-selector";
 import LayoutStyleSelector from "../../../../components/dashboard/ssn-lib/new/layout-style-selector";
-import SSNFormInputs from "../../../../components/dashboard/ssn-lib/new/ssn-form-inputs";
+import NewSSNFormInputs from "../../../../components/dashboard/ssn-lib/new/ssn-form-inputs/NewSSNFormInput";
 import SSNPreviewCard from "../../../../components/dashboard/ssn-lib/new/ssn-preview-card";
 import AddedSSNsTable from "../../../../components/dashboard/ssn-lib/new/added-ssns-table";
 import PageBreadcrumb from "../../../../components/dashboard/page-breadcrumb";
 import { CustomerMenu } from "../../../../components/layout/top-bar-menu/customer-menu";
+import MetallicTag from "../../../../assets/metallic-tag.png";
+import NormalTag from "../../../../assets/normal-tag.png";
+import FloatingTag from "../../../../assets/floating-tag.png";
 
 const { Title } = Typography;
 
 const rfidTypes: RFIDType[] = [
-    { id: 'normal', name: 'Normal RFID Tag', dimensions: '43 x 21 mm', price: 'S$0.12 / tag', icon: '🏷️' },
-    { id: 'floating', name: 'Floating RFID Tag', dimensions: '43 x 36 mm', price: 'S$0.12 / tag', icon: '🏷️' },
-    { id: 'metallic', name: 'Metallic RFID Tag', dimensions: '60 x 25 mm', price: 'S$0.56 / tag', icon: '🏷️' },
+    {
+        id: 'normal',
+        name: 'Normal RFID Tag',
+        dimensions: '43 x 21 mm',
+        price: 'S$0.12 / tag',
+        icon: <img src={NormalTag} alt="Normal RFID Tag" style={{ width: '32px', height: 'auto' }} />
+    },
+    {
+        id: 'floating',
+        name: 'Floating RFID Tag',
+        dimensions: '43 x 36 mm',
+        price: 'S$0.12 / tag',
+        icon: <img src={FloatingTag} alt="Floating RFID Tag" style={{ width: '32px', height: 'auto' }} />
+    },
+    {
+        id: 'metallic',
+        name: 'Metallic RFID Tag',
+        dimensions: '60 x 25 mm',
+        price: 'S$0.56 / tag',
+        icon: <img src={MetallicTag} alt="Metallic RFID Tag" style={{ width: '32px', height: 'auto' }} />
+    },
 ];
 
 const NewSSNPage: React.FC = () => {
@@ -66,7 +87,7 @@ const NewSSNPage: React.FC = () => {
                         onSelect={model.handleLayoutChange}
                     />
 
-                    <SSNFormInputs
+                    <NewSSNFormInputs
                         ssnValue={state.ssnValue}
                         description={state.description}
                         size={state.size}
@@ -81,7 +102,7 @@ const NewSSNPage: React.FC = () => {
                     <SSNPreviewCard
                         selectedRFIDInfo={selectedRFIDInfo}
                         canAdd={!!(state.selectedRFIDType && state.ssnValue)}
-                        onAddToLibrary={model.handleAddToLibrary}
+                        onAddToLibrary={model.addNewSSN}
                         description={state.description}
                         size={state.size}
                     />
