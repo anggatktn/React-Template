@@ -1,6 +1,7 @@
 import React from 'react';
 import { Table, Button, Card, Typography, Space } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
+import BarcodeGen from '../../../../components/common/BarcodeGen';
 
 const { Text } = Typography;
 
@@ -32,20 +33,15 @@ const PackingListTable: React.FC<PackingListProps> = ({ items }) => {
         {
             title: 'Barcode',
             key: 'barcode',
-            width: 100,
-            render: () => (
-                <div style={{
-                    width: '60px',
-                    height: '20px',
-                    background: `repeating-linear-gradient(
-                        90deg,
-                        #000,
-                        #000 2px,
-                        #fff 2px,
-                        #fff 4px
-                    )`,
-                    opacity: 0.6
-                }} />
+            width: 180,
+            render: (_: any, record: PackingListItem) => (
+                <BarcodeGen
+                    value={record.ssn}
+                    description={record.description}
+                    width={1}
+                    height={25}
+                    fontSize={11}
+                />
             ),
         },
         {

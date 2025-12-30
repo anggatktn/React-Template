@@ -47,8 +47,8 @@ export const mockPackingListItems: PackingListItem[] = [
         sn: '01',
         ssn: '1234567890',
         layout: 'Large Font',
-        description: 'Morbi quis elit condimentum, faucibus eros non...',
-        size: 'M',
+        description: 'Navy Uniform Batch 2026',
+        size: 'L',
         quantity: 300,
         epcStart: '5354250000000001000000104110',
         epcEnd: '5354250000000001000000104410'
@@ -56,35 +56,35 @@ export const mockPackingListItems: PackingListItem[] = [
     {
         key: '2',
         sn: '02',
-        ssn: '1234567890',
+        ssn: '1234567891',
         layout: 'Standard',
-        description: 'Morbi quis elit condimentum, faucibus eros non...',
+        description: 'Navy Uniform Batch 2026',
         size: 'M',
-        quantity: 300,
-        epcStart: '5354250000000001000000104110',
-        epcEnd: '5354250000000001000000104410'
+        quantity: 150,
+        epcStart: '5354250000000001000000104411',
+        epcEnd: '5354250000000001000000104560'
     },
     {
         key: '3',
         sn: '03',
-        ssn: '1234567890',
+        ssn: '1234567892',
         layout: 'Standard',
-        description: 'Morbi quis elit condimentum, faucibus eros non...',
+        description: 'Air Force Uniform Batch 2025',
         size: 'M',
-        quantity: 300,
-        epcStart: '5354250000000001000000104110',
-        epcEnd: '5354250000000001000000104410'
+        quantity: 200,
+        epcStart: '5354250000000001000000104561',
+        epcEnd: '5354250000000001000000104760'
     },
     {
         key: '4',
         sn: '04',
-        ssn: '1234567890',
+        ssn: '1234567893',
         layout: 'Large Font',
-        description: 'Morbi quis elit condimentum, faucibus eros non...',
-        size: 'M',
-        quantity: 300,
-        epcStart: '5354250000000001000000104110',
-        epcEnd: '5354250000000001000000104410'
+        description: 'Army Uniform Batch 2025',
+        size: 'XL',
+        quantity: 100,
+        epcStart: '5354250000000001000000104761',
+        epcEnd: '5354250000000001000000104860'
     },
 ];
 
