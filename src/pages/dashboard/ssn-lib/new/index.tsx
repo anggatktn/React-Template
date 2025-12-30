@@ -8,7 +8,7 @@ import RFIDTypeSelector, { type RFIDType } from "../../../../components/dashboar
 import LayoutStyleSelector from "../../../../components/dashboard/ssn-lib/new/layout-style-selector";
 import NewSSNFormInputs from "../../../../components/dashboard/ssn-lib/new/ssn-form-inputs/NewSSNFormInput";
 import SSNPreviewCard from "../../../../components/dashboard/ssn-lib/new/ssn-preview-card";
-import AddedSSNsTable from "../../../../components/dashboard/ssn-lib/new/added-ssns-table";
+import AddedSSNsTable from "../../../../components/dashboard/ssn-lib/new/added-ssns-table/AddedSSNTable";
 import PageBreadcrumb from "../../../../components/dashboard/page-breadcrumb";
 import { CustomerMenu } from "../../../../components/layout/top-bar-menu/customer-menu";
 import MetallicTag from "../../../../assets/metallic-tag.png";
@@ -105,6 +105,7 @@ const NewSSNPage: React.FC = () => {
                         onAddToLibrary={model.addNewSSN}
                         description={state.description}
                         size={state.size}
+                        isLoading={state.isLoading}
                     />
                 </Col>
             </Row>

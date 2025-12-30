@@ -15,5 +15,6 @@ export interface AddSSNState {
     ssnValue: string;
     description: string;
     size: string;
+    isLoading: boolean;
     addedSSNs: AddedSSNRecord[];
 }

@@ -11,6 +11,7 @@ interface SSNPreviewCardProps {
     size?: string;
     canAdd: boolean;
     onAddToLibrary: () => void;
+    isLoading: boolean;
 }
 
 const SSNPreviewCard: React.FC<SSNPreviewCardProps> = ({
@@ -18,7 +19,8 @@ const SSNPreviewCard: React.FC<SSNPreviewCardProps> = ({
     description,
     size,
     canAdd,
-    onAddToLibrary
+    onAddToLibrary,
+    isLoading
 }) => {
     return (
         <div style={{
@@ -100,13 +102,14 @@ const SSNPreviewCard: React.FC<SSNPreviewCardProps> = ({
                     size="middle"
                     block
                     onClick={onAddToLibrary}
-                    disabled={!canAdd}
+                    disabled={!canAdd || isLoading}
                     style={{
                         height: '48px',
                         borderRadius: '8px',
                         fontSize: '15px',
                         fontWeight: 500
                     }}
+                    loading={isLoading}
                 >
                     Add to SSN Library
                 </Button>

@@ -33,7 +33,15 @@
 
         .ant-table-tbody>tr:last-child>td {
             border-bottom: 1px solid #F0F0F0;
-            border-radius: 0 0 8px 8px;
+            border-radius: 0;
+        }
+
+        .ant-table-tbody>tr:last-child>td:first-child {
+            border-radius: 0 0 0 8px;
+        }
+
+        .ant-table-tbody>tr:last-child>td:last-child {
+            border-radius: 0 0 8px 0;
         }
 
         // Even rows (0-indexed, so 0, 2, 4... are actually 1st, 3rd, 5th rows)
