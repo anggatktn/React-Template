@@ -13,6 +13,8 @@ export class SSNLibModel extends BaseModel<SSNLibState> {
             sortBy: "S/N",
             searchValue: "",
             ssnLibList: [],
+            editModalVisible: false,
+            editingItem: null,
         });
         this.navigate = navigate;
         this.getSSNList();
@@ -25,6 +27,30 @@ export class SSNLibModel extends BaseModel<SSNLibState> {
                 sortBy: value
             }
         })
+    }
+
+    public openEditModal = (item: any) => {
+        this.updateState((state) => ({
+            ...state,
+            editModalVisible: true,
+            editingItem: item
+        }));
+    }
+
+    public closeEditModal = () => {
+        this.updateState((state) => ({
+            ...state,
+            editModalVisible: false,
+            editingItem: null
+        }));
+    }
+
+    public handleSaveSsn = (item: any) => {
+        // TODO: Implement actual save logic here (API call)
+        console.log("Saving SSN:", item);
+        this.closeEditModal();
+        // Ideally, refresh the list or update the local list item
+        this.getSSNList();
     }
 
     public handleAddSSN = () => {

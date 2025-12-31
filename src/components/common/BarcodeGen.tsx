@@ -8,6 +8,7 @@ interface BarcodeGenProps {
     width?: number;
     height?: number;
     fontSize?: number;
+    addBorder?: boolean;
 }
 
 const BarcodeGen: React.FC<BarcodeGenProps> = ({
@@ -15,7 +16,8 @@ const BarcodeGen: React.FC<BarcodeGenProps> = ({
     description,
     width = 2,
     height = 40,
-    fontSize = 14
+    fontSize = 14,
+    addBorder = true
 }) => {
     const [imageUrl, setImageUrl] = useState<string>('');
     const [displayDimensions, setDisplayDimensions] = useState<{ width: number, height: number }>({ width: 0, height: 0 });
@@ -121,7 +123,7 @@ const BarcodeGen: React.FC<BarcodeGenProps> = ({
 
     return (
         <div ref={containerRef} style={{
-            border: '2px solid #D2DAE5',
+            border: `${addBorder ? '2px' : '0px'} solid #D2DAE5`,
             borderRadius: '8px',
             padding: '2px',
             display: 'flex',

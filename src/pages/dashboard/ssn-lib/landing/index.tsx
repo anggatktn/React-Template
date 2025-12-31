@@ -17,6 +17,7 @@ import BarcodeGen from "../../../../components/common/BarcodeGen";
 
 const { Title, Text } = Typography;
 
+import EditTagModal from "../../../../components/dashboard/ssn-lib/landing/edit-tag-modal/EditTagModal";
 
 const SSNLibraryPage: React.FC = () => {
     const navigate = useNavigate();
@@ -163,7 +164,7 @@ const SSNLibraryPage: React.FC = () => {
             title: '',
             dataIndex: 'action',
             key: 'action',
-            render: () => (
+            render: (_: any, record: SsnListResponse) => (
                 <div style={{ display: 'flex', gap: '0px' }}>
                     <Button
                         type="link"
@@ -176,7 +177,7 @@ const SSNLibraryPage: React.FC = () => {
                     </Button>
                     <Button
                         type="link"
-                        onClick={() => { }}
+                        onClick={() => model.openEditModal(record)}
                         style={{
                             whiteSpace: 'nowrap',
                             color: '#265CD7'
@@ -212,7 +213,7 @@ const SSNLibraryPage: React.FC = () => {
                     columns={columns}
                     dataSource={state.ssnLibList}
                     pagination={false}
-                    rowKey={(record, index) => `${record}-${index}`}
+                    rowKey={(record, index) => `${record.id}-${index}`}
                     locale={{
                         emptyText: (
                             <div >
@@ -224,6 +225,13 @@ const SSNLibraryPage: React.FC = () => {
                     }}
                 />
             </div> : <SSNLibraryEmpty />}
+
+            <EditTagModal
+                visible={state.editModalVisible}
+                initialData={state.editingItem}
+                onCancel={model.closeEditModal}
+                onSave={model.handleSaveSsn}
+            />
         </div>
     </MenuLayout>
 }
