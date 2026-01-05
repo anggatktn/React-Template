@@ -33,7 +33,7 @@ export interface NewSSNRequestBody {
     }
 */
 
-export interface SsnListResponse {
+export interface SSNItemResponse {
     id: string;
     type: string;
     layout_style: string;
@@ -48,16 +48,16 @@ export interface SsnListResponse {
 export class SsnService extends BaseService {
     private readonly basePath = '/ssn';
 
-    async getSSNList(): Promise<ApiResponse<SsnListResponse[]>> {
+    async getSSNList(): Promise<ApiResponse<SSNItemResponse[]>> {
         return this.execute(() => {
-            const response = apiClient.get<SsnListResponse[]>(this.basePath);
+            const response = apiClient.get<SSNItemResponse[]>(this.basePath);
             return response;
         });
     }
 
-    async createNewSSN(body: NewSSNRequestBody): Promise<ApiResponse<any>> {
+    async createNewSSN(body: NewSSNRequestBody): Promise<ApiResponse<SSNItemResponse>> {
         return this.execute(() => {
-            const response = apiClient.post<any>(this.basePath, body);
+            const response = apiClient.post<SSNItemResponse>(this.basePath, body);
             return response;
         });
     }

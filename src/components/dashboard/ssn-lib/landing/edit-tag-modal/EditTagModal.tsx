@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Modal, Input, Select, Button, Typography } from 'antd';
 import BarcodeGen from '../../../../common/BarcodeGen';
 import classes from './index.module.less';
-import type { SsnListResponse } from '../../../../../services/ssn-service';
+import type { SSNItemResponse } from '../../../../../services/ssn-service';
 
 const { Text } = Typography;
 const { TextArea } = Input;
@@ -10,8 +10,8 @@ const { TextArea } = Input;
 interface EditTagModalProps {
     visible: boolean;
     onCancel: () => void;
-    onSave: (data: SsnListResponse) => void;
-    initialData: SsnListResponse | null;
+    onSave: (data: SSNItemResponse) => void;
+    initialData: SSNItemResponse | null;
 }
 
 const EditTagModal: React.FC<EditTagModalProps> = ({
@@ -20,7 +20,7 @@ const EditTagModal: React.FC<EditTagModalProps> = ({
     onSave,
     initialData
 }) => {
-    const [formData, setFormData] = useState<Partial<SsnListResponse>>({});
+    const [formData, setFormData] = useState<Partial<SSNItemResponse>>({});
 
     useEffect(() => {
         if (visible && initialData) {
@@ -34,7 +34,7 @@ const EditTagModal: React.FC<EditTagModalProps> = ({
 
     const handleSave = () => {
         if (initialData) {
-            onSave({ ...initialData, ...formData } as SsnListResponse);
+            onSave({ ...initialData, ...formData } as SSNItemResponse);
         }
     };
 

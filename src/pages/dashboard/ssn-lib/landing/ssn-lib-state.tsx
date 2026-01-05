@@ -1,9 +1,9 @@
-import type { SsnListResponse } from "../../../../services/ssn-service";
+import type { SSNItemResponse } from "../../../../services/ssn-service";
 
 export interface SSNLibState {
     sortBy: string;
     searchValue: string;
-    ssnLibList: SsnListResponse[];
+    ssnLibList: SSNItemResponse[];
     editModalVisible: boolean;
-    editingItem: SsnListResponse | null;
+    editingItem: SSNItemResponse | null;
 }   

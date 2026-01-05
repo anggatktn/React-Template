@@ -114,7 +114,7 @@ export class AddSSNModel extends BaseModel<AddSSNState> {
                 style: this.getLayoutName(currentState.selectedLayout),
                 description: currentState.description || '-',
                 size: currentState.size || '-',
-                id: uuidv4(),
+                id: response.data.id,
             };
 
             this.updateState((state) => ({

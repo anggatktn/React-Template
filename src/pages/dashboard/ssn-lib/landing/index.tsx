@@ -11,7 +11,7 @@ import { Button, Divider, Table } from "antd";
 import type { ColumnsType } from 'antd/es/table';
 import { Typography } from "antd";
 import classes from "./index.module.less";
-import type { SsnListResponse } from "../../../../services/ssn-service";
+import type { SSNItemResponse } from "../../../../services/ssn-service";
 import BarcodeGen from "../../../../components/common/BarcodeGen";
 
 
@@ -24,7 +24,7 @@ const SSNLibraryPage: React.FC = () => {
     const model = useMemo(() => new SSNLibModel(navigate), [navigate]);
     const state = useStateFlow(model.state);
 
-    const columns: ColumnsType<SsnListResponse> = [
+    const columns: ColumnsType<SSNItemResponse> = [
         {
             title: 'S/N',
             dataIndex: 'sn',
@@ -164,7 +164,7 @@ const SSNLibraryPage: React.FC = () => {
             title: '',
             dataIndex: 'action',
             key: 'action',
-            render: (_: any, record: SsnListResponse) => (
+            render: (_: any, record: SSNItemResponse) => (
                 <div style={{ display: 'flex', gap: '0px' }}>
                     <Button
                         type="link"
